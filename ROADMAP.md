@@ -2,7 +2,7 @@
 
 建立日期：2026-11-22，最後更新：2026-11-22。撰寫時使用 AI 輔助（Claude）。沒有外部審查。
 
-本文件說明專案的新方向。`plan-a/`、`plan-b/` 和 `analysis/` 是**已凍結的舊有證據**，不再修改，`VERIFY_PUBLIC.py` 會繼續檢查它們的雜湊值。根目錄的 `README.md` 也列在 `PUBLIC_MANIFEST.json` 裡，所以這個新方向寫在獨立的檔案中，沒有改動 `README.md`。
+本文件說明專案的新方向。`plan-a/`、`plan-b/` 和 `analysis/` 是**已凍結的舊有證據**，不再修改，`VERIFY_PUBLIC.py` 會繼續檢查它們的雜湊值。根目錄的 `README.md` 在 2026-11-22 改寫成以本研究為主的介紹（專案同時改名為 Causal Loops Lab），舊的證據說明保留成其中一節，`PUBLIC_MANIFEST.json` 只更新了 `README.md` 那一行的雜湊值。
 
 ## 核心假設
 
