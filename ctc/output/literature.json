@@ -1,0 +1,188 @@
+{
+  "bhw_fig1": {
+    "0": {
+      "p_outcome_1": 0.0,
+      "fixed_point_dimension": 1
+    },
+    "-": {
+      "p_outcome_1": 1.0,
+      "fixed_point_dimension": 1
+    }
+  },
+  "bhw_bb84": {
+    "0": {
+      "claimed": "00",
+      "outcome_probabilities": {
+        "00": 1.0,
+        "01": 0.0,
+        "10": 0.0,
+        "11": 0.0
+      },
+      "fixed_point_dimension": 1
+    },
+    "+": {
+      "claimed": "10",
+      "outcome_probabilities": {
+        "00": 0.0,
+        "01": 0.0,
+        "10": 1.0,
+        "11": 0.0
+      },
+      "fixed_point_dimension": 1
+    },
+    "1": {
+      "claimed": "01",
+      "outcome_probabilities": {
+        "00": 0.0,
+        "01": 1.0,
+        "10": 0.0,
+        "11": 0.0
+      },
+      "fixed_point_dimension": 1
+    },
+    "-": {
+      "claimed": "11",
+      "outcome_probabilities": {
+        "00": 0.0,
+        "01": 0.0,
+        "10": 0.0,
+        "11": 1.0
+      },
+      "fixed_point_dimension": 1
+    }
+  },
+  "lloyd_gun": [
+    {
+      "theta_deg": 0,
+      "p_ctc_success_and_same": 0.5,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.0
+    },
+    {
+      "theta_deg": 15,
+      "p_ctc_success_and_same": 0.4914814566,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.0170370869
+    },
+    {
+      "theta_deg": 30,
+      "p_ctc_success_and_same": 0.4665063509,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.0669872981
+    },
+    {
+      "theta_deg": 45,
+      "p_ctc_success_and_same": 0.4267766953,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.1464466094
+    },
+    {
+      "theta_deg": 60,
+      "p_ctc_success_and_same": 0.375,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.25
+    },
+    {
+      "theta_deg": 75,
+      "p_ctc_success_and_same": 0.3147047613,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.3705904774
+    },
+    {
+      "theta_deg": 90,
+      "p_ctc_success_and_same": 0.25,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.5
+    },
+    {
+      "theta_deg": 105,
+      "p_ctc_success_and_same": 0.1852952387,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.6294095226
+    },
+    {
+      "theta_deg": 120,
+      "p_ctc_success_and_same": 0.125,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.75
+    },
+    {
+      "theta_deg": 135,
+      "p_ctc_success_and_same": 0.0732233047,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.8535533906
+    },
+    {
+      "theta_deg": 150,
+      "p_ctc_success_and_same": 0.0334936491,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.9330127019
+    },
+    {
+      "theta_deg": 165,
+      "p_ctc_success_and_same": 0.0085185434,
+      "p_ctc_opposite_given_success": 0.0,
+      "d_ctc_opposite": 0.9829629131
+    },
+    {
+      "theta_deg": 180,
+      "p_ctc_success_and_same": 0.0,
+      "p_ctc_opposite_given_success": null,
+      "d_ctc_opposite": 1.0
+    }
+  ],
+  "lloyd_unproved_theorem": {
+    "p_ctc_state": [
+      [
+        0.5,
+        0.0,
+        0.0,
+        0.5
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.5,
+        0.0,
+        0.0,
+        0.5
+      ]
+    ],
+    "d_ctc_state": [
+      [
+        0.5,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.5
+      ]
+    ]
+  }
+}

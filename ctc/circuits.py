@@ -108,6 +108,27 @@ def kfk(q, r, mode):
                    U, rho, bit_state(0.0), dict(q=q, r=r, mode=mode))
 
 
+def interference(p1, phi=np.pi):
+    """Quantum-only effect: interference between two self-consistent histories.
+
+    CR qubit `a` starts in sqrt(1-p1)|0> + sqrt(p1)|1>. A controlled phase e^{i phi}
+    acts when a = 1 and message = 1. The message itself is never changed, so both
+    message values are logically self-consistent in every branch; only the phase of
+    the m = 1 history differs. Baseline: an unknown external message (maximally mixed).
+    phi = pi is a CZ gate."""
+    U = np.diag([1, 1, 1, np.exp(1j * phi)]).astype(complex)
+    a = np.array([np.sqrt(1 - p1), np.sqrt(p1)], complex)
+    return Circuit('interference', ['a'], ['message'], U, np.outer(a, a.conj()), bit_state(0.5),
+                   dict(p1=p1, phi=phi))
+
+
+def phase_only_loop():
+    """The message picks up a phase (Z) and touches nothing else. Logically every
+    history is consistent, but Tr_loop[U] = 0."""
+    U = np.kron(np.eye(2), np.diag([1, -1])).astype(complex)
+    return Circuit('phase_only_loop', ['a'], ['message'], U, bit_state(0.3), bit_state(0.5))
+
+
 def bootstrap():
     """A message with no source: the loop bit is copied into a CR record and sent
     back unchanged. Baseline: an unknown external bit (maximally mixed)."""

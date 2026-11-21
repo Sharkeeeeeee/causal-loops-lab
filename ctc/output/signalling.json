@@ -1,0 +1,102 @@
+{
+  "alice_to_bob_trace_distance": {
+    "grandfather": {
+      "no_loop_classical": 0.0,
+      "p_ctc_classical": 0.95,
+      "d_ctc_classical": 0.0,
+      "no_loop_entangled": 0.0,
+      "p_ctc_entangled": 0.95,
+      "d_ctc_entangled": 0.0,
+      "branches_D": 0.0,
+      "branches_per_world": 0.0,
+      "branches_typical_consistent": 0.95,
+      "branches_P": 0.95,
+      "branches_middle": 0.075160998
+    },
+    "kfk_motivated": {
+      "no_loop_classical": 0.0,
+      "p_ctc_classical": 0.1536585366,
+      "d_ctc_classical": 0.0,
+      "no_loop_entangled": 0.0,
+      "p_ctc_entangled": 0.1536585366,
+      "d_ctc_entangled": 0.0,
+      "branches_D": 0.0,
+      "branches_per_world": 0.0,
+      "branches_typical_consistent": 0.2447852761,
+      "branches_P": 0.1536585366,
+      "branches_middle": 0.1055514045
+    },
+    "kfk_unconditional": {
+      "no_loop_classical": 0.0,
+      "p_ctc_classical": 0.0,
+      "d_ctc_classical": 0.0,
+      "no_loop_entangled": 0.0,
+      "p_ctc_entangled": 0.0,
+      "d_ctc_entangled": 0.0,
+      "branches_D": 0.0,
+      "branches_per_world": 0.0,
+      "branches_typical_consistent": 0.0,
+      "branches_P": 0.0,
+      "branches_middle": 0.0
+    },
+    "interference": {
+      "no_loop_classical": 0.0,
+      "p_ctc_classical": 0.5,
+      "d_ctc_classical": 0.0,
+      "no_loop_entangled": 0.0,
+      "p_ctc_entangled": 0.5,
+      "d_ctc_entangled": 0.0
+    },
+    "bootstrap": {
+      "no_loop_classical": 0.0,
+      "p_ctc_classical": 0.0,
+      "d_ctc_classical": 0.0,
+      "no_loop_entangled": 0.0,
+      "p_ctc_entangled": 0.0,
+      "d_ctc_entangled": 0.0,
+      "branches_D": 0.0,
+      "branches_per_world": 0.0,
+      "branches_typical_consistent": 0.0,
+      "branches_P": 0.0,
+      "branches_middle": 0.0
+    }
+  },
+  "bob_to_alice_bb84_alice_outcomes": {
+    "p_ctc_global_Z": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "p_ctc_global_X": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "d_ctc_global_Z": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "d_ctc_global_X": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "d_ctc_per_branch_Z": [
+      0.5,
+      0.5,
+      0.0,
+      0.0
+    ],
+    "d_ctc_per_branch_X": [
+      0.0,
+      0.0,
+      0.5,
+      0.5
+    ]
+  }
+}

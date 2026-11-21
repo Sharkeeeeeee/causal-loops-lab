@@ -56,6 +56,31 @@ def p_ctc(U, rho, d_cr, d_loop):
     return unnormalized / weight, weight
 
 
+def p_ctc_success_probability(U, rho, d_cr, d_loop):
+    """Probability that the postselection succeeds when the P-CTC is realised as
+    teleportation through a maximally entangled pair: Tr[C rho C^dag] / d_loop^2."""
+    C = partial_trace_operator_loop(U, d_cr, d_loop)
+    return float(np.trace(C @ rho @ C.conj().T).real) / d_loop ** 2
+
+
+def p_ctc_by_teleportation(U, rho, d_cr, d_loop):
+    """Independent check of p_ctc: simulate the postselected-teleportation circuit
+    explicitly. Systems CR x E x E'; E,E' start in |Phi> = sum_i |ii>/sqrt(d); U acts
+    on CR x E; then E,E' are projected back onto |Phi>. Returns (normalised CR state
+    or None, success probability)."""
+    phi = np.eye(d_loop, dtype=complex).reshape(-1) / np.sqrt(d_loop)
+    projector_phi = np.outer(phi, phi.conj())
+    state = np.kron(rho, projector_phi)
+    big_U = np.kron(U, np.eye(d_loop))
+    P = np.kron(np.eye(d_cr), projector_phi)
+    out = P @ big_U @ state @ big_U.conj().T @ P
+    cr = np.einsum('aibi->ab', out.reshape(d_cr, d_loop * d_loop, d_cr, d_loop * d_loop))
+    success = float(np.trace(cr).real)
+    if success < TOL:
+        return None, success
+    return cr / success, success
+
+
 def loop_map_matrix(U, rho, d_cr, d_loop):
     """Matrix of the linear map tau -> Tr_CR[U (rho x tau) U^dag] on row-major vec(tau)."""
     M = np.zeros((d_loop * d_loop, d_loop * d_loop), complex)
