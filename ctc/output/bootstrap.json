@@ -1,0 +1,14 @@
+{
+  "no_loop": {
+    "p_record_1": 0.5,
+    "x_expectation": 0.0
+  },
+  "p_ctc": {
+    "p_record_1": 0.5,
+    "x_expectation": 1.0
+  },
+  "d_ctc": {
+    "p_record_1": 0.5,
+    "x_expectation": 0.0
+  }
+}
