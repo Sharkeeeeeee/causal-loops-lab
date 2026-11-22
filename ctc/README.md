@@ -12,9 +12,15 @@ python -B ctc/run_branches.py           # 產生 κ–β 平面的 CSV 和圖
 python -B ctc/tests/test_quantum_effects.py  # 7 項測試，自洽歷史之間的量子干涉
 python -B ctc/tests/test_signalling.py  # 11 項測試，無訊號條件
 python -B ctc/run_signalling.py         # 產生無訊號測試的 JSON 和圖
+python -B ctc/tests/test_t_ctc.py       # 12 項測試，第四種規則 T-CTC（Allen 2014）
+python -B ctc/run_t_ctc.py              # 四種規則並排比較，以及 P-CTC ↔ T-CTC 線上的傳訊圖
+python -B ctc/tests/test_past_preserving.py  # 9 項測試，過去守恆篩選與有時間迴圈的雙縫實驗
+python -B ctc/run_double_slit.py        # 雙縫實驗與量子擦除的 JSON 和圖
+python -B ctc/tests/test_decoherence.py # 6 項測試，用去相干決定記錄基底
+python -B ctc/run_decoherence.py        # 記錄強度掃描的 JSON 和圖
 ```
 
-只有量子版本才有的效應見 [QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md)。無訊號測試的結果見 [NO_SIGNALLING.md](NO_SIGNALLING.md)。
+只有量子版本才有的效應見 [QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md)。無訊號測試的結果見 [NO_SIGNALLING.md](NO_SIGNALLING.md)。第四種規則 T-CTC 見 [T_CTC.md](T_CTC.md)，H2 的候選出路「過去守恆篩選」和雙縫實驗見 [PAST_PRESERVING.md](PAST_PRESERVING.md)，用去相干決定記錄基底見 [DECOHERENCE.md](DECOHERENCE.md)，新穎性檢查見 [NOVELTY_CHECK.md](NOVELTY_CHECK.md)。
 
 文獻重現的結果見 [LITERATURE_REPRODUCTION.md](LITERATURE_REPRODUCTION.md)。把 P-CTC 和 D-CTC 放進同一個雙參數模型的結果見 [BRANCHES.md](BRANCHES.md)。
 
@@ -24,7 +30,7 @@ python -B ctc/run_signalling.py         # 產生無訊號測試的 JSON 和圖
 
 | 檔案 | 內容 |
 |---|---|
-| `models.py` | 三種規則：無迴圈、P-CTC（Lloyd 等人 2011）、D-CTC（Deutsch 1991）；另外有直接模擬後選擇 teleportation 的檢查 |
+| `models.py` | 四種規則：無迴圈、P-CTC（Lloyd 等人 2011）、D-CTC（Deutsch 1991）、T-CTC（Allen 2014）；另外有直接模擬後選擇 teleportation 的檢查 |
 | `circuits.py` | 三個情境：祖父悖論、KFK 型提醒、自舉悖論；另外有兩個只有量子版本才有效應的電路：受控相位干涉、只帶相位的迴圈 |
 | `literature.py` | 從論文圖中讀出的電路：Lloyd 2011 Fig. 2、Brun–Harrington–Wilde 2009 Fig. 1–2 |
 | `branches.py` | 古典的「有權重分支」模型：κ（訊息從哪裡來）和 β（自洽篩選強度），P-CTC 和 D-CTC 是其中兩個角落 |
@@ -33,6 +39,15 @@ python -B ctc/run_signalling.py         # 產生無訊號測試的 JSON 和圖
 | `signalling.py` | 加上遠方的 Bob，檢查 Alice ↔ Bob 兩個方向能不能傳訊 |
 | `tests/test_signalling.py` | 各規則的傳訊量、P-CTC 的 C†C 判準、D-CTC 兩種套用方式 |
 | `run_signalling.py` | 傳訊量總表與 κ–β 平面上的傳訊圖 |
+| `tests/test_t_ctc.py` | T-CTC 對照 Allen 2014 的公式（Eq. 24、33、35、38、40）、極限、傳訊 |
+| `run_t_ctc.py` | 四種規則並排比較，以及沿 t 參數的傳訊圖 |
+| `past_preserving.py` | 過去守恆篩選：過去的機率不變，只在每個已記錄的過去世界內做自洽篩選 |
+| `double_slit.py` | 有時間迴圈的雙縫實驗，包括跟閒置光子糾纏的量子擦除版本 |
+| `tests/test_past_preserving.py` | 不能傳訊、祖父悖論不變、KFK 閉式解、雙縫與擦除的數值、記錄基底的依賴 |
+| `run_double_slit.py` | 雙縫實驗在六種規則下的條紋 |
+| `decoherence.py` | 環境部分記錄光子路徑；去相干定義的過去守恆篩選 |
+| `tests/test_decoherence.py` | 不能傳訊、紀錄不被改寫、新鮮光子閉式解、指標基底決定擦除結果 |
+| `run_decoherence.py` | 記錄強度 s 的掃描與圖 |
 | `run_branches.py` | κ–β 平面的掃描與畫圖 |
 | `tests/test_models.py` | 么正性、不動點、與解析公式的比對 |
 | `tests/test_literature.py` | 逐條重現論文中的說法 |

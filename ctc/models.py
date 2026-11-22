@@ -5,6 +5,8 @@ Three rules for a unitary U acting on (CR system) x (loop system):
   p_ctc   : postselected CTC (Lloyd et al. 2011). Output ~ C rho C^dag, C = Tr_loop[U].
   d_ctc   : Deutsch CTC (1991). The loop state tau must satisfy
             tau = Tr_CR[U (rho x tau) U^dag].
+  t_ctc   : transition-probability CTC (Allen 2014). A weighted mixture of the P-CTC
+            term and the maximally mixed loop channel.
 
 Ordering convention: CR subsystems first, loop subsystems last.
 These are mathematical models. Running them does not send anything anywhere in time.
@@ -54,6 +56,33 @@ def p_ctc(U, rho, d_cr, d_loop):
     if weight < TOL:
         return None, weight
     return unnormalized / weight, weight
+
+
+def maximally_mixed_loop(U, rho, d_cr, d_loop):
+    """Ordinary evolution with the loop input replaced by the maximally mixed state."""
+    return no_loop(U, rho, d_cr, d_loop, np.eye(d_loop, dtype=complex) / d_loop)
+
+
+def t_ctc(U, rho, d_cr, d_loop, t=1.0):
+    """Transition-probability CTC (Allen 2014, Phys. Rev. A 90, 042107, Eq. 33):
+
+        rho_f = z^-1 ( C rho C^dag + t d Tr_loop[U (rho x 1/d) U^dag] ),  C = Tr_loop[U].
+
+    t = 1 is Allen's T-CTC (the Haar average over pure loop states, Eq. 24). t = 0 is
+    P-CTC and t -> inf is the maximally mixed loop channel. Values t != 1 are this
+    project's generalisation, not Allen's. Returns (output state, lam), where lam is
+    the weight of the channel term (Allen Eq. 38 at t = 1). Output is None only if
+    both terms vanish, which cannot happen for t > 0."""
+    if np.isinf(t):
+        return maximally_mixed_loop(U, rho, d_cr, d_loop), 1.0
+    C = partial_trace_operator_loop(U, d_cr, d_loop)
+    selected = C @ rho @ C.conj().T
+    channel = t * d_loop * maximally_mixed_loop(U, rho, d_cr, d_loop)
+    total = selected + channel
+    z = float(np.trace(total).real)
+    if z < TOL:
+        return None, float('nan')
+    return total / z, float(np.trace(channel).real) / z
 
 
 def p_ctc_success_probability(U, rho, d_cr, d_loop):

@@ -14,10 +14,10 @@ Derived in this project (see ctc/NO_SIGNALLING.md); likely known in some form.
 import numpy as np
 
 from circuits import Circuit
-from models import d_ctc, no_loop, p_ctc
+from models import d_ctc, no_loop, p_ctc, t_ctc
 from branches import output_state
 
-RULES = ('no_loop', 'p_ctc', 'd_ctc')
+RULES = ('no_loop', 'p_ctc', 'd_ctc', 't_ctc')
 
 
 def single_qubit_marginals(rho, n):
@@ -88,7 +88,7 @@ def bob_state(rho_cr, n_cr):
     return np.einsum('aiaj->ij', rho_cr.reshape(d_rest, 2, d_rest, 2))
 
 
-def output(circuit, rule, kappa=None, beta=None):
+def output(circuit, rule, kappa=None, beta=None, t=1.0):
     c = circuit
     if rule == 'no_loop':
         return no_loop(c.U, c.rho, c.d_cr, c.d_loop, c.baseline_loop)
@@ -96,6 +96,8 @@ def output(circuit, rule, kappa=None, beta=None):
         return p_ctc(c.U, c.rho, c.d_cr, c.d_loop)[0]
     if rule == 'd_ctc':
         return d_ctc(c.U, c.rho, c.d_cr, c.d_loop)[0]
+    if rule == 't_ctc':
+        return t_ctc(c.U, c.rho, c.d_cr, c.d_loop, t)[0]
     if rule == 'branches':
         return output_state(c, kappa, beta)
     raise ValueError(rule)
