@@ -1,0 +1,131 @@
+{
+  "grandfather": {
+    "no_loop": [
+      {
+        "quantity": "P(jam = 1)  [past]",
+        "exact": 0.2,
+        "measured": 0.1981201171875,
+        "std": 0.004049641788892991,
+        "raw": 0.1981201171875
+      }
+    ],
+    "p_ctc": [
+      {
+        "quantity": "P(jam = 1)  [past]",
+        "exact": 1.0,
+        "measured": 0.8796296296296297,
+        "std": 0.007472758171220051,
+        "raw": 0.8796296296296297
+      }
+    ],
+    "past_preserving": [
+      {
+        "quantity": "P(jam = 1)  [past]",
+        "exact": 0.2,
+        "measured": 0.20398289653884463,
+        "std": 0.004118184820453227,
+        "raw": 0.20398289653884463
+      }
+    ]
+  },
+  "refusal": {
+    "no_loop": [
+      {
+        "quantity": "P(a = 1)  [past]",
+        "exact": 0.5,
+        "measured": 0.4757080078125,
+        "std": 0.005711989227505892,
+        "raw": 0.4757080078125
+      },
+      {
+        "quantity": "P(message logged, given a = 1)  [future]",
+        "exact": 0.5,
+        "measured": 0.48498845265588914,
+        "std": 0.007530343305870533,
+        "raw": 0.48498845265588914
+      },
+      {
+        "quantity": "P(message logged, given a = 0)  [future]",
+        "exact": 0.5,
+        "measured": 0.470314318975553,
+        "std": 0.007432944831846371,
+        "raw": 0.470314318975553
+      }
+    ],
+    "p_ctc": [
+      {
+        "quantity": "P(a = 1)  [past]",
+        "exact": 0.3333333333333333,
+        "measured": 0.35219283562102455,
+        "std": 0.008459876044725164,
+        "raw": 0.35219283562102455
+      },
+      {
+        "quantity": "P(message logged, given a = 1)  [future]",
+        "exact": 0.0,
+        "measured": 0.11216730038022812,
+        "std": 0.010199142293506436,
+        "raw": 0.11216730038022812
+      },
+      {
+        "quantity": "P(message logged, given a = 0)  [future]",
+        "exact": 0.5,
+        "measured": 0.4594315245478037,
+        "std": 0.011529199768441226,
+        "raw": 0.4594315245478037
+      }
+    ],
+    "past_preserving": [
+      {
+        "quantity": "P(a = 1)  [past]",
+        "exact": 0.5000000000000001,
+        "measured": 0.4757080078125,
+        "std": 0.005711989227505889,
+        "raw": 0.4757080078125
+      },
+      {
+        "quantity": "P(message logged, given a = 1)  [future]",
+        "exact": 0.0,
+        "measured": 0.11216730038022815,
+        "std": 0.010199142293506432,
+        "raw": 0.11216730038022815
+      },
+      {
+        "quantity": "P(message logged, given a = 0)  [future]",
+        "exact": 0.5,
+        "measured": 0.4594315245478035,
+        "std": 0.011529199768441235,
+        "raw": 0.4594315245478035
+      }
+    ]
+  },
+  "one_way": {
+    "no_loop": [
+      {
+        "quantity": "P(a = 1)  [past; equals the record held by a partner]",
+        "exact": 0.5,
+        "measured": 0.484619140625,
+        "std": 0.005685257975724923,
+        "raw": 0.484619140625
+      }
+    ],
+    "p_ctc": [
+      {
+        "quantity": "P(a = 1)  [past; equals the record held by a partner]",
+        "exact": 0.0,
+        "measured": 0.06110458284371328,
+        "std": 0.0057396321344588925,
+        "raw": 0.06110458284371328
+      }
+    ],
+    "past_preserving": [
+      {
+        "quantity": "P(a = 1)  [past; equals the record held by a partner]",
+        "exact": 0.5,
+        "measured": 0.477893757370283,
+        "std": 0.0057252878465954855,
+        "raw": 0.477893757370283
+      }
+    ]
+  }
+}

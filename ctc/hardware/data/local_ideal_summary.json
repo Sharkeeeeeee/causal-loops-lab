@@ -1,0 +1,373 @@
+{
+  "grandfather": {
+    "no_loop": [
+      {
+        "quantity": "P(jam = 1)  [past]",
+        "exact": 0.2,
+        "measured": 0.19903564453125,
+        "std": 0.0030908595975388375,
+        "raw": 0.19903564453125
+      }
+    ],
+    "p_ctc": [
+      {
+        "quantity": "P(jam = 1)  [past]",
+        "exact": 1.0,
+        "measured": 1.0,
+        "std": 0.0,
+        "raw": 1.0
+      }
+    ],
+    "past_preserving": [
+      {
+        "quantity": "P(jam = 1)  [past]",
+        "exact": 0.2,
+        "measured": 0.19903564453125,
+        "std": 0.0030908595975388375,
+        "raw": 0.19903564453125
+      }
+    ]
+  },
+  "refusal": {
+    "no_loop": [
+      {
+        "quantity": "P(a = 1)  [past]",
+        "exact": 0.5,
+        "measured": 0.49786376953125,
+        "std": 0.0038031066536406443,
+        "raw": 0.49786376953125
+      },
+      {
+        "quantity": "P(message logged, given a = 1)  [future]",
+        "exact": 0.5,
+        "measured": 0.5021453965918843,
+        "std": 0.005320211227184421,
+        "raw": 0.5021453965918843
+      },
+      {
+        "quantity": "P(message logged, given a = 0)  [future]",
+        "exact": 0.5,
+        "measured": 0.49835906162635224,
+        "std": 0.005489106488228837,
+        "raw": 0.49835906162635224
+      }
+    ],
+    "p_ctc": [
+      {
+        "quantity": "P(a = 1)  [past]",
+        "exact": 0.3333333333333333,
+        "measured": 0.337612323491656,
+        "std": 0.0056258378489252425,
+        "raw": 0.337612323491656
+      },
+      {
+        "quantity": "P(message logged, given a = 1)  [future]",
+        "exact": 0.0,
+        "measured": 0.0,
+        "std": 0.0,
+        "raw": 0.0
+      },
+      {
+        "quantity": "P(message logged, given a = 0)  [future]",
+        "exact": 0.5,
+        "measured": 0.4958817829457364,
+        "std": 0.007658409138534619,
+        "raw": 0.4958817829457364
+      }
+    ],
+    "past_preserving": [
+      {
+        "quantity": "P(a = 1)  [past]",
+        "exact": 0.5000000000000001,
+        "measured": 0.49786376953125,
+        "std": 0.0038031066536406443,
+        "raw": 0.49786376953125
+      },
+      {
+        "quantity": "P(message logged, given a = 1)  [future]",
+        "exact": 0.0,
+        "measured": 0.0,
+        "std": 0.0,
+        "raw": 0.0
+      },
+      {
+        "quantity": "P(message logged, given a = 0)  [future]",
+        "exact": 0.5,
+        "measured": 0.4958817829457364,
+        "std": 0.0076584091385346244,
+        "raw": 0.4958817829457364
+      }
+    ]
+  },
+  "one_way": {
+    "no_loop": [
+      {
+        "quantity": "P(a = 1)  [past; equals the record held by a partner]",
+        "exact": 0.5,
+        "measured": 0.49786376953125,
+        "std": 0.0038917344444367786,
+        "raw": 0.49786376953125
+      }
+    ],
+    "p_ctc": [
+      {
+        "quantity": "P(a = 1)  [past; equals the record held by a partner]",
+        "exact": 0.0,
+        "measured": 0.0,
+        "std": 0.0,
+        "raw": 0.0
+      }
+    ],
+    "past_preserving": [
+      {
+        "quantity": "P(a = 1)  [past; equals the record held by a partner]",
+        "exact": 0.5,
+        "measured": 0.49786376953125,
+        "std": 0.0038917344444367786,
+        "raw": 0.49786376953125
+      }
+    ]
+  },
+  "eraser_x": {
+    "no_loop": [
+      {
+        "quantity": "P(Bob idler reads X = +)  [Bob's own statistics]",
+        "exact": 0.5,
+        "measured": 0.50213623046875,
+        "std": 0.0039605735621644446,
+        "raw": 0.50213623046875
+      },
+      {
+        "quantity": "P(path reads X = +)  [whole screen]",
+        "exact": 0.5,
+        "measured": 0.50140380859375,
+        "std": 0.0038065698522586114,
+        "raw": 0.50140380859375
+      },
+      {
+        "quantity": "P(path reads X = +, given Bob X = +)  [sorted fringe]",
+        "exact": 0.7499999999999999,
+        "measured": 0.7516713261213079,
+        "std": 0.005122772260522198,
+        "raw": 0.7516713261213079
+      }
+    ],
+    "p_ctc": [
+      {
+        "quantity": "P(Bob idler reads X = +)  [Bob's own statistics]",
+        "exact": 0.5,
+        "measured": 0.5030145021997718,
+        "std": 0.00464874230968283,
+        "raw": 0.5030145021997718
+      },
+      {
+        "quantity": "P(path reads X = +)  [whole screen]",
+        "exact": 0.5,
+        "measured": 0.5043180707185921,
+        "std": 0.004476614440532236,
+        "raw": 0.5043180707185921
+      },
+      {
+        "quantity": "P(path reads X = +, given Bob X = +)  [sorted fringe]",
+        "exact": 0.8333333333333333,
+        "measured": 0.8360868156786525,
+        "std": 0.005052188169897142,
+        "raw": 0.8360868156786525
+      }
+    ],
+    "past_preserving": [
+      {
+        "quantity": "P(Bob idler reads X = +)  [Bob's own statistics]",
+        "exact": 0.5,
+        "measured": 0.50213623046875,
+        "std": 0.003960573562164444,
+        "raw": 0.50213623046875
+      },
+      {
+        "quantity": "P(path reads X = +)  [whole screen]",
+        "exact": 0.5,
+        "measured": 0.5037317696872246,
+        "std": 0.00430830185006585,
+        "raw": 0.5037317696872246
+      },
+      {
+        "quantity": "P(path reads X = +, given Bob X = +)  [sorted fringe]",
+        "exact": 0.8333333333333333,
+        "measured": 0.8360868156786524,
+        "std": 0.0050521881698971415,
+        "raw": 0.8360868156786524
+      }
+    ]
+  },
+  "eraser_y": {
+    "no_loop": [
+      {
+        "quantity": "P(Bob idler reads X = +)  [Bob's own statistics]",
+        "exact": 0.5,
+        "measured": 0.50213623046875,
+        "std": 0.003785811446393424,
+        "raw": 0.50213623046875
+      },
+      {
+        "quantity": "P(path reads Y = +)  [whole screen]",
+        "exact": 0.5,
+        "measured": 0.50140380859375,
+        "std": 0.0038792376136079585,
+        "raw": 0.50140380859375
+      },
+      {
+        "quantity": "P(path reads Y = +, given Bob X = +)  [sorted fringe]",
+        "exact": 0.7499999999999999,
+        "measured": 0.7516713261213079,
+        "std": 0.004808647050614603,
+        "raw": 0.7516713261213079
+      }
+    ],
+    "p_ctc": [
+      {
+        "quantity": "P(Bob idler reads X = +)  [Bob's own statistics]",
+        "exact": 0.5,
+        "measured": 0.5030145021997718,
+        "std": 0.004583774513243178,
+        "raw": 0.5030145021997718
+      },
+      {
+        "quantity": "P(path reads Y = +)  [whole screen]",
+        "exact": 0.5,
+        "measured": 0.5043180707185921,
+        "std": 0.004441216534687135,
+        "raw": 0.5043180707185921
+      },
+      {
+        "quantity": "P(path reads Y = +, given Bob X = +)  [sorted fringe]",
+        "exact": 0.8333333333333333,
+        "measured": 0.8360868156786525,
+        "std": 0.0047151449204004044,
+        "raw": 0.8360868156786525
+      }
+    ],
+    "past_preserving": [
+      {
+        "quantity": "P(Bob idler reads X = +)  [Bob's own statistics]",
+        "exact": 0.5,
+        "measured": 0.50213623046875,
+        "std": 0.003785811446393424,
+        "raw": 0.50213623046875
+      },
+      {
+        "quantity": "P(path reads Y = +)  [whole screen]",
+        "exact": 0.5,
+        "measured": 0.5037317696872246,
+        "std": 0.004125806851937414,
+        "raw": 0.5037317696872246
+      },
+      {
+        "quantity": "P(path reads Y = +, given Bob X = +)  [sorted fringe]",
+        "exact": 0.8333333333333333,
+        "measured": 0.8360868156786524,
+        "std": 0.004715144920400409,
+        "raw": 0.8360868156786524
+      }
+    ]
+  },
+  "eraser_z": {
+    "no_loop": [
+      {
+        "quantity": "P(Bob idler reads Z = 0)  [Bob's own statistics]",
+        "exact": 0.5,
+        "measured": 0.50213623046875,
+        "std": 0.003787183765565837,
+        "raw": 0.50213623046875
+      },
+      {
+        "quantity": "P(path reads Z = 1, right slit)",
+        "exact": 0.5,
+        "measured": 0.49786376953125,
+        "std": 0.003787183765565837,
+        "raw": 0.49786376953125
+      }
+    ],
+    "p_ctc": [
+      {
+        "quantity": "P(Bob idler reads Z = 0)  [Bob's own statistics]",
+        "exact": 0.6666666666666666,
+        "measured": 0.6695149739583334,
+        "std": 0.003916842472115743,
+        "raw": 0.6695149739583334
+      },
+      {
+        "quantity": "P(path reads Z = 1, right slit)",
+        "exact": 0.3333333333333333,
+        "measured": 0.3304850260416667,
+        "std": 0.00391684247211574,
+        "raw": 0.3304850260416667
+      }
+    ],
+    "past_preserving": [
+      {
+        "quantity": "P(Bob idler reads Z = 0)  [Bob's own statistics]",
+        "exact": 0.5000000000000001,
+        "measured": 0.50213623046875,
+        "std": 0.003787183765565837,
+        "raw": 0.50213623046875
+      },
+      {
+        "quantity": "P(path reads Z = 1, right slit)",
+        "exact": 0.5,
+        "measured": 0.49786376953125,
+        "std": 0.003787183765565837,
+        "raw": 0.49786376953125
+      }
+    ]
+  },
+  "eraser_fringe": {
+    "no_loop sorted by Bob X = +": {
+      "exact_visibility": 0.7071067811865472,
+      "measured_visibility": 0.7118340053223517,
+      "std_visibility": 0.009492540312036016,
+      "exact_shift": 0.7853981633974483,
+      "measured_shift": 0.7853981633974483,
+      "std_shift": 0.014552081997986938
+    },
+    "no_loop whole screen": {
+      "exact_visibility": 0.0,
+      "measured_visibility": 0.003970570304514305,
+      "std_visibility": 0.0049004933774137475,
+      "exact_shift": 0.0,
+      "measured_shift": 0.7853981633974483,
+      "std_shift": 1.4844970739541206
+    },
+    "p_ctc sorted by Bob X = +": {
+      "exact_visibility": 0.9428090415820631,
+      "measured_visibility": 0.9505970657350739,
+      "std_visibility": 0.009543430232490787,
+      "exact_shift": 0.7853981633974483,
+      "measured_shift": 0.7853981633974483,
+      "std_shift": 0.010521704014143981
+    },
+    "p_ctc whole screen": {
+      "exact_visibility": 0.0,
+      "measured_visibility": 0.012213348347038274,
+      "std_visibility": 0.007229377464831586,
+      "exact_shift": 0.0,
+      "measured_shift": 0.7853981633974483,
+      "std_shift": 0.923215363701858
+    },
+    "past_preserving sorted by Bob X = +": {
+      "exact_visibility": 0.9428090415820631,
+      "measured_visibility": 0.9505970657350735,
+      "std_visibility": 0.009543430232490789,
+      "exact_shift": 0.7853981633974483,
+      "measured_shift": 0.7853981633974483,
+      "std_shift": 0.010521704014143983
+    },
+    "past_preserving whole screen": {
+      "exact_visibility": 0.0,
+      "measured_visibility": 0.010555038606651525,
+      "std_visibility": 0.006728771673443397,
+      "exact_shift": 0.0,
+      "measured_shift": 0.7853981633974483,
+      "std_shift": 1.047817792940983
+    }
+  }
+}
