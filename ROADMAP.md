@@ -39,6 +39,8 @@ These findings changed the content of the hypotheses; details in the linked docu
 13. **Strong, common microscopic loops are ruled out.** If every particle coupled to a loop (Z-basis model), the loop phase would have to be below 0.136 rad: a direct pure-vs-recorded test on ibm_kingston bounds the population shift at |S| < 1.16×10⁻³ (95%), stronger than existing Born-rule data for φ between 0.14 and 0.98 rad. A first run's 10σ "anomaly" was traced, with a preregistered control, to CNOT crosstalk that the design failed to cancel because ±π/2 compiled to the same physical pulse. ([ctc/born_rule/README.md](ctc/born_rule/README.md))
 14. **Two intuitive conjectures about PPS are false in general.** In a preregistered "conjecture lottery" (credences hashed before any checking code existed), "the PPS effect never exceeds P-CTC's" holds for single-qubit CR systems but fails for two qubits, and "PPS never increases entropy" fails for classical circuits. Brier score 0.213, close to chance, as intended. ([ctc/conjectures/README.md](ctc/conjectures/README.md))
 
+15. **PPS works in a timeless universe, if "the past" is defined by influence, not by time.** Written as a constraint on a static Page–Wootters history state, PPS reproduces every circuit prediction exactly. "Past = recorded at an earlier clock reading" depends on the choice of clock (with one ordering of two commuting steps PPS collapses to P-CTC and signals); "past = every record" switches the loop off; "past = records the loop cannot influence" works and is clock independent. The same holds with local clocks (one static state, many frames) and with a superposed clock (indefinite order of record and loop): where the order is recorded the definitions agree; where it is not, the clock definition disturbs the order's interference and the influence definition does not. Open: every loop rule, PPS included, moves the unrecorded initial condition. ([ctc/timeless/README.md](ctc/timeless/README.md))
+
 ## Phases
 
 ### Phase 0: project setup ✅
@@ -62,7 +64,7 @@ Done:
 - [x] **choose a way out for H2:** PPS chosen; H2 rewritten as H2′ (reweighting only inside each recorded past world) and proved as a theorem ([ctc/THEOREMS.md](ctc/THEOREMS.md)). Other candidates (global non-local rules, D-CTC-like effects on the message only) are not pursued; see [ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md)
 - [x] **decision point:** only rules that do not reweight the world are compatible with relativity. Decision: keep no-signalling, rewrite H2 as H2′, adopt PPS (it still reweights the future inside each past world, but weights between worlds do not change)
 - [x] novelty checks, rounds 1–3 ([ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md)): P-CTC signalling and D-CTC's interpretation dependence are known (Bub–Stairs 2014 and others); the C†C criterion is essentially Araújo–Guérin–Baumeler 2017's linearity condition; Allen 2014 is the closest prior work to the κ–β model; PPS's within-world rule is Hartle 1994 Eq. (5.6)
-- [x] 135 tests, all passing (2026-11-24; 3 gate-level hardware tests are skipped without qiskit)
+- [x] 154 tests, all passing (2026-11-24; 3 gate-level hardware tests are skipped without qiskit)
 
 Next, in priority order:
 - [ ] **make the record basis state independent:** let the system–environment interaction, not the conditional state, fix the basis (PERSPECTIVES.md 3.1). This makes the rule linear, so Theorem 0 applies, and should also remove the all-or-nothing behaviour in the eraser
@@ -116,7 +118,7 @@ The rule X is chosen as PPS, and first versions of T1–T3 are done in [ctc/THEO
 - [ ] T4 consequences: computational power, thermodynamics, no-cloning, no-signalling. **Partly done:** no signalling with a fixed record basis (Theorem 0); computational power at least PostBQP (PERSPECTIVES.md 1.5)
 - [ ] uniqueness of PPS: the only rule that is CPTP, keeps recorded probabilities, gives consistent outcomes and recovers ordinary QM (PERSPECTIVES.md 3.2)
 - [ ] the seam of falling back to D-CTC in paradox worlds: justify it or find a rule without a seam
-- [ ] how "the recorded past" is defined in relativity (PERSPECTIVES.md 1.3)
+- [ ] how "the recorded past" is defined in relativity (PERSPECTIVES.md 1.3). **Toy-model step (11-24):** in a Page–Wootters universe the past must be "records the loop cannot influence"; clock order fails ([ctc/timeless/README.md](ctc/timeless/README.md)). Local clocks and a superposed clock done the same day. Next: continuous clocks with finite resolution, and whether the initial condition counts as a record
 - [ ] optional: formalize one or two small theorems in Lean
 
 ### Phase 4: publication and collaboration

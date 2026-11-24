@@ -22,9 +22,11 @@ python -B ctc/tests/test_hardware.py            #  8  hardware circuits and esti
 python -B ctc/tests/test_born_rule.py           #  6  loop model vs Born-rule tests
 python -B ctc/tests/test_born_direct.py         #  8  direct pure-vs-recorded test design
 python -B ctc/tests/test_blockchain.py          # 22  blockchain lottery protocol (offline)
+python -B ctc/tests/test_timeless.py            # 11  loop rules in a timeless (Page–Wootters) universe
+python -B ctc/tests/test_clocks.py              #  8  local clocks (frames) and a superposed clock
 ```
 
-135 tests in total (2026-11-24). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
+154 tests in total (2026-11-24). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
 
 ## Regenerating results
 
@@ -50,6 +52,7 @@ Requires NumPy; figures need matplotlib; hardware code needs qiskit (and qiskit-
 | [THEOREMS.md](THEOREMS.md) | H1′–H3′ under past-preserving selection: statements, proofs, checks |
 | [PAST_PRESERVING.md](PAST_PRESERVING.md) | the PPS rule; a double slit and quantum eraser with a time loop |
 | [DECOHERENCE.md](DECOHERENCE.md) | letting decoherence fix the record basis |
+| [timeless/README.md](timeless/README.md) | PPS in a timeless (Page–Wootters) universe: the past must be defined by influence, not clock order |
 | [NO_SIGNALLING.md](NO_SIGNALLING.md) | reweighting the world equals faster-than-light signalling |
 | [QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md) | interference between consistent histories |
 | [T_CTC.md](T_CTC.md) | Allen's T-CTC as a fourth rule |
@@ -78,6 +81,7 @@ Requires NumPy; figures need matplotlib; hardware code needs qiskit (and qiskit-
 | `born_rule/` | loop model, comparison with published Sorkin bounds, direct test and control on IBM hardware |
 | `conjectures/` | conjecture pool, credences, exhaustive evaluator |
 | `blockchain/` | protocol, Bitcoin header checks, OpenTimestamps and Internet Archive helpers |
+| `timeless/` | Page–Wootters history states, the loop as a constraint on a static state, three definitions of "the past" |
 | `tests/` | all tests listed above |
 | `output/` | generated tables and figures (`toy_results.csv` holds every number in the toy figure) |
 
