@@ -1,3 +1,3 @@
-# Keep files byte-identical on every platform so VERIFY_PUBLIC.py hashes match.
-# Without this, Windows checkouts with core.autocrlf=true convert LF to CRLF.
+# Keep files byte-identical on every platform (no line-ending conversion), so hashes of
+# preregistration files and committed results stay stable on Windows checkouts.
 * -text

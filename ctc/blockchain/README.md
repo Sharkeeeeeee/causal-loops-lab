@@ -1,101 +1,105 @@
-# 迴圈樂透：在比特幣區塊鏈上測試「自洽能不能把答案從未來逼回來」
+# Loop lottery: testing on the Bitcoin blockchain whether self-consistency can pull answers back from the future
 
-建立日期：2026-11-23，撰寫時使用 AI 輔助（Claude）。沒有外部審查。協議版本 `cll-loop-lottery-v2`（v1 經漏洞檢查後修正，見最後一節）。協議和判準在正式執行前由 `preregister.py` 產生 `PREREGISTRATION.md` 和 `params.json`。
+Created 2026-11-23 with AI assistance (Claude). No external review. Protocol version `cll-loop-lottery-v2` (v1 was revised after a loophole review; see the last sections). Before a real run, `preregister.py` generates `PREREGISTRATION.md` and `params.json` with the protocol and criteria.
 
-## 一句話
+**Status: designed and tested offline; not yet run.**
 
-先把猜測鎖進區塊鏈，答案由事先指定、尚未挖出的區塊決定；答案出來後再把它「寄回過去」。如果自洽真的能逼出答案，被寄回的題目就會猜中。**32 位元的答案，只要猜中一題，巧合的機率就只有約 7×10⁻⁹，超過 5σ。**
+## In one sentence
 
-## 為什麼用區塊鏈
+Lock guesses into the blockchain first, with answers determined by a pre-specified block that has not yet been mined; once the answers exist, "send them back to the past". If self-consistency really could force answers, the questions that are sent back would be guessed correctly. **With 32-bit answers, a single correct guess has a chance probability of about 7×10⁻⁹, beyond 5σ.**
 
-| 需要什麼 | 怎麼做 |
+## Why a blockchain
+
+| Requirement | How |
 |---|---|
-| 猜測確實在答案之前就固定了 | 用 [OpenTimestamps](https://opentimestamps.org) 把承諾值寫進比特幣區塊 B_c。免費，不需要錢包或加密貨幣 |
-| 只有**一組**猜測（不能藏很多組事後挑） | 承諾值以明文發布在事先指定的網址，由 Internet Archive 存檔；**第一次**存檔才算數 |
-| 答案在猜的時候還不存在、也無法預測 | 答案取自事先指定高度 H 的區塊雜湊；承諾必須在 H−6 或更早的區塊裡 |
-| 規則沒有事後修改 | 預先登錄文件（含 H 和網址）的 SHA-256 被包進承諾值，一起上鏈 |
+| The guesses were really fixed before the answers | write the commitment into Bitcoin block B_c with [OpenTimestamps](https://opentimestamps.org); free, no wallet or cryptocurrency needed |
+| Only **one** set of guesses (no hiding many and picking afterwards) | the commitment is published in plain text at a pre-specified URL and archived by the Internet Archive; only the **first** capture counts |
+| The answers do not exist and cannot be predicted at guessing time | answers come from the hash of the block at pre-specified height H; the commitment must be in block H−6 or earlier |
+| The rules were not changed afterwards | the SHA-256 of the preregistration (including H and the URL) is part of the commitment and goes on-chain with it |
 
-## 流程
+## Procedure
 
 ```text
- 0. preregister.py   指定答案區塊 H（約現在 +48 塊，8 小時後）和見證網址
- 1. commit.py        IBM 量子電腦產生 64 個 32 位元猜測 → 承諾值 → OpenTimestamps 上鏈
- 2. push + witness.py  承諾檔推到 GitHub，請 Internet Archive 存檔（必須早於區塊 H 兩小時以上）
-        ⋯ 等待：承諾進入區塊 B_c（≤ H−6），區塊 H、H+1 被挖出，再等 6 個確認 ⋯
- 3. send.py          未來的寄件者：用區塊 H 算答案、區塊 H+1 選出約一半題目，把答案「寄回」並上鏈
- 4. reveal.py        寄完才公開猜測和鹽值
- 5. verify.py        任何人都能從頭重跑全部檢查，套用預先登錄的判準
+ 0. preregister.py     fix the answer block H (about now + 48 blocks, 8 hours ahead) and the witness URL
+ 1. commit.py          an IBM quantum computer produces 64 guesses of 32 bits → commitment → OpenTimestamps
+ 2. push + witness.py  push the commitment file to GitHub and ask the Internet Archive to capture it
+                       (at least two hours before block H)
+        ⋯ wait: the commitment enters block B_c (≤ H−6), blocks H and H+1 are mined, then 6 confirmations ⋯
+ 3. send.py            the future sender: compute the answers from block H, use block H+1 to pick about half
+                       of the questions, and "send back" their answers on-chain
+ 4. reveal.py          only after sending, publish the guesses and the salt
+ 5. verify.py          anyone can rerun every check from scratch and apply the preregistered criteria
 ```
 
-- 寄件者看不到猜測；猜的人看不到答案（答案區塊還不存在）。
-- **對照組：** 沒被寄回的那一半題目，在任何假說下都只是巧合水準。「寄回的中、沒寄回的不中」才是迴圈效應的特徵；量子亂數本身的偏差會讓兩組一起受影響，而且因為答案是均勻的，猜測再怎麼偏也不改變命中機率（有測試）。
+- The sender never sees the guesses; the guesser cannot see the answers (the answer block does not exist yet).
+- **Control group:** the half of the questions that are not sent back stay at chance under every hypothesis. "Sent-back questions hit, others do not" is the signature of a loop effect. A bias in the quantum random numbers would affect both groups, and since the answers are uniform, no bias in the guesses changes the hit probability (tested).
 
-## 電腦怎麼嚴謹檢查（verify.py）
+## How the computer checks (verify.py)
 
-1. `params.json` 和 `PREREGISTRATION.md` 一致，而且預先登錄文件的 SHA-256 等於承諾值裡記錄的那一個。
-2. 公開的猜測和鹽值，雜湊後等於上鏈的承諾值。
-3. OpenTimestamps 證明從承諾檔一路算到區塊 B_c 的 merkle root，而且 B_c ≤ H−6。
-4. 見證網址的第一次 Internet Archive 存檔，內容是同一個承諾值，存檔時間早於「區塊 H 的時間戳 − 2 小時」。比特幣規定區塊時間戳最多只能超前真實時間 2 小時，所以這保證存檔發生在區塊 H 被挖出之前。
-5. 區塊 B_c 到 H+1 的區塊頭：從 mempool.space 和 blockstream.info 兩個獨立來源抓取並逐位元組比對；每個區塊的雙重 SHA-256、工作量證明、現代難度下限、前後鏈結全部重算。
-6. 從區塊雜湊重新算出答案和寄回名單，`loop_messages.json` 必須完全一致。
+1. `params.json` agrees with `PREREGISTRATION.md`, and the preregistration's SHA-256 equals the one recorded in the commitment.
+2. The published guesses and salt hash to the on-chain commitment.
+3. The OpenTimestamps proof leads from the commitment file to the merkle root of block B_c, and B_c ≤ H−6.
+4. The first Internet Archive capture of the witness URL contains the same commitment and is earlier than "timestamp of block H − 2 hours". Bitcoin allows a block timestamp to run at most 2 hours ahead of real time, so this guarantees the capture happened before block H was mined.
+5. Block headers from B_c to H+1 are fetched from two independent sources, mempool.space and blockstream.info, and compared byte by byte; each block's double SHA-256, proof of work, modern difficulty floor and linkage to the previous block are recomputed.
+6. The answers and the sent-back list are recomputed from the block hashes, and `loop_messages.json` must match exactly.
 
-任何一項失敗，這次執行就**作廢**：既不算陽性也不算陰性。
+If any check fails, the run is **void**: neither positive nor negative.
 
-## 幾題才不能說是巧合
+## How many hits rule out chance
 
-約 32 題被寄回時：
+With about 32 questions sent back:
 
-| 每題位元數 | 每題靠運氣猜中的機率 | 至少中一題的機率 | 達到 5σ 需要猜中幾題 |
+| Bits per answer | Chance hit probability per question | Probability of at least one hit | Hits needed for 5σ |
 |---|---|---|---|
 | 8 | 0.0039 | 0.12 | 5 |
 | 16 | 1.5×10⁻⁵ | 4.9×10⁻⁴ | 2 |
 | 24 | 6.0×10⁻⁸ | 1.9×10⁻⁶ | 2 |
-| **32（本實驗）** | **2.3×10⁻¹⁰** | **7.5×10⁻⁹** | **1** |
+| **32 (this experiment)** | **2.3×10⁻¹⁰** | **7.5×10⁻⁹** | **1** |
 | 64 | 5.4×10⁻²⁰ | 1.7×10⁻¹⁸ | 1 |
 
-- **主要判準：** 被寄回題目中完全猜中的題數 X；P(Binomial(約 32, 2⁻³²) ≥ X) < 2.87×10⁻⁷（5σ）就拒絕「純屬巧合」。
-- **次要判準：** 被寄回題目的位元命中數，對照 Binomial(32 × 題數, 1/2)。
-- **對照組：** 沒寄回的題目必須維持巧合水準；那裡出現命中，代表程式錯誤或被竄改。
+- **Primary criterion:** X = number of exact hits among the sent-back questions; reject "pure chance" if P(Binomial(≈32, 2⁻³²) ≥ X) < 2.87×10⁻⁷ (5σ).
+- **Secondary criterion:** bit hits among the sent-back questions, against Binomial(32 × number of questions, 1/2).
+- **Control:** questions not sent back must stay at chance; hits there mean a bug or tampering.
 
-## 各假說的預測
+## Predictions of each hypothesis
 
-| 假說 | 被寄回的題目 |
+| Hypothesis | Sent-back questions |
 |---|---|
-| 沒有回溯因果（標準物理） | 巧合水準 |
-| 過去守恆篩選（本專案的 H2′） | 巧合水準：猜測在答案存在前就記錄在區塊鏈上，已記錄的過去不會改變 |
-| 會重新加權過去的自洽規則（類似 P-CTC），且迴圈真的存在 | 全部猜中，沒寄回的維持巧合 |
+| No retrocausality (standard physics) | chance level |
+| Past-preserving selection (this project's H2′) | chance level: the guesses are recorded on the blockchain before the answers exist, and the recorded past does not change |
+| A consistency rule that reweights the past (P-CTC-like), and the loop really exists | all hit; those not sent back stay at chance |
 
-**誠實說明：** 這個設定裡沒有任何東西真的傳回過去，「寄回」只是在答案出現後把它發布出來。實驗檢驗的是最強的說法：「只要打算形成迴圈，自洽就能把答案拉回來」。標準物理和你自己的 H2′ 都預測**猜不中**。如果真的猜中，它會推翻本專案自己的定理，照預先登錄的規定，第一步是找錯誤和請別人獨立重做。
+**Honest note:** nothing in this setup is really sent to the past; "sending back" just means publishing the answer after it exists. The experiment tests the strongest claim: "intending to form a loop is enough for self-consistency to pull the answers back". Standard physics and this project's own H2′ both predict **no hits**. A hit would contradict the project's own theorems; by the preregistered rules, the first steps would be a bug hunt and independent replication.
 
-## 漏洞檢查（2026-11-23）
+## Loophole review (2026-11-23)
 
-v1 設計經過逐步攻擊檢查，找到下列問題。每一個都有對應的自動測試，確認攻擊會被 verify.py 抓到（`ctc/tests/test_blockchain.py`，22 項）。
+The v1 design was attacked step by step, and the problems below were found. Each has an automated test confirming that verify.py catches the attack (`ctc/tests/test_blockchain.py`, 22 tests).
 
-| # | 漏洞 | 嚴重度 | v1 的問題 | v2 的修正 |
+| # | Loophole | Severity | Problem in v1 | Fix in v2 |
 |---|---|---|---|---|
-| 1 | **Merkle 樹藏很多組猜測** | 致命 | OpenTimestamps 證明的路徑可以藏一棵自己做的 merkle 樹。一次上鏈就能涵蓋 2³⁰ 組猜測，事後公開猜中的那組，偽造「猜中」的機率超過 99% | 承諾值以明文發布在事先指定的網址，Internet Archive 的**第一次**存檔才算數，而且必須早於答案區塊 |
-| 2 | **重新上鏈換答案** | 高 | 答案區塊是「B_c + 6」。同一個承諾多上鏈幾次，就會得到不同的 B_c 和不同的答案，可以挑 | 答案區塊高度 H 事先固定在預先登錄裡；承諾必須在 H−6 或更早，太晚就作廢 |
-| 3 | 區塊重組 | 中 | 答案區塊一出現就寄送，若之後被重組，答案會變 | 寄送前等待 6 個確認 |
-| 4 | 難度下限太寬 | 低 | 2¹⁹⁰ 的目標值下限，有人花錢就可能挖出假區塊頭（仍須同時騙過兩個瀏覽器） | 收緊到 2¹⁸²（現在約 2¹⁷⁷，保留 32 倍餘裕） |
-| 5 | 驗證程式是自己寫的 | 低 | 惡意的 repo 可以附一個會說謊的驗證程式 | 協議夠短，可以獨立重寫；預先登錄裡寫明 |
+| 1 | **A merkle tree hiding many guess sets** | fatal | an OpenTimestamps proof path can hide a merkle tree of one's own. One stamp can cover 2³⁰ guess sets, and the winning one is revealed afterwards; the probability of faking a hit exceeds 99% | the commitment is published in plain text at a pre-specified URL; only the **first** Internet Archive capture counts, and it must precede the answer block |
+| 2 | **Re-stamping to change the answer** | high | the answer block was "B_c + 6". Stamping the same commitment several times gives different B_c and different answers to choose from | answer height H is fixed in the preregistration; the commitment must be in H−6 or earlier, otherwise the run is void |
+| 3 | Block reorganization | medium | sending as soon as the answer block appears; a later reorganization would change the answer | wait for 6 confirmations before sending |
+| 4 | Difficulty floor too loose | low | with a target floor of 2¹⁹⁰, a funded attacker might mine fake headers (still having to fool two explorers) | tightened to 2¹⁸² (currently about 2¹⁷⁷, a 32× margin) |
+| 5 | The verifier is self-written | low | a malicious repo could ship a lying verifier | the protocol is short enough to reimplement independently; stated in the preregistration |
 
-已確認**不是**漏洞的：猜測時挑選量子亂數（答案還不存在，挑了也沒用）；量子亂數有偏差（答案均勻，命中機率不變）；礦工操縱答案區塊（猜測被鹽值隱藏，不知道往哪個方向操縱）；提早洩漏猜測（答案區塊已固定，洩漏也改變不了答案）。
+Confirmed **not** to be loopholes: choosing among quantum random numbers when guessing (the answers do not exist yet, so choosing does not help); biased quantum random numbers (the answers are uniform, so the hit probability does not change); miners manipulating the answer block (the guesses are hidden by the salt, so there is no direction to push); leaking the guesses early (the answer block is fixed, so a leak cannot change the answers).
 
-**仍然存在、無法靠協議消除的：** 一個人可以開很多個獨立的公開實驗（不同 repo、不同網址、不同預先登錄），只宣傳最幸運的那個。每一個都是公開且有時間戳的，所以看得出來，但真正的防線是別人獨立重做。
+**What remains and cannot be removed by protocol:** one person could run many independent public experiments (different repos, URLs and preregistrations) and advertise only the luckiest. Each is public and timestamped, so this is detectable, but the real defense is independent replication.
 
-## 怎麼跑
+## How to run
 
-需要 `opentimestamps-client`（上鏈）；量子猜測另外需要 `qiskit-ibm-runtime` 和你的 IBM Quantum 帳號。
+Needs `opentimestamps-client` (stamping); quantum guesses also need `qiskit-ibm-runtime` and your IBM Quantum account.
 
 ```text
-python -B ctc/tests/test_blockchain.py                    # 離線測試（22 項）
-python -B ctc/blockchain/preregister.py --answer-height H # H ≈ 現在的區塊高度 + 48
-python -B ctc/blockchain/commit.py                        # 猜測並上鏈（只能做一次）
-git add ctc/blockchain && git commit && git push          # 讓承諾檔出現在見證網址
-python -B ctc/blockchain/witness.py                       # Internet Archive 存檔
-python -B ctc/blockchain/send.py                          # 約 9 小時後：寄回答案
-python -B ctc/blockchain/reveal.py                        # 公開猜測
-python -B ctc/blockchain/verify.py                        # 驗證並套用判準
+python -B ctc/tests/test_blockchain.py                    # offline tests (22)
+python -B ctc/blockchain/preregister.py --answer-height H # H ≈ current block height + 48
+python -B ctc/blockchain/commit.py                        # guess and stamp (only once)
+git add ctc/blockchain && git commit && git push          # make the commitment file appear at the witness URL
+python -B ctc/blockchain/witness.py                       # Internet Archive capture
+python -B ctc/blockchain/send.py                          # about 9 hours later: send back the answers
+python -B ctc/blockchain/reveal.py                        # publish the guesses
+python -B ctc/blockchain/verify.py                        # verify and apply the criteria
 ```
 
-`private/reveal.json` 在公開前是秘密，已被 `.gitignore` 排除；reveal 之前不要提交或分享它。見證網址預設是本 repo `main` 分支上的 `ctc/blockchain/public/commitment.txt`，所以承諾檔必須推到 `main`。
+`private/reveal.json` is secret until the reveal and is excluded by `.gitignore`; do not commit or share it before revealing. The default witness URL is `ctc/blockchain/public/commitment.txt` on this repo's `main` branch, so the commitment file must be pushed to `main`.

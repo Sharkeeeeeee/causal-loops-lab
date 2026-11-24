@@ -1,89 +1,89 @@
-# 第四種規則：T-CTC（Allen 2014）
+# A fourth rule: T-CTC (Allen 2014)
 
-建立日期：2026-11-22，撰寫時使用 AI 輔助（Claude）。沒有外部審查。
-
-```text
-python -B ctc/tests/test_t_ctc.py   # 12 項測試
-python -B ctc/run_t_ctc.py          # 產生 output/t_ctc.json 和 output/t_ctc_signalling.png
-```
-
-程式在 [models.py](models.py) 的 `t_ctc`。
-
-## T-CTC 是什麼
-
-J.-M. A. Allen, "Treating Time Travel Quantum Mechanically", Phys. Rev. A 90, 042107 (2014), [arXiv:1401.4933](https://arxiv.org/abs/1401.4933)。
-
-做法是對迴圈中所有可能的純態 |φ⟩ 取平均，每個 |φ⟩ 的權重是「迴圈從 |φ⟩ 出發、又回到 |φ⟩」的轉移振幅（Allen Eq. 24）。積分算出來是（Allen Eq. 33）：
+Created 2026-11-22 with AI assistance (Claude). No external review.
 
 ```text
-ρ_out ∝ C ρ C† + d · Tr_loop[ U (ρ ⊗ 𝟙/d) U† ]        C = Tr_loop U，d = 迴圈維度
+python -B ctc/tests/test_t_ctc.py   # 12 tests
+python -B ctc/run_t_ctc.py          # writes output/t_ctc.json and output/t_ctc_signalling.png
 ```
 
-第一項就是 P-CTC 的自洽篩選，第二項是「把迴圈換成完全隨機的訊息」的普通量子通道。Allen 自己的說法是，T-CTC 是 P-CTC 和一個普通通道的加權混合。
+The code is `t_ctc` in [models.py](models.py).
 
-**本專案的推廣：** 在第二項前面乘上 t。t = 0 是 P-CTC，t = 1 是 Allen 的 T-CTC，t → ∞ 是「迴圈完全隨機」。t ≠ 1 不是 Allen 提出的，但 Allen 寫明轉移機率理論是「一類理論」，積分測度沒有唯一的自然選擇，所以這個推廣很可能在他的框架內。
+## What T-CTC is
 
-## 獨立檢查（全部通過）
+J.-M. A. Allen, "Treating Time Travel Quantum Mechanically", Phys. Rev. A 90, 042107 (2014), [arXiv:1401.4933](https://arxiv.org/abs/1401.4933).
 
-| 檢查 | 方法 |
+It averages over all pure loop states |φ⟩, weighting each by the transition amplitude for the loop to start in |φ⟩ and return to |φ⟩ (Allen Eq. 24). The integral evaluates to (Allen Eq. 33)
+
+```text
+ρ_out ∝ C ρ C† + d · Tr_loop[ U (ρ ⊗ 𝟙/d) U† ]        C = Tr_loop U,  d = loop dimension
+```
+
+The first term is P-CTC's consistency selection; the second is the ordinary channel obtained by replacing the loop with a completely random message. In Allen's own words, T-CTC is a weighted mixture of P-CTC and an ordinary channel.
+
+**Generalization in this project:** multiply the second term by t. t = 0 is P-CTC, t = 1 is Allen's T-CTC, t → ∞ is "fully random loop". t ≠ 1 is not Allen's proposal, but Allen states that transition-probability theories are a class of theories with no unique natural integration measure, so this generalization probably fits within his framework.
+
+## Independent checks (all pass)
+
+| Check | Method |
 |---|---|
-| 閉式解 Eq. 33 等於積分 Eq. 24 | 用 6 個 Pauli 本徵態直接平均（它們是 3-design，對二次式結果和 Haar 積分完全相同），包括隨機么正矩陣 |
-| Allen Eq. 35（未證定理電路） | ½\|00⟩⟨00\| + ¼\|00⟩⟨11\| + ¼\|11⟩⟨00\| + ½\|11⟩⟨11\|，逐項相符 |
-| Allen Eq. 38（通道項權重） | λ = d / (d + ‖Cψ‖²) ≥ 1/(d+1) |
-| Allen §IV E.1（乘積么正） | U = V ⊗ W 時輸出是 VρV† |
-| Allen Eq. 40（區分非正交態的上限） | 20 組隨機案例都在上限內 |
-| 極限 | t = 0 等於 P-CTC，t = ∞ 等於完全隨機迴圈 |
+| Closed form Eq. 33 equals integral Eq. 24 | direct average over the 6 Pauli eigenstates (a 3-design, so for quadratic expressions it equals the Haar integral exactly), including random unitaries |
+| Allen Eq. 35 (unproved-theorem circuit) | ½\|00⟩⟨00\| + ¼\|00⟩⟨11\| + ¼\|11⟩⟨00\| + ½\|11⟩⟨11\|, matches term by term |
+| Allen Eq. 38 (weight of the channel term) | λ = d / (d + ‖Cψ‖²) ≥ 1/(d+1) |
+| Allen §IV E.1 (product unitaries) | for U = V ⊗ W the output is VρV† |
+| Allen Eq. 40 (bound on distinguishing non-orthogonal states) | 20 random cases all within the bound |
+| Limits | t = 0 equals P-CTC; t = ∞ equals a fully random loop |
 
-## 結果：四種規則並排
+## Results: four rules side by side
 
-| 情境 | 觀測量 | 無迴圈 | D-CTC | **T-CTC** | P-CTC |
+| Scenario | Observable | No loop | D-CTC | **T-CTC** | P-CTC |
 |---|---|---|---|---|---|
-| 祖父悖論，ε = 0.05 | P(槍卡住) | 0.05 | 0.05 | **0.136** | 1 |
-| KFK 有動機寄件者 | P(壞結果) | 0.30 | 0.254 | **0.191** | 0.146 |
-| KFK 無條件寄件者 | P(壞結果) | 0.30 | 0.12 | **0.18** | 0.12 |
-| 量子干涉，φ = π | P(a = 1) | 0.5 | 0.5 | **0.25** | 0 |
-| 自舉悖論 | 記錄的 ⟨X⟩ | 0 | 0 | **0.5** | 1 |
-| Lloyd 的槍，θ = π/2 | P(兩個探針一致) | 0.5 | 0.5 | **0.667** | 1 |
-| BB84，輸入 \|0⟩ | P(正確標記) | 0.25 | 1 | **1/3** | 0.5 |
+| Grandfather paradox, ε = 0.05 | P(gun jams) | 0.05 | 0.05 | **0.136** | 1 |
+| KFK motivated sender | P(bad outcome) | 0.30 | 0.254 | **0.191** | 0.146 |
+| KFK unconditional sender | P(bad outcome) | 0.30 | 0.12 | **0.18** | 0.12 |
+| Quantum interference, φ = π | P(a = 1) | 0.5 | 0.5 | **0.25** | 0 |
+| Bootstrap paradox | recorded ⟨X⟩ | 0 | 0 | **0.5** | 1 |
+| Lloyd's gun, θ = π/2 | P(two probes agree) | 0.5 | 0.5 | **0.667** | 1 |
+| BB84, input \|0⟩ | P(correct label) | 0.25 | 1 | **1/3** | 0.5 |
 
-祖父悖論的閉式解：P(卡住) = ε(2 + t)/(t + 2ε)，T-CTC 是 3ε/(1 + 2ε)。
+Grandfather paradox closed form: P(jam) = ε(2 + t)/(t + 2ε); for T-CTC, 3ε/(1 + 2ε).
 
-觀察：
+Observations:
 
-1. **T-CTC 大多落在 P-CTC 和 D-CTC 之間**，但有兩個例外：KFK 無條件寄件者和 BB84。原因是 t 線的另一端是「完全隨機迴圈」，不是 D-CTC。只有在迴圈映射保持完全混合態的電路（例如祖父悖論）上，這兩者才相同。
-2. **完美的槍（ε = 0）在 T-CTC 下沒有悖論：** 槍正常運作，迴圈訊息變成隨機。P-CTC 在這裡沒有定義。
-3. **新的發現：KFK 無條件寄件者在 T-CTC 下跟 D-CTC、P-CTC 不同。** 壞結果是 0.18，不是 q(1 − r) = 0.12。原因是通道項把迴圈訊息換成隨機位元，所以收件者有一部分機率收到的是雜訊，不是提醒。它仍然沒有重新加權世界（不能傳訊），但「無條件訊息在所有規則下都一樣」這個說法要修正成：在 D-CTC 和 P-CTC 下一樣；在 T-CTC 下，它像一則**只部分送達**的普通訊息。
-4. BB84：T-CTC 無法完美區分，符合 Allen 的主張。
+1. **T-CTC mostly lies between P-CTC and D-CTC**, with two exceptions: the KFK unconditional sender and BB84. The other end of the t line is "fully random loop", not D-CTC; the two coincide only for circuits whose loop map preserves the maximally mixed state (such as the grandfather paradox).
+2. **A perfect gun (ε = 0) has no paradox under T-CTC:** the gun works and the loop message becomes random. P-CTC is undefined here.
+3. **New finding: under T-CTC the KFK unconditional sender differs from D-CTC and P-CTC.** The bad outcome is 0.18, not q(1 − r) = 0.12. The channel term replaces the loop message with a random bit, so part of the time the receiver gets noise instead of the warning. It still does not reweight the world (no signalling), but the statement "an unconditional message is the same under every rule" must be corrected: it holds for D-CTC and P-CTC; under T-CTC it behaves like an ordinary message that is **only partly delivered**.
+4. BB84: T-CTC cannot distinguish perfectly, as Allen claims.
 
-## 結果：無訊號
+## Results: no-signalling
 
-| 情境（Bob 共享糾纏） | D-CTC | **T-CTC** | P-CTC |
+| Scenario (Bob shares entanglement) | D-CTC | **T-CTC** | P-CTC |
 |---|---|---|---|
-| 祖父悖論 | 0 | **0.086** | 0.95 |
-| KFK 有動機寄件者 | 0 | **0.045** | 0.154 |
-| KFK 無條件寄件者 | 0 | 0 | 0 |
-| 量子干涉 | 0 | **0.25** | 0.5 |
-| 自舉悖論 | 0 | 0 | 0 |
+| Grandfather paradox | 0 | **0.086** | 0.95 |
+| KFK motivated sender | 0 | **0.045** | 0.154 |
+| KFK unconditional sender | 0 | 0 | 0 |
+| Quantum interference | 0 | **0.25** | 0.5 |
+| Bootstrap paradox | 0 | 0 | 0 |
 
 ![T-CTC signalling](output/t_ctc_signalling.png)
 
-- **T-CTC 也能讓 Alice 對 Bob 傳訊。** 這和 Allen §IV E.5 的說法一致：T-CTC 的非線性讓「糾纏偵測器」成為可能，跟 D-CTC、P-CTC 一樣。
-- **判準跟 P-CTC 相同：** Bob 跟 Alice 整個 CR 系統最大糾纏時，Bob 的狀態正比於 (C†C)^T + t·d·𝟙。所以對每個有限的 t，都是「不傳訊 ⇔ C†C ∝ 𝟙」。
-- 沿著 t 這條線，傳訊量隨 t 增加而遞減，**只有在 t → ∞（世界不再被重新加權）時才是零。** 這跟古典 κ–β 平面的結論相同：只要還有一點自洽篩選，就能傳訊。
-- **Bob → Alice：** T-CTC 套用在整體狀態上不能傳訊。逐分支套用時，Bob 量 Z，Alice 的 P(卡住) = ε；Bob 量 X，Alice 的 P(卡住) = 3ε/(1 + 2ε)，所以 Bob 能傳訊。跟 D-CTC 的情況相同。
+- **T-CTC also lets Alice signal to Bob.** This agrees with Allen §IV E.5: T-CTC's nonlinearity makes an "entanglement detector" possible, as for D-CTC and P-CTC.
+- **Same criterion as P-CTC:** when Bob is maximally entangled with Alice's whole CR system, Bob's state is proportional to (C†C)^T + t·d·𝟙. So for every finite t, "no signalling ⇔ C†C ∝ 𝟙".
+- Along the t line the signalling decreases with t and **is zero only as t → ∞, where the world is no longer reweighted.** This matches the classical κ–β plane: any amount of consistency selection allows signalling.
+- **Bob → Alice:** T-CTC applied to the global state cannot signal. Applied branch by branch, Bob measuring Z gives Alice P(jam) = ε, and Bob measuring X gives 3ε/(1 + 2ε), so Bob can signal. Same as D-CTC.
 
-## 對新穎性的意義
+## What this means for novelty
 
-這是到目前為止跟 κ–β 模型最接近的前人工作：
+This is the closest prior work to the κ–β model found so far:
 
-- Allen 2014 已經把 T-CTC 寫成「P-CTC 加上普通通道」的加權混合，也說轉移機率理論是一類理論。
-- 但 Allen 給的是**一個點**（t = 1，權重由 Haar 測度固定），沒有寫成連續家族，也沒有連到 D-CTC。
-- κ–β 模型是古典的雙參數平面，兩個角落分別是 D-CTC 和 P-CTC。t 這條線是量子的單參數線，兩端是 P-CTC 和完全隨機迴圈。兩者都在「篩選強度」這個方向上內插，所以 κ–β 模型的論文一定要引用 Allen 2014，並說明差別。
+- Allen 2014 already writes T-CTC as a weighted mixture of P-CTC and an ordinary channel, and says transition-probability theories form a class.
+- But Allen gives **one point** (t = 1, weight fixed by the Haar measure), not a continuous family, and does not connect it to D-CTC.
+- The κ–β model is a classical two-parameter plane whose corners are D-CTC and P-CTC. The t line is a quantum one-parameter line from P-CTC to a fully random loop. Both interpolate in selection strength, so any paper on the κ–β model must cite Allen 2014 and explain the difference.
 
-細節見 [NOVELTY_CHECK.md](NOVELTY_CHECK.md)。
+Details in [NOVELTY_CHECK.md](NOVELTY_CHECK.md).
 
-## 限制
+## Limitations
 
-- t ≠ 1 是本專案的推廣，沒有物理上的推導依據，只是內插。
-- κ–β 模型和 t 線還沒有放進同一個框架：古典置換電路配對角輸入時，T-CTC 的 P-CTC 項帶有相干的交叉項，所以 T-CTC 一般不等於 κ–β 平面上的某一點。
-- Allen 論文最後約 19,000 字元（第 V 節結尾和參考文獻）沒有讀到原文。
+- t ≠ 1 is this project's generalization, a plain interpolation without physical derivation.
+- The κ–β model and the t line are not yet in one framework: for classical permutation circuits with diagonal inputs, T-CTC's P-CTC term carries coherent cross terms, so T-CTC is in general not a point of the κ–β plane.
+- The last ~19,000 characters of Allen's paper (end of Section V and references) were not read in the original.

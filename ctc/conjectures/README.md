@@ -1,54 +1,54 @@
-# 猜想樂透：讓電腦裁決連 AI 都猜不到的問題
+# Conjecture lottery: letting the computer settle questions the AI could not predict
 
-建立日期：2026-11-23，撰寫時使用 AI 輔助（Claude）。沒有外部審查。
+Created 2026-11-23 with AI assistance (Claude). No external review.
 
-## 目的
+## Purpose
 
-之前的實驗，結果都能事先算出來：沒有真正的時間迴圈時，過去守恆篩選等於一般量子力學（定理 3）。這個實驗改問**理論本身的數學後果**，而且只問我（Claude）事先真的不知道答案的問題。
+The earlier experiments all had outcomes that could be computed in advance: without a real time loop, past-preserving selection (PPS) equals ordinary quantum mechanics (Theorem 3). This experiment asks instead about **the mathematical consequences of the theory itself**, and only questions whose answers I (Claude) genuinely did not know beforehand.
 
-## 方法
+## Method
 
-1. **題庫（[pool.py](pool.py)）：** 6 類電路 × 10 種性質 = 60 個猜想，每個都是「這類電路全部都有這個性質」。
-2. **先寫機率，再寫程式：** 在任何檢查程式存在之前，我寫下每個猜想成立的機率（[credences.json](credences.json)），並在對話紀錄裡記下雜湊值：
+1. **Pool ([pool.py](pool.py)):** 6 circuit classes × 10 properties = 60 conjectures, each of the form "every circuit in this class has this property".
+2. **Credences first, code second:** before any checking code existed, I wrote down the probability that each conjecture holds ([credences.json](credences.json)) and recorded the hashes in the conversation log:
    - `credences.json` SHA-256 `1d7ad527ba9ee95d720109fae7fdf1614574343ceafc745babc934e11eb87c9d`
    - `pool.py` SHA-256 `6ec2376a9f71c9130a8780b7382a30f0de8f06dfdc8c6276581524ad661b2fe2`
-   - [evaluate.py](evaluate.py) 啟動時會檢查 `credences.json` 的雜湊值，被改過就拒絕執行。
-3. **用資料選題：** 只測我給 35%–65% 機率的猜想，共 11 個。其他 49 個我有把握（有些是寫的時候順便想通了），不納入評分。
-4. **嚴謹裁決：**
-   - 有限集合（全部 40320 個經典可逆電路、全部 11520 個雙量子位元 Clifford 電路）逐一窮舉：結果是**證明**或**反例**。
-   - 連續集合（隨機么正矩陣）在固定預算內搜尋反例，亂數種子取自 `credences.json` 的雜湊值：結果是**反例**或**未推翻**（不是證明）。
-5. **評分：** Brier 分數 = 平均（我的機率 − 實際結果）²。完全不確定時期望值是 0.25；越高代表結果越出乎我的意料。
+   - [evaluate.py](evaluate.py) checks the hash of `credences.json` on start and refuses to run if it changed.
+3. **Selection by credence:** only conjectures to which I gave 35%–65% were tested: 11 in total. The other 49 I was confident about (some I worked out while writing them) and they are not scored.
+4. **Strict verdicts:**
+   - Finite sets (all 40320 classical reversible circuits, all 11520 two-qubit Clifford circuits) are enumerated exhaustively: the result is a **proof** or a **counterexample**.
+   - Continuous sets (random unitaries) are searched for counterexamples within a fixed budget, with the random seed derived from the hash of `credences.json`: the result is a **counterexample** or **not refuted** (not a proof).
+5. **Score:** Brier score = mean of (my probability − actual outcome)². Complete ignorance gives an expected 0.25; higher means the outcomes surprised me more.
 
-原先設計的「用未來區塊抽題」改成**全部 11 題都測**：沒有任何挑選，比抽題更嚴格。
+The originally planned "draw questions using a future block hash" was replaced by **testing all 11**: no selection at all, which is stricter than drawing.
 
-## 與原計畫的偏差
+## Deviations from the plan
 
-- Clifford 群的產生程式第一次執行時卡住（`-0.0` 和 `0.0` 被當成不同的矩陣），修正後才得到正確的 11520 個元素。這發生在任何猜想被裁決之前。
-- 正式執行前，用幾個已知答案的案例確認檢查程式正確（定理 3、拒絕寄件、祖父悖論），它們都不在 11 個選中的猜想裡。
+- The Clifford-group generator hung on its first run (`-0.0` and `0.0` were treated as different matrices); after the fix it produced the correct 11520 elements. This happened before any conjecture was evaluated.
+- Before the scored run, the checking code was validated on cases with known answers (Theorem 3, refusal to send, grandfather paradox), none of which are among the 11 selected conjectures.
 
-## 結果（2026-11-23，[results.json](results.json)）
+## Results (2026-11-23, [results.json](results.json))
 
-| 猜想 | 我的機率 | 結果 | 反例數 / 檢查數 |
+| Conjecture | My probability | Result | Counterexamples / checked |
 |---|---|---|---|
-| 經典 2+1：過去守恆的未來效應 ≤ P-CTC | 0.50 | **推翻** | 576 / 40320 |
-| 經典 1+2：過去守恆不增加熵 | 0.45 | **推翻** | 4224 / 40320 |
-| 經典 1+2：過去守恆的未來效應 ≤ P-CTC | 0.50 | **證明** | 0 / 40320 |
-| Clifford：純態輸出 | 0.40 | **推翻** | 1728 / 11520 |
-| Clifford：不增加熵 | 0.55 | **證明** | 0 / 11520 |
-| Clifford：機率分布等於無迴圈 | 0.40 | **推翻** | 2880 / 11520 |
-| Clifford：未來效應 ≤ P-CTC | 0.50 | **證明** | 0 / 11520 |
-| Clifford：保持最大混合態 | 0.35 | **推翻** | 4896 / 11520 |
-| Clifford：輸出與無迴圈對易 | 0.50 | **證明** | 0 / 11520 |
-| 隨機 1+1：未來效應 ≤ P-CTC | 0.50 | 未推翻 | 0 / 20000 |
-| 隨機 2+1：未來效應 ≤ P-CTC | 0.50 | **推翻** | 495 / 3000 |
+| Classical 2+1: PPS future effect ≤ P-CTC | 0.50 | **refuted** | 576 / 40320 |
+| Classical 1+2: PPS does not increase entropy | 0.45 | **refuted** | 4224 / 40320 |
+| Classical 1+2: PPS future effect ≤ P-CTC | 0.50 | **proved** | 0 / 40320 |
+| Clifford: pure-state output | 0.40 | **refuted** | 1728 / 11520 |
+| Clifford: does not increase entropy | 0.55 | **proved** | 0 / 11520 |
+| Clifford: probability distribution equals no loop | 0.40 | **refuted** | 2880 / 11520 |
+| Clifford: future effect ≤ P-CTC | 0.50 | **proved** | 0 / 11520 |
+| Clifford: preserves the maximally mixed state | 0.35 | **refuted** | 4896 / 11520 |
+| Clifford: output commutes with no loop | 0.50 | **proved** | 0 / 11520 |
+| Random 1+1: future effect ≤ P-CTC | 0.50 | not refuted | 0 / 20000 |
+| Random 2+1: future effect ≤ P-CTC | 0.50 | **refuted** | 495 / 3000 |
 
-**Brier 分數 0.213**，只比擲硬幣（0.25）好一點：這 11 題對我來說確實接近未知。5 題證明、5 題推翻、1 題未推翻。
+**Brier score 0.213**, only slightly better than a coin (0.25): these 11 questions were indeed close to unknown for me. 5 proved, 5 refuted, 1 not refuted.
 
-**意料之外的規律（探索性，未預先登錄）：** 「過去守恆的未來效應不超過 P-CTC」在 CR 只有 1 個量子位元的三類電路裡都成立（兩類窮舉證明、一類隨機搜尋未推翻），在 CR 有 2 個量子位元的兩類裡都被推翻。這暗示一個新猜想：CR 是單一量子位元時，這個不等式對所有么正矩陣都成立。它可以當作下一輪的題目。
+**An unexpected pattern (exploratory, not preregistered):** "the PPS future effect does not exceed P-CTC's" holds in all three classes where the CR system is one qubit (two proved exhaustively, one not refuted by random search) and fails in both classes where it is two qubits. This suggests a new conjecture: for a single-qubit CR system the inequality holds for every unitary. It can be a question for the next round.
 
-## 怎麼重跑
+## Rerunning
 
 ```text
-python -B ctc/conjectures/evaluate.py        # 只裁決預先選中的 11 題並評分
-python -B ctc/conjectures/evaluate.py --all  # 另外裁決其他 49 題（探索性，不計分）
+python -B ctc/conjectures/evaluate.py        # evaluate and score only the 11 preselected questions
+python -B ctc/conjectures/evaluate.py --all  # also evaluate the other 49 (exploratory, unscored)
 ```

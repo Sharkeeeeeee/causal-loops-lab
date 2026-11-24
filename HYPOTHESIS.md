@@ -1,90 +1,90 @@
-# 假設的精確表述
+# Precise statement of the hypotheses
 
-撰寫時使用 AI 輔助（Claude）。這是工作草稿，不是已證明的結果。
+Written with AI assistance (Claude). This is a working draft, not a proven result.
 
-2026-11-24 更新：原本的 H1–H3 保留原文，不修改。後續工作把它們改寫成可以證明的 H1′–H3′（[ctc/THEOREMS.md](ctc/THEOREMS.md)），兩者的關係整理在下面「目前狀態：三層架構」一節。
+The original hypotheses H1–H3 below are kept as first stated. Later work rewrote them into the provable forms H1′–H3′ ([ctc/THEOREMS.md](ctc/THEOREMS.md)); how the two relate is summarized in "Current status: three layers" below.
 
-## 設定
+## Setting
 
-把世界分成兩部分：
+Split the world into two parts:
 
-- **CR 系統**（chronology-respecting）：時間正常前進的一般系統，初始狀態是 ρ。
-- **迴圈系統**：沿著封閉類時曲線繞回過去的系統，例如一則訊息。
+- **CR system** (chronology-respecting): an ordinary system whose time runs forward, with initial state ρ.
+- **Loop system**: a system that travels along a closed timelike curve back to the past, for example a message.
 
-兩者之間的交互作用用一個么正算符 U 描述。迴圈系統在迴圈終點的狀態，必須等於它在起點的狀態，這就是「自洽」。
+Their interaction is a unitary U. The loop system's state at the end of the loop must equal its state at the start. This is "self-consistency".
 
-## 兩種已知的自洽規則
+## Two known consistency rules
 
-**D-CTC（Deutsch 1991）**
+**D-CTC (Deutsch 1991)**
 
-迴圈系統的狀態 τ 必須是不動點：
+The loop state τ must be a fixed point:
 
     τ = Tr_CR[ U (ρ ⊗ τ) U† ]
 
-CR 系統的輸出是 Tr_迴圈[ U (ρ ⊗ τ) U† ]。不動點可能不只一個。本專案用「從最大混合態出發做 Cesàro 平均」來選，這在 `ctc/` 的例子裡會得到熵最大的不動點，但不保證一般情況都是如此。
+The CR output is Tr_loop[ U (ρ ⊗ τ) U† ]. There can be several fixed points. This project picks one by Cesàro averaging from the maximally mixed state. In the examples in `ctc/` this gives the maximum-entropy fixed point, but that is not guaranteed in general.
 
-**P-CTC（Lloyd 等人 2011，基於 Bennett、Svetlichny 的後選擇 teleportation）**
+**P-CTC (Lloyd et al. 2011, based on Bennett's and Svetlichny's postselected teleportation)**
 
-令 C = Tr_迴圈[U]，這是對算符本身取部分跡。CR 系統的輸出是：
+Let C = Tr_loop[U], the partial trace of the operator itself. The CR output is
 
     ρ_out = C ρ C† / Tr[C ρ C†]
 
-如果 Tr[C ρ C†] = 0，代表沒有任何自洽歷史，這是真正的悖論，規則沒有定義。
+If Tr[C ρ C†] = 0 there is no consistent history at all: a true paradox, and the rule is undefined.
 
-## 假設
+## Hypotheses
 
-**H1（自洽）：** 只有滿足自洽條件的歷史會出現。
+**H1 (self-consistency):** only histories that satisfy the consistency condition occur.
 
-**H2（效應在未來）：** 令 P_loop(o) 是有迴圈時 CR 觀測量 o 的分布，P_0(o) 是同一個 U、但迴圈輸入換成一般外部輸入時的分布。H2 主張：
+**H2 (effect in the future):** let P_loop(o) be the distribution of a CR observable o with the loop, and P_0(o) the distribution for the same U with the loop input replaced by an ordinary external input. H2 claims:
 
-1. 兩者之間的差異是可觀察的；
-2. 這個差異完全由「排除不自洽歷史並重新加權」決定。
+1. the difference between them is observable;
+2. the difference is fully determined by "removing inconsistent histories and renormalizing".
 
-在 P-CTC 規則下，對古典可逆電路，這個重新加權可以寫成
+Under P-CTC, for classical reversible circuits, this reweighting is
 
-    P_loop(歷史) ∝ P_0(歷史) × [該歷史是自洽的]
+    P_loop(history) ∝ P_0(history) × [history is consistent]
 
-在 D-CTC 規則下，自洽是靠迴圈系統變成混合態來達成，未來不一定被重新加權。`ctc/` 的祖父悖論例子正好顯示兩者的差別。
+Under D-CTC, consistency is reached by the loop system becoming mixed, and the future is not necessarily reweighted. The grandfather-paradox example in `ctc/` shows exactly this difference.
 
-**H3（因果律復原）：** 當 U 不讓迴圈系統影響 CR 系統時，P_loop = P_0，也就是一般的因果量子力學。
+**H3 (recovery of causality):** when U does not let the loop system influence the CR system, P_loop = P_0, i.e. ordinary causal quantum mechanics.
 
-## 目前狀態：三層架構
+## Current status: three layers
 
-按「離已證明的東西有多遠」，假設可以分成三層。細節、每層的前提與否證條件見 [PERSPECTIVES.md](PERSPECTIVES.md) 第 1 節。
+Sorted by distance from what has been proved, the hypotheses fall into three layers. Assumptions and falsification conditions for each layer are in [PERSPECTIVES.md](PERSPECTIVES.md), section 1.
 
-| | 內層：已證明的定理 | 中層：一般有限維量子系統 | 外層：真實宇宙 |
+| | Inner layer: proved theorems | Middle layer: general finite-dimensional quantum systems | Outer layer: the real universe |
 |---|---|---|---|
-| 敘述 | 在過去守恆篩選下，H1′–H3′ 成立 | 同樣的結論對任意量子交互作用都成立，而且過去守恆篩選是唯一合理的規則 | 如果宇宙有時間迴圈，H1–H3 描述的就是實際發生的事 |
-| 範圍 | 有限維；經典可逆電路；受控形式的 U；固定的記錄基底 | 有限維；任意 U、任意糾纏；記錄基底由動力學決定 | 彎曲時空、量子場、重力 |
-| 性質 | 數學定理 | 數學問題，加上一部分物理選擇 | 物理主張 |
-| 現況 | 已證明，有數值檢查，硬體上量得出來 | 部分完成 | 目前無法檢驗 |
+| Statement | Under past-preserving selection (PPS), H1′–H3′ hold | The same conclusions hold for any quantum interaction, and PPS is the only reasonable rule | If the universe has time loops, H1–H3 describe what actually happens |
+| Scope | finite dimension; classical reversible circuits; controlled-form U; fixed record basis | finite dimension; any U, any entanglement; record basis set by the dynamics | curved spacetime, quantum fields, gravity |
+| Nature | mathematical theorems | mathematical problems plus some physical choices | physical claim |
+| Status | proved, checked numerically, measurable on hardware | partly done | not testable at present |
 
-H1、H2、H3 各自走到哪一層：
+How far each hypothesis has got:
 
-| | 內層 | 中層 | 外層 |
+| | Inner layer | Middle layer | Outer layer |
 |---|---|---|---|
-| **H1** | 定理 1：有自洽歷史的世界只出現自洽結果，悖論世界處於 Deutsch 不動點 | 量子情形要先決定邏輯自洽還是振幅自洽 | Novikov 自洽原理；撞球悖論的自洽解不唯一 |
-| **H2** | 定理 2：過去不變，每個世界之內以自洽為條件 | 記錄基底怎麼決定 | 真實環境中的效應能不能觀察到 |
-| **H3** | 定理 3：受控形式的 U | 一般「不回頭作用」的 U | 迴圈邊界上的量子場（Kay–Radzikowski–Wald 1997） |
+| **H1** | Theorem 1: a world with a consistent history shows only consistent outcomes; a paradox world sits at the Deutsch fixed point | the quantum case must first choose logical or amplitude consistency | Novikov's self-consistency principle; consistent solutions of the billiard-ball paradox are not unique |
+| **H2** | Theorem 2: the past is unchanged; inside each world the future is conditioned on consistency | how the record basis is fixed | whether the effect is observable in a real environment |
+| **H3** | Theorem 3: controlled-form U | general U that does not act back | quantum fields at the loop boundary (Kay–Radzikowski–Wald 1997) |
 
-**往內走時，假設被改寫了，而且是被無訊號條件逼著改的：**
+**Moving inward, the hypotheses were rewritten, and the no-signalling condition forced the rewrite:**
 
-- H1 從「悖論歷史不會發生」變成「悖論世界本身留著，迴圈訊息變成混合態」。刪掉已記錄的過去世界，正是 P-CTC 會傳訊的原因。
-- H2 從「排除不自洽歷史並重新加權」變成「只在每個已記錄的過去世界之內重新加權」。重新加權整個世界等於超光速傳訊（[ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md)）。
-- H3 原文在 P-CTC 下有反例：只控制迴圈、不受迴圈影響的位元，分支仍會被刪掉（THEOREMS.md 定理 3 附註）。在過去守恆篩選下成立。
+- H1 went from "paradoxical histories do not happen" to "a paradox world survives, and the loop message becomes mixed". Deleting recorded past worlds is exactly why P-CTC signals.
+- H2 went from "remove inconsistent histories and renormalize" to "renormalize only inside each recorded past world". Reweighting the whole world is equivalent to faster-than-light signalling ([ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md)).
+- The original H3 has a counterexample under P-CTC: a bit that only controls the loop, and is not affected by it, still has a branch deleted (THEOREMS.md, remark after Theorem 3). It holds under PPS.
 
-**三層之間：** 內層成立不代表宇宙真的這樣運作；反過來，就算宇宙沒有時間迴圈，內層仍然是正確的數學，因為它說的是「如果有迴圈，而且規則是過去守恆篩選，會發生什麼」。
+**Between the layers:** the inner layer holding does not mean the universe works this way. Conversely, even if the universe has no time loops, the inner layer is still correct mathematics: it says what would happen if there were loops and the rule were PPS.
 
-## 時間觀的選擇
+## Choice of time picture
 
-| | A：單一時間線 | B：分支時間線 |
+| | A: single timeline | B: branching timelines |
 |---|---|---|
-| 對應規則 | P-CTC | D-CTC（Deutsch 的多世界詮釋） |
-| 祖父悖論 | 讓悖論成立的事件機率變成零，其餘重新加權 | 迴圈訊息變成混合態 |
-| KFK 型提醒 | 提醒者自己的未來也必須自洽 | 提醒抵達另一個分支 |
+| Matching rule | P-CTC | D-CTC (Deutsch's many-worlds reading) |
+| Grandfather paradox | events that would make the paradox happen get probability zero; the rest is renormalized | the loop message becomes mixed |
+| KFK-type warning | the warner's own future must also be consistent | the warning arrives in another branch |
 
-## 還沒有答案的問題
+## Open questions
 
-1. 自然界如果允許迴圈，會用哪一種規則？還是用第三種？
-2. 能不能找到一個實驗特徵，區分「真正的迴圈」和「一般的後選擇」？
-3. 在 process matrix 框架裡，H2 對應什麼數學條件？
+1. If nature allows loops, which rule does it use? Or a third one?
+2. Is there an experimental signature that separates a real loop from ordinary postselection?
+3. What mathematical condition does H2 correspond to in the process-matrix framework?

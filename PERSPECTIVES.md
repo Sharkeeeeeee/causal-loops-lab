@@ -1,221 +1,213 @@
-# 額外觀點與建議
+# Outside perspectives and suggestions
 
-建立日期：2026-11-24，撰寫時使用 AI 輔助（Claude）。這是一次外部角度的閱讀筆記，**不是同儕審查**，也沒有經過熟悉 CTC 文獻的研究者確認。這份文件不在 `PUBLIC_MANIFEST.json` 裡。
+Created 2026-11-24 with AI assistance (Claude). These are notes from a reading of the project from an outside angle. They are **not peer review**, and no researcher familiar with the CTC literature has confirmed them.
 
-閱讀範圍：根目錄的 README、ROADMAP、HYPOTHESIS，`ctc/` 底下的所有說明文件與程式，`ctc/hardware/` 的三次 IBM 執行資料。另外在 Python 3.13.18、NumPy 2.5.3 上跑了全部測試，也從原始計數重算了第三次硬體執行的分析（結果見第 2 節）。
+Scope of the reading: the root README, ROADMAP and HYPOTHESIS, every document and program in `ctc/`, and the data of the three IBM runs in `ctc/hardware/`. All tests were run on Python 3.13 with NumPy 2.5, and the analysis of the third hardware run was recomputed from raw counts (section 2).
 
-## 1. 把假設分成三層
+Abbreviation: PPS = past-preserving selection (renamed from "PP" to avoid a clash with the complexity class PP; see 1.5).
 
-目前 H1–H3（`HYPOTHESIS.md`）和 H1′–H3′（`ctc/THEOREMS.md`）分散在兩份文件裡，讀者不容易看出兩者的關係。建議用「離已證明的東西有多遠」把假設分成三層：
+## 1. Three layers of hypotheses
 
-| | 內層：已證明的定理 | 中層：一般有限維量子系統 | 外層：真實宇宙 |
+H1–H3 ([HYPOTHESIS.md](HYPOTHESIS.md)) and H1′–H3′ ([ctc/THEOREMS.md](ctc/THEOREMS.md)) live in two documents, and their relation is hard to see. Sorting the hypotheses by distance from what has been proved gives three layers:
+
+| | Inner layer: proved theorems | Middle layer: general finite-dimensional quantum systems | Outer layer: the real universe |
 |---|---|---|---|
-| 敘述 | 在過去守恆篩選（PP）下，H1′–H3′ 成立 | 同樣的結論對任意量子交互作用都成立；並且 PP 是唯一合理的規則 | 如果宇宙有時間迴圈，H1–H3 描述的就是實際發生的事 |
-| 範圍 | 有限維；經典可逆電路；受控形式的 U；固定的記錄基底 | 有限維；任意 U、任意糾纏；記錄基底由動力學決定 | 彎曲時空、量子場、重力 |
-| 性質 | 數學定理 | 數學問題，加上一部分物理選擇 | 物理主張 |
-| 現況 | 已證明，有數值檢查，硬體上量得出來 | 部分完成，開放問題見 THEOREMS.md 最後一節 | 目前無法檢驗 |
-| 檢驗方式 | 證明、數值檢查、形式化（Lean） | 證明、反例搜尋 | 需要量子重力理論，或真的找到時間迴圈 |
+| Statement | under PPS, H1′–H3′ hold | the same conclusions hold for any quantum interaction, and PPS is the only reasonable rule | if the universe has time loops, H1–H3 describe what actually happens |
+| Scope | finite dimension; classical reversible circuits; controlled-form U; fixed record basis | finite dimension; any U, any entanglement; record basis set by the dynamics | curved spacetime, quantum fields, gravity |
+| Nature | mathematical theorems | mathematical problems plus some physical choices | physical claim |
+| Status | proved, checked numerically, measurable on hardware | partly done; open problems at the end of THEOREMS.md | not testable at present |
+| How to test | proofs, numerical checks, formalization (Lean) | proofs, counterexample search | needs a theory of quantum gravity, or an actual time loop |
 
-三層之間的關係：
+How the layers relate:
 
-- **往外推不是自動的。** 內層成立，不代表宇宙真的這樣運作。
-- **外層的答案不會推翻內層。** 就算宇宙沒有時間迴圈，內層仍然是正確的數學：它說的是「如果有迴圈，而且規則是 PP，會發生什麼」。
-- **往內走時，假設被改寫了，而且是被無訊號條件逼著改的。** H1 從「悖論世界消失」變成「悖論世界裡迴圈是混合態」；H2 從「重新加權世界」變成「只在每個過去世界之內重新加權」。這段改寫的過程本身就是專案的主要發現之一，值得在對外的文件裡講清楚。
+- **Extending outward is not automatic.** The inner layer holding does not mean the universe works this way.
+- **The outer layer's answer cannot overturn the inner layer.** Even if the universe has no time loops, the inner layer is correct mathematics: it says what would happen if there were loops and the rule were PPS.
+- **Moving inward, the hypotheses were rewritten, and the no-signalling condition forced it.** H1 went from "paradox worlds disappear" to "in a paradox world the loop is mixed"; H2 from "reweight the world" to "reweight only inside each past world". This rewriting is itself one of the project's main findings and deserves to be explained in outward-facing documents.
 
-建議把這張表放進 `HYPOTHESIS.md`，讓它成為 H1–H3 和 H1′–H3′ 之間的橋。下面幾小節是可以補進這個架構的內容。
+(The table is now in HYPOTHESIS.md.)
 
-### 1.1 每一層多加的欄位
+### 1.1 More columns per layer
 
-| 欄位 | 內層 | 中層 | 外層 |
+| Field | Inner | Middle | Outer |
 |---|---|---|---|
-| 前提 | 記錄基底固定；經典可逆電路（定理 1、2）；受控形式的 U（定理 3） | 有限維；記錄基底由交互作用決定 | 時間迴圈存在；某種量子重力理論 |
-| 否證條件 | 證明有錯，或數值反例 | 找到另一個滿足同樣條件、但不是 PP 的規則（推翻唯一性）；或找到不依賴狀態的記錄基底仍會傳訊的例子 | 時序保護被證明；或量子重力理論給出不同的規則 |
-| 已被推翻的版本 | 原本的 H3 在 P-CTC 下有反例（THEOREMS.md 定理 3 附註） | 原本的 H2「重新加權整個世界」等於超光速傳訊（NO_SIGNALLING.md） | 無 |
-| 證據類型 | 證明、數值檢查、硬體上可量測 | 部分證明、數值探索 | 文獻 |
+| Assumptions | fixed record basis; classical reversible circuits (Theorems 1, 2); controlled-form U (Theorem 3) | finite dimension; record basis set by the interaction | time loops exist; some theory of quantum gravity |
+| Falsified by | an error in a proof, or a numerical counterexample | another rule meeting the same conditions that is not PPS (refutes uniqueness); or an example where a state-independent record basis still signals | chronology protection being proved; or quantum gravity giving a different rule |
+| Versions already refuted | the original H3 has a counterexample under P-CTC (THEOREMS.md, remark after Theorem 3) | the original H2, "reweight the whole world", equals superluminal signalling (NO_SIGNALLING.md) | none |
+| Evidence | proofs, numerical checks, measurable on hardware | partial proofs, numerical exploration | literature |
 
-「已被推翻的版本」這一欄值得特別保留：這些否定結果是專案的成果，不該只散落在各文件裡。
+The "versions already refuted" row is worth keeping: these negative results are outcomes of the project and should not stay scattered across documents.
 
-### 1.2 三層和 H1–H3 交叉
+### 1.2 Layers crossed with H1–H3
 
-H1、H2、H3 各自走到哪一層並不一樣：
-
-| | 內層 | 中層 | 外層 |
+| | Inner | Middle | Outer |
 |---|---|---|---|
-| **H1 自洽** | 定理 1：有自洽歷史的世界只出現自洽結果，悖論世界處於 Deutsch 不動點 | 量子情形要先決定「自洽」指邏輯自洽還是振幅自洽；一般 U 下目前的敘述幾乎等於 PP 的定義，需要更有內容的版本 | Novikov 自洽原理；古典廣義相對論的「撞球悖論」研究（Echeverria–Klinkhammer–Thorne 1991）發現同一個初始條件可以有多個自洽解 |
-| **H2 效應在未來** | 定理 2：過去不變，每個世界之內以自洽為條件 | 記錄基底怎麼決定（3.1）；糾纏系統的效應只出現在分組資料裡 | 真實環境中的迴圈效應能不能被觀察到 |
-| **H3 因果律復原** | 定理 3：受控形式的 U | 推廣到一般「不回頭作用」的 U（THEOREMS.md 開放問題 1） | 沒有迴圈的區域要回到一般量子場論；迴圈邊界上量子場沒辦法良好定義（Kay–Radzikowski–Wald 1997） |
+| **H1 consistency** | Theorem 1: a world with a consistent history shows only consistent outcomes; a paradox world sits at the Deutsch fixed point | the quantum case must decide between logical and amplitude consistency; for general U the current statement is almost the definition of PPS and needs a version with more content | Novikov's principle; the classical "billiard-ball paradox" studies (Echeverria–Klinkhammer–Thorne 1991) found that one initial condition can have several consistent solutions |
+| **H2 effect in the future** | Theorem 2: past unchanged, conditioning on consistency inside each world | how the record basis is fixed (3.1); for entangled systems the effect appears only in sorted data | whether loop effects could be observed in a real environment |
+| **H3 causality recovered** | Theorem 3: controlled-form U | general U "that does not act back" (open problem 1 in THEOREMS.md) | regions without loops must reduce to ordinary QFT; quantum fields are not well defined at a loop boundary (Kay–Radzikowski–Wald 1997) |
 
-撞球悖論是外層 H1 最直接的前人工作。（更正：這份文件的第一版說 `LITERATURE_REVIEW.md` 沒有收錄它，這是錯的；它已經在對照表的 H1 那一行，只是閱讀程度是摘要層級。建議之後讀原文。）
+The billiard-ball paradox is the most direct prior work for the outer layer of H1. It is in the comparison table of `LITERATURE_REVIEW.md` at abstract level; the original should be read.
 
-### 1.3 層與層之間的橋
+### 1.3 Bridges between layers
 
-一個結論要往外搬一層，需要先證明什麼：
+What has to be proved to move a conclusion one layer outward:
 
-**內層 → 中層**
-1. 記錄基底改成由交互作用決定，不依賴狀態（3.1）
-2. 定理 3 推廣到一般的 U
-3. 定理 1、2 從經典電路推廣到量子電路，而且推廣後仍有實質內容
-4. PP 的唯一性（3.2）
+**Inner → middle**
+1. a record basis set by the interaction, independent of the state (3.1);
+2. Theorem 3 extended to general U;
+3. Theorems 1 and 2 extended from classical to quantum circuits while keeping real content;
+4. uniqueness of PPS (3.2).
 
-**中層 → 外層**
-1. 無限維：連續變數、光子；D-CTC 不動點在無限維不一定存在
-2. **相對論協變性。** PP 需要知道哪些事實「已經被記錄」，也就是需要一個時間順序。在相對論裡，類空間隔的事件沒有絕對的先後，所以「已記錄的過去」必須用光錐來定義，結果才不會依賴參考系。但在有時間迴圈的區域裡，光錐意義下的「過去」可能涵蓋整個區域，這個定義可能根本無法使用。這個問題目前專案的文件裡沒有提到。
-3. 跟廣義相對論中有封閉類時曲線的解，以及 Hawking 的時序保護猜想對接
+**Middle → outer**
+1. infinite dimensions: continuous variables, photons; D-CTC fixed points need not exist in infinite dimensions;
+2. **relativistic covariance.** PPS needs to know which facts "have been recorded", i.e. it needs a time order. In relativity, spacelike-separated events have no absolute order, so the "recorded past" must be defined by light cones for the result to be frame independent. But in a region with time loops, the light-cone past may cover the whole region, and the definition may not be usable at all. The project's documents do not yet mention this;
+3. connecting to general-relativistic solutions with closed timelike curves, and to Hawking's chronology-protection conjecture.
 
-### 1.4 第二個軸：規則
+### 1.4 A second axis: rules
 
-三層是「範圍」軸。專案還有一個「規則」軸：無迴圈、D-CTC、P-CTC、T-CTC、κ–β、PP。交叉起來可以看出每種規則在哪裡出局：
+Besides the "scope" axis, the project has a "rule" axis: no loop, D-CTC, P-CTC, T-CTC, κ–β, PPS. Crossing them shows where each rule fails:
 
-| 規則 | 內層 | 中層 |
+| Rule | Inner | Middle |
 |---|---|---|
-| P-CTC | H3 有反例；ε = 0 的祖父悖論沒有定義 | 會傳訊 |
-| T-CTC | 對照 Allen 2014 重現 | 會傳訊，判準跟 P-CTC 相同 |
-| D-CTC（約化態） | 不重新加權，H2 在祖父悖論中不成立 | 不傳訊；逐分支套用則會傳訊 |
-| κ–β | 兩個角落等於 P-CTC 和 D-CTC | 只有 β = 0 那條邊不傳訊 |
-| PP | H1′–H3′ 成立 | 固定基底不傳訊；基底依賴狀態時未證明（3.1）；計算能力至少跟 P-CTC 一樣強（1.5） |
+| P-CTC | H3 counterexample; the ε = 0 grandfather paradox is undefined | signals |
+| T-CTC | reproduced against Allen 2014 | signals, same criterion as P-CTC |
+| D-CTC (reduced state) | no reweighting, so H2 fails in the grandfather paradox | does not signal; applied branch by branch, it does |
+| κ–β | two corners equal P-CTC and D-CTC | only the β = 0 edge does not signal |
+| PPS | H1′–H3′ hold | no signalling with a fixed basis; unproved for a state-dependent basis (3.1); computationally at least as powerful as P-CTC (1.5) |
 
-### 1.5 計算能力：PP 至少跟 P-CTC 一樣強
+### 1.5 Computational power: PPS is at least as powerful as P-CTC
 
-這是 ROADMAP 階段 3 的 T4 的一部分，目前沒有人算過 PP 的計算能力。
+This is part of T4 in phase 3 of the roadmap; nobody had computed the computational power of PPS.
 
-**論證。** 依 THEOREMS.md 的定義，當輸入是一個確定的記錄 |k⟩ 而且 C|k⟩ ≠ 0 時，PP 的輸出是 C|k⟩/‖C|k⟩‖，跟 P-CTC 完全一樣。（`ctc/past_preserving.py` 的說明也提到，純態輸入取包含它的記錄基底時，PP 就是 P-CTC。）一個計算本來就從確定的古典輸入開始，所以 P-CTC 在古典輸入上能做的事，PP 都能做。文獻上 P-CTC 的計算能力等於 PostBQP（Lloyd 等人 2011），而 PostBQP 等於複雜度類別 PP（Aaronson 2005）。
+**Argument.** By the definition in THEOREMS.md, when the input is a definite record |k⟩ and C|k⟩ ≠ 0, PPS outputs C|k⟩/‖C|k⟩‖, exactly like P-CTC. (The docstring of `ctc/past_preserving.py` also notes that for a pure input with a record basis containing it, PPS is P-CTC.) A computation starts from a definite classical input, so whatever P-CTC can do on classical inputs, PPS can too. P-CTC's computational power is known to equal PostBQP (Lloyd et al. 2011), and PostBQP equals the complexity class PP (Aaronson 2005).
 
-**結論。** PP 規則的計算能力**至少**是 PostBQP。上界沒有證明。PP 不能傳訊，但它能做的計算一樣強得不尋常：原則上可以在一次呼叫裡解 NP 完全問題。Aaronson 等人把這種計算能力當作「規則不太可能是物理」的證據，所以這應該列為 PP 的代價之一。
+**Conclusion.** PPS has computational power **at least** PostBQP. No upper bound is proved. PPS cannot signal, but its computational power is just as unusually strong: in principle it could solve NP-complete problems in a single call. Aaronson and others treat such power as evidence that a rule is unlikely to be physical, so this should be listed as one of PPS's costs.
 
-**為什麼「保護過去」擋不住它。** PP 只保護輸入那一刻的記錄。計算需要的疊加，是 U 在記錄之後才產生的，PP 不管這一段。
+**Why "protecting the past" does not stop it.** PPS only protects the record at the input. The superposition the computation needs is created by U after the record; PPS does not constrain that part.
 
-**數值檢查：** `ctc/tests/test_computational_power.py`，5 項，全部通過：
-- 隨機 U、確定的基底輸入：PP 等於 P-CTC（5 種維度 × 5 個 U × 所有輸入）
-- 純態輸入、記錄基底包含它：PP 等於 P-CTC
-- 混合輸入：兩者不同（P-CTC 重新加權世界，PP 不會）
-- 搜尋問題：6 個量子位元、一個迴圈量子位元。輸入 |000000⟩ 是唯一的過去記錄，U 先做 Hadamard，再在「x 不是解」時翻轉迴圈。PP 和 P-CTC 都以機率 1 輸出一個解；沒有迴圈時成功率是（解的數目）/ 64
-- 沒有解時，P-CTC 沒有定義，PP 退回 D-CTC，仍然有輸出
+**Numerical checks:** `ctc/tests/test_computational_power.py`, 5 tests, all pass:
+- random U, definite basis input: PPS equals P-CTC (5 dimensions × 5 U × all inputs);
+- pure input with a record basis containing it: PPS equals P-CTC;
+- mixed input: the two differ (P-CTC reweights worlds, PPS does not);
+- search problem: 6 qubits and one loop qubit. Input |000000⟩ is the only recorded past; U applies Hadamards, then flips the loop qubit when "x is not a solution". PPS and P-CTC both output a solution with probability 1; without the loop the success rate is (number of solutions) / 64;
+- no solution: P-CTC is undefined; PPS falls back to D-CTC and still gives an output.
 
-**縮寫撞名。** 專案用「PP」代表過去守恆篩選，跟複雜度類別 PP 撞名，而 `LITERATURE_REVIEW.md` 正好引用了「P-CTC 的計算能力在 PP 中」。一旦討論計算能力就會混淆，建議改縮寫，例如 PPS。
+**Name clash.** The project used "PP" for past-preserving selection, which clashes with the complexity class PP, and `LITERATURE_REVIEW.md` cites "the computational power of P-CTC is in PP". The documentation now uses **PPS**.
 
-### 1.6 其他還沒放進架構的題目
+### 1.6 Topics not yet in the framework
 
-- **熱力學和無複製定理**（T4 的另一半，中層）：PP 能不能用來複製未知量子態，或違反熱力學第二定律。
-- **自舉悖論在 PP 下的表現**（內層）：資訊從哪裡來。`ctc/output/bootstrap.json` 只算了 D-CTC 和 P-CTC，補上 PP 很容易。依 1.5 的論證，輸入確定時結果會跟 P-CTC 相同。
-- **跟其他框架的介面**：Baumeler–Wolf 的古典 process function（內層）、process matrix（中層）、Gell-Mann–Hartle 的去相干歷史（中層到外層，見 3.3）。
+- **Thermodynamics and no-cloning** (the other half of T4, middle layer): can PPS clone unknown quantum states or violate the second law?
+- **The bootstrap paradox under PPS** (inner layer): where does the information come from? `ctc/output/bootstrap.json` covers only D-CTC and P-CTC; adding PPS is easy. By the argument of 1.5, with a definite input the result equals P-CTC's.
+- **Interfaces with other frameworks:** Baumeler–Wolf classical process functions (inner), process matrices (middle), Gell-Mann–Hartle decoherent histories (middle to outer, see 3.3).
 
-## 2. 對硬體實驗的觀察
+## 2. Observations on the hardware experiments
 
-### 2.1 獨立重算：數值重現了
+### 2.1 Independent recomputation: the numbers reproduce
 
-用 `ctc/hardware/analyze.py` 從 `data/ibm_ibm_kingston_dc1j37ts2omc738amaa0.json` 的原始計數重算：
+Recomputing with `ctc/hardware/analyze.py` from the raw counts in `data/ibm_ibm_kingston_dc1j37ts2omc738amaa0.json`:
 
-- 所有測量值和 repo 裡的報告完全相同；
-- 21 項判準全部通過；
-- 只有少數 bootstrap 標準差和 z 值在小數第三位有差異（例如 eraser_z 的 z 從 −58.3 變成 −57.9），推測是 NumPy 版本不同（2.3 對 2.5），不影響任何判準；
-- `PREREGISTRATION.md` 的 SHA-256 等於結果檔裡記錄的 `956fe5a6…`。
+- every measured value matches the repository's report;
+- all 21 criteria pass;
+- only a few bootstrap standard errors and z values differ in the third decimal (for example the eraser_z z value goes from −58.3 to −57.9), presumably from the NumPy version (2.3 vs 2.5); no criterion is affected;
+- the SHA-256 of `PREREGISTRATION.md` equals the `956fe5a6…` recorded in the results file.
 
-### 2.2 事先登錄的時間沒有外部證據
+### 2.2 The preregistration has no external timestamp
 
-- 結果檔記錄的取回時間是 2026-11-22T18:18:36Z。
-- `PREREGISTRATION.md` 和結果資料是在**同一個 commit**（`e8e1ede`，2026-11-22T18:26:27Z）加進 git 的，在取回結果之後 8 分鐘。
-- 結果檔裡的雜湊值是 `run_ibm.py` 自己寫進去的，只能證明「存結果時登錄檔長這樣」，不能證明「送出 job 之前登錄檔就長這樣」。
+- The results file records retrieval at 2026-11-22T18:18:36Z.
+- `PREREGISTRATION.md` and the results data were added to git in **the same commit** (`e8e1ede`, 2026-11-22T18:26:27Z), 8 minutes after retrieval.
+- The hash in the results file is written by `run_ibm.py` itself; it proves what the preregistration said when the results were saved, not that it existed in that form before submission.
 
-這不代表有任何不當之處，`ctc/hardware/README.md` 也已經坦白說判準是在前兩次執行之後才定的。但「事先登錄」這個詞通常意味著有第三方可以驗證的時間戳記。**建議：** 下一次執行前，先把登錄檔 commit 並推送到 GitHub（或放到 OSF、Zenodo 這類有時間戳記的地方），再送出 job；並在結果檔裡記錄 IBM 回報的 job 建立時間。
+This does not suggest anything improper, and `ctc/hardware/README.md` already says the criteria were set after the first two runs. But "preregistration" usually implies a timestamp a third party can verify. **Suggestion:** before the next run, commit and push the preregistration to GitHub (or a timestamped store such as OSF or Zenodo) before submitting the job, and record IBM's job creation time in the results file.
 
-### 2.3 實驗能說明什麼、不能說明什麼
+### 2.3 What the experiment can and cannot show
 
-專案已經寫明「三種規則來自同一批 shots」。這裡補充一個更直接的說法，建議放進 README：
+The project already states that "all rules come from the same shots". A more direct wording, suggested for the README:
 
-> 硬體實驗不是在比較三種規則，而是在檢驗「一個後選擇電路在真實硬體上能不能做到理論上的精度」。三種規則是同一份資料的三種整理方式，所以不管硬體結果如何，都不可能支持其中一種規則、反對另一種。
+> The hardware experiment does not compare the rules; it tests whether a postselected circuit reaches theoretical precision on real hardware. The rules are three ways of sorting the same data, so whatever the hardware result, it cannot support one rule over another.
 
-另外，`ctc/hardware/` 也不是第一個在可程式量子電腦上實作 P-CTC 的工作：2025 年有一篇在 IBM 和 Quantinuum 雲端處理器上用 P-CTC 解讀擾亂資訊解碼的實驗（arXiv 2501.16335，已補進 `LITERATURE_REVIEW.md`，內容未讀）。Lloyd 等人 2011 和 Ringbauer 等人 2014 則是光學實驗。
+Also, `ctc/hardware/` is not the first P-CTC implementation on a programmable quantum computer: a 2025 experiment on IBM and Quantinuum cloud processors interprets scrambled-information decoding with P-CTCs (arXiv 2501.16335, added to `LITERATURE_REVIEW.md`, content not read). Lloyd et al. 2011 and Ringbauer et al. 2014 were optical.
 
-照這個說法，README 頂端的「IBM hardware 21/21 preregistered checks」徽章容易被讀成「實驗支持過去守恆篩選」。建議改成類似「IBM hardware: predictions measurable (21/21)」的字樣，或在徽章旁邊直接加一句限制。
+By that wording, the README badge "IBM hardware 21/21 preregistered checks" could be read as "the experiment supports PPS". (Done: the badge now reads "predictions measurable, 21/21 checks".)
 
-### 2.4 結果依賴讀取校正
+### 2.4 The results depend on readout correction
 
-- 祖父悖論的過去守恆值，校正後 0.211、未校正 0.263。用未校正數字的話，C2（誤差 ≤ 0.05）不會通過。README 已經揭露這一點。
-- 量子位元 147 的讀取錯誤，在 preflight 時是 0.46%，幾分鐘後在主 job 裡變成約 8%。
+- The PPS grandfather value is 0.211 corrected and 0.263 uncorrected; with uncorrected numbers, C2 (error ≤ 0.05) would fail. The README discloses this.
+- Qubit 147's readout error was 0.46% in the preflight and about 8% in the main job a few minutes later.
 
-**建議：** 在登錄檔裡也寫明讀取校正的方法（目前的判準只提到 bootstrap 會重抽校正資料，沒有明寫「以校正後的數字為主要分析」）；把未校正的判準結果當作次要分析一起報告；讀取校正電路跟實驗電路交錯執行，而不是集中在一處。
+**Suggestion:** state the readout-correction method in the preregistration (the criteria currently say only that the bootstrap resamples calibration data, not that corrected numbers are the primary analysis); report the uncorrected criteria as a secondary analysis; interleave calibration circuits with the experiment circuits instead of grouping them.
 
-### 2.5 擦除實驗剛好過門檻
+### 2.5 The eraser only just passes
 
-清晰度 0.870，門檻 0.85。專案已經指出無迴圈的清晰度同比例下降（約 0.92 倍），符合一般的去相干。這是合理的解釋，但下一次可以事先登錄「相對於無迴圈的清晰度比例」當作判準，它對硬體雜訊比較不敏感，比絕對門檻更能反映規則本身。
+Visibility 0.870 against a threshold of 0.85. The project already notes that the no-loop visibility drops by the same factor (about 0.92), consistent with ordinary decoherence. That is a reasonable explanation, but a future run can preregister "visibility relative to no-loop" as the criterion, which is less sensitive to hardware noise and reflects the rule better than an absolute threshold.
 
-## 3. 理論上的觀點
+## 3. Theoretical perspectives
 
-### 3.1 記錄基底一旦跟狀態有關，規則就變成非線性
+### 3.1 Once the record basis depends on the state, the rule becomes nonlinear
 
-這是我認為最值得注意的一點。
+This is the point I consider most important.
 
-- **定理 0 的前提是記錄基底固定。** 在固定基底下，PP 是線性的量子通道，所以一定不能傳訊。
-- **但 `ctc/DECOHERENCE.md` 的規則不是固定基底。** 它取「條件狀態 ρ_{S|e} 的本徵基底」當記錄基底，所以基底跟著輸入狀態變。這樣的規則對 ρ 是非線性的，定理 0 的證明不能直接套用。
-- DECOHERENCE.md 用「Bob 改變不了 S 和環境的約化態」論證它不能傳訊，數值測試也通過了。這個論證處理了 Bob → Alice 的方向，但沒有處理 Bennett 等人 2009 的「線性陷阱」和 Cavalcanti–Menicucci–Pienaar 2012 的「製備問題」：同一個混合態可以由不同的純態系綜製備，非線性規則對「混合態」和「各成分分別作用再混合」會給出不同答案。專案在 PAST_PRESERVING.md 已經點出製備問題，但去相干版本的規則還沒有正面回答它。
-- **DECOHERENCE.md 觀察到的「全有或全無」很可能就是這個非線性的症狀。** 矩陣的本徵向量在本徵值簡併的地方不連續：條件狀態接近 𝟙/2 時，任意小的擾動就能把本徵基底轉到任何方向。s = 0.01 的環境紀錄就完全決定基底，正是這個現象。
+- **Theorem 0 assumes a fixed record basis.** With a fixed basis, PPS is a linear quantum channel and so cannot signal.
+- **The rule in `ctc/DECOHERENCE.md` does not use a fixed basis.** It takes the eigenbasis of the conditional state ρ_{S|e} as the record basis, so the basis follows the input state. Such a rule is nonlinear in ρ, and the proof of Theorem 0 does not apply directly.
+- DECOHERENCE.md argues no-signalling from "Bob cannot change the reduced state of S and the environment", and the numerical tests pass. That argument handles the Bob → Alice direction but not the "linearity trap" of Bennett et al. 2009 or the "preparation problem" of Cavalcanti–Menicucci–Pienaar 2012: the same mixed state can be prepared from different ensembles of pure states, and a nonlinear rule gives different answers for "the mixture" and for "acting on each component, then mixing". PAST_PRESERVING.md already points out the preparation problem, but the decoherence version of the rule does not yet answer it.
+- **The "all-or-nothing" behaviour seen in DECOHERENCE.md is probably a symptom of this nonlinearity.** Eigenvectors are discontinuous at degenerate eigenvalues: near a conditional state of 𝟙/2, an arbitrarily small perturbation can turn the eigenbasis in any direction. That a record of s = 0.01 fixes the basis completely is exactly this.
 
-**建議：** 讓記錄基底只由**交互作用**決定，而不是由**狀態**決定。例如取系統和環境之間交互作用哈密頓量的指標基底（Zurek 的 einselection 本來就是這樣定義的）。這樣規則對每個固定的交互作用都是線性的，定理 0 直接適用，也不會有本徵向量不連續的問題。ROADMAP 已經列了「讓環境的讀取基底由環境自身的動力學決定」，這裡建議把它提高優先順序，而且明確要求「基底不依賴狀態」。
+**Suggestion:** let the record basis be fixed by the **interaction**, not the **state**; for example the pointer basis of the system–environment interaction Hamiltonian (which is how Zurek's einselection is defined). Then the rule is linear for each fixed interaction, Theorem 0 applies directly, and there is no eigenvector discontinuity. The roadmap already lists "let the environment's readout basis be set by its own dynamics"; this should be raised in priority, with the explicit requirement that the basis not depend on the state.
 
-### 3.2 中層最值得證明的目標：PP 的唯一性
+### 3.2 The most valuable middle-layer target: uniqueness of PPS
 
-目前 PP 是「一個能讓三個假設同時成立的規則」。如果能證明下面這種敘述，PP 就從「一個選擇」變成「被逼出來的答案」，這會是專案最強的理論結果：
+At present PPS is "one rule under which the three hypotheses hold together". A statement like the following would turn PPS from a choice into a forced answer, which would be the project's strongest theoretical result:
 
-> 在有限維系統上，同時滿足 (a) 線性、完全正、保持跡（因此不能傳訊），(b) 不改變記錄基底上的機率，(c) 世界有自洽歷史時只輸出自洽的結果，(d) 迴圈不回頭作用時回到一般量子力學，的規則，只有 PP（可能差在悖論世界的退回方式）。
+> On finite-dimensional systems, the only rules satisfying (a) linear, completely positive and trace preserving (so no signalling), (b) unchanged probabilities in the record basis, (c) only consistent outcomes in worlds that have a consistent history, and (d) ordinary quantum mechanics when the loop does not act back, are PPS (possibly up to the fallback in paradox worlds).
 
-這個敘述也會把 THEOREMS.md 的「接縫」問題精確化：如果唯一的自由度正好就是悖論世界的退回方式，那「為什麼退回 D-CTC」就變成一個可以單獨討論的問題。
+This would also sharpen the "seam" problem in THEOREMS.md: if the only freedom is the fallback in paradox worlds, then "why fall back to D-CTC" becomes a question that can be discussed on its own.
 
-### 3.3 新穎性：Hartle 1994 全文比對（2026-11-24 完成）
+### 3.3 Novelty: full-text comparison with Hartle 1994 (done 2026-11-24)
 
-已讀 Hartle 1994（gr-qc/9309012）全文，比對寫在 `ctc/NOVELTY_CHECK.md` 第三輪，數值檢查在 `ctc/tests/test_hartle.py`。結論：
+Hartle 1994 (gr-qc/9309012) was read in full; the comparison is in `ctc/NOVELTY_CHECK.md`, third round, with a numerical check in `ctc/tests/test_hartle.py`. Conclusions:
 
-- **PP 在每個世界之內的規則不是新的。** 它就是 Hartle Eq. (5.6)：初始狀態被持久紀錄去相干時的條件機率。Hartle 的 NC 之後的狀態 XρX†/Tr(XρX†)（Eq. 6.7）就是 P-CTC 的公式。
-- **唯一的差別是已記錄的過去的機率。** Hartle 的框架會用 ‖X|α⟩‖² 重新加權它們（Eq. 4.1、5.5），他稱之為 acausal，並把它當作理論的特徵；PP 規定它們不變。Hartle 1994 沒有提出這個因果版本。
-- **研究筆記必須把 PP 定位成「Hartle 框架的因果修改」，並引用 Eq. (5.5)–(5.6)**，而不是宣稱一條全新的規則。
-- Hartle 的「不能傳訊」證明排除了初始糾纏的情況，所以跟 NO_SIGNALLING.md 的 P-CTC 傳訊結果不矛盾。
-- Hartle 指出只有去相干的過去選項能被指定機率，而實際的去相干機制在時間上是局域的。這支持 3.1 的建議：記錄基底由局域的環境交互作用決定。
+- **The within-world rule of PPS is not new.** It is Hartle's Eq. (5.6): the conditional probability when the initial state is decohered by a persistent record. Hartle's post-NC state XρX†/Tr(XρX†) (Eq. 6.7) is the P-CTC formula.
+- **The only difference is the probability of the recorded past.** Hartle's framework reweights it by ‖X|α⟩‖² (Eqs. 4.1, 5.5), which he calls acausal and treats as a feature; PPS keeps it fixed. Hartle 1994 does not propose this causal version.
+- **Research notes must present PPS as "a causal modification of Hartle's framework" and cite Eqs. (5.5)–(5.6)**, not claim a new rule.
+- Hartle's no-signalling proof excludes initial entanglement, so it does not contradict the P-CTC signalling results of NO_SIGNALLING.md.
+- Hartle notes that only decoherent past alternatives can be assigned probabilities, and that real decoherence mechanisms are local in time. This supports the suggestion of 3.1: a record basis fixed by local environmental interactions.
 
-**下一步：** 引用 Hartle 1994 的後續工作還沒查，那裡可能有人寫過同樣的因果版本。這需要能看引用清單的資料庫（INSPIRE 或 Semantic Scholar），目前這個環境只允許連 arxiv.org。
+**Next step:** later work citing Hartle 1994 has not been checked; someone may have written the same causal version there. This needs a database with citation lists (INSPIRE or Semantic Scholar).
 
-## 4. 專案管理與可重現性
+## 4. Project management and reproducibility
 
-### 4.1 文件跟不上進度
+### 4.1 Documents lagging behind (fixed 2026-11-24)
 
-**2026-11-24 已修正**（下表各項；README 的雜湊值也同步更新在 `PUBLIC_MANIFEST.json`）。下表保留作為紀錄。
+The roadmap's date and test count, ctc/README's "no hardware runs", the inconsistent Chinese and English versions of README finding 6, and the unfinished literature-review update were all fixed on 2026-11-24. (On the same day the repository was translated to English and the legacy evidence package was removed from the main tree.)
 
-| 文件 | 問題 |
-|---|---|
-| `ROADMAP.md` | 寫著「最後更新 2026-11-22」和「74 項測試」，實際是 93 項；「主要發現」沒有列入定理和硬體結果 |
-| `ctc/README.md` | 開頭說「沒有硬體執行」；指令清單沒有 `test_theorems.py`、`test_hardware.py` |
-| `README.md` | 中文版第 6 點還寫著「未解決：記錄基底由誰決定」，英文版已經改成用去相干決定，兩邊不一致 |
-| `ROADMAP.md` 階段 0 | 更新 `LITERATURE_REVIEW.md` 的待辦還沒完成 |
-| `README.md` 徽章 | 寫著 93 項測試；加上這份文件附帶的 `test_computational_power.py` 之後是 98 項 |
+### 4.2 Rerunning the analysis overwrites committed data files
 
-### 4.2 重跑分析會覆寫 repo 裡的資料檔
+`analyze.py` writes its report straight back into `ctc/hardware/data/`. A rerun therefore:
 
-`analyze.py` 直接把報告寫回 `ctc/hardware/data/`。重跑時會發生兩件事：
+1. may change reported numbers in the third decimal because of the NumPy version (see 2.1);
+2. rewrites every line, because the committed report files use CRLF line endings and the program writes LF.
 
-1. 報告的數字可能因為 NumPy 版本而在小數第三位改變（見 2.1）；
-2. repo 裡的報告檔是 CRLF 換行，程式寫出來的是 LF，所以 git 會顯示每一行都改了。
+**Suggestion:** give `analyze.py` an output-directory option, defaulting to a location outside the repository or an ignored folder; update committed result files only for genuinely new runs.
 
-**建議：** 給 `analyze.py` 加一個輸出目錄的選項，預設寫到 repo 外面或一個被 `.gitignore` 的資料夾；commit 過的結果檔只在真的有新執行時才更新。
+### 4.3 Environment and automation
 
-### 4.3 環境與自動化
+- **Pin dependency versions.** Add a `requirements.txt` (NumPy, matplotlib; hardware: qiskit, qiskit-ibm-runtime). The tests pass on Python 3.13 and NumPy 2.5, but versions affect bootstrap decimals.
+- **Continuous integration.** A GitHub Actions workflow running `ctc/tests/` on every push would give the "tests passing" badge a real source instead of a hand-maintained number.
 
-- **固定依賴版本。** 加一個 `requirements.txt`（NumPy、matplotlib，硬體部分另列 qiskit、qiskit-ibm-runtime）。這次在 Python 3.13、NumPy 2.5 上測試全部通過，但版本會影響 bootstrap 的小數位。
-- **持續整合。** 加一個 GitHub Actions 工作流程，每次推送都跑 `ctc/tests/` 和 `VERIFY_PUBLIC.py`。這樣「93 項測試通過」的徽章就有實際的來源，不需要手動維護數字。
+### 4.4 Formalization (Lean)
 
-### 4.4 形式化（Lean）
+The project's theorems are finite-dimensional linear algebra and counting; formalizing them is estimated at a few thousand lines, mostly for quantum-channel infrastructure rather than the project's own content. In 2026 there are Mathlib-compatible quantum-information libraries (for example Lean-Quantum, arXiv 2607.05492, covering partial traces, Kraus and Stinespring) that would lower the cost a lot.
 
-這個專案的定理是有限維的線性代數和計數，形式化的規模估計是幾千行，而且主要成本是量子通道的基礎設施，不是專案本身的內容。2026 年已經有 Mathlib 相容的量子資訊函式庫（例如 Lean-Quantum，arXiv 2607.05492，涵蓋部分跡、Kraus、Stinespring），可以大幅降低成本。
+But the value is limited: the proofs are short and already checked numerically, and the main risks are in the definitions and the physical interpretation, which Lean cannot check. If done, formalize only the cleanest parts (Lemma 1, Theorem 1(1), Theorem 2(2) with Mathlib alone, plus Theorem 0 with an existing library) as an appendix.
 
-但形式化的價值有限：這裡的證明很短，也已經有數值檢查，主要風險在定義和物理詮釋，這些 Lean 檢查不到。如果要做，建議只做最乾淨的部分（引理 1、定理 1(1)、定理 2(2)，只需要 Mathlib；再加上用現成函式庫做的定理 0），當作附錄。
+## 5. Suggested priorities
 
-## 5. 建議的優先順序
-
-1. ~~修正文件的不一致（4.1），並把三層架構寫進 `HYPOTHESIS.md`（第 1 節）~~ **2026-11-24 完成。**
-2. ~~調整 README 對硬體實驗的措辭（2.3）~~ **2026-11-24 完成：** 徽章改成「predictions measurable, 21/21 checks」，README 第 8 點和誠實聲明補上「結果由標準量子力學決定」「登錄檔沒有外部時間戳記」與前人工作；`ctc/hardware/README.md` 的注意事項也補上這兩點。
-3. ~~讀 Hartle 1994 全文，做 PP 的新穎性檢查（3.3）~~ **2026-11-24 完成：** 世界之內的規則已知（Hartle Eq. 5.6），差別只在不重新加權過去。剩下的是引用追蹤，以及讀撞球悖論的原文（1.2）。
-4. **把記錄基底改成不依賴狀態**（3.1）。這是 PP 最大的開放問題，而且直接關係到它是否真的不能傳訊。
-5. **在研究筆記裡誠實列出 PP 的計算能力**（1.5），並把縮寫改掉以免跟複雜度類別撞名。
-6. **嘗試證明 PP 的唯一性**（3.2），或者至少把定理 3 推廣到一般的 U。
-7. **思考「已記錄的過去」在相對論裡怎麼定義**（1.3）。這是外層最先會碰到的問題。
-8. **加 requirements.txt、CI，修正 analyze.py 的輸出位置**（4.2、4.3）。
-9. **請熟悉 CTC 文獻的研究者看過**，然後寫 arXiv 研究筆記。
-10. 下一次硬體執行時，採用有外部時間戳記的事先登錄（2.2）和相對清晰度判準（2.5）。
-11. 選擇性的 Lean 形式化（4.4）。
+1. ~~Fix document inconsistencies (4.1) and add the three-layer table to `HYPOTHESIS.md` (section 1).~~ **Done 2026-11-24.**
+2. ~~Adjust the README's wording about the hardware experiments (2.3).~~ **Done 2026-11-24:** badge reads "predictions measurable, 21/21 checks"; the README and honesty statement add "results are fixed by standard quantum mechanics", "the preregistration has no external timestamp" and the prior work; `ctc/hardware/README.md` caveats add the same two points.
+3. ~~Read Hartle 1994 in full and check the novelty of PPS (3.3).~~ **Done 2026-11-24:** the within-world rule is known (Hartle Eq. 5.6); the difference is only not reweighting the past. Remaining: citation tracking, and reading the billiard-ball paradox originals (1.2).
+4. **Make the record basis state independent** (3.1). This is the largest open problem of PPS and bears directly on whether it really cannot signal.
+5. **State PPS's computational power honestly in any research note** (1.5). ~~Rename the abbreviation.~~ Done: PPS.
+6. **Try to prove uniqueness of PPS** (3.2), or at least extend Theorem 3 to general U.
+7. **Think about how "the recorded past" is defined in relativity** (1.3). This is the first problem the outer layer meets.
+8. **Add requirements.txt and CI; fix analyze.py's output location** (4.2, 4.3).
+9. **Ask a researcher familiar with the CTC literature to look at it**, then write an arXiv research note.
+10. For the next hardware run, use a preregistration with an external timestamp (2.2) and a relative-visibility criterion (2.5).
+11. Optional Lean formalization (4.4).

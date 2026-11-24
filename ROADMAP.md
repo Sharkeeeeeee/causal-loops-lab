@@ -1,131 +1,169 @@
-# 研究路線圖：因果自洽的資訊迴圈
+# Research roadmap: causally self-consistent information loops
 
-建立日期：2026-11-22，最後更新：2026-11-24。撰寫時使用 AI 輔助（Claude）。沒有外部審查。
+Created 2026-11-22, last updated 2026-11-24. Written with AI assistance (Claude). No external review.
 
-本文件說明專案的新方向。`plan-a/`、`plan-b/` 和 `analysis/` 是**已凍結的舊有證據**，不再修改，`VERIFY_PUBLIC.py` 會繼續檢查它們的雜湊值。根目錄的 `README.md` 在 2026-11-22 改寫成以本研究為主的介紹（專案同時改名為 Causal Loops Lab），舊的證據說明保留成其中一節，`PUBLIC_MANIFEST.json` 只更新了 `README.md` 那一行的雜湊值。
+On 2026-11-22 the repository was renamed Causal Loops Lab and its README rewritten around this research. On 2026-11-24 the repository was translated to English, and the earlier evidence package (`plan-a/`, `plan-b/`, `analysis/` and its hash manifest) was removed from the main tree; it is preserved at the git tag `archive/evidence-package-v0.34`.
 
-## 核心假設
+## Core hypotheses
 
-精確的表述見 [HYPOTHESIS.md](HYPOTHESIS.md)。
+Precise statements in [HYPOTHESIS.md](HYPOTHESIS.md).
 
-| 編號 | 假設 | 白話 |
+| | Hypothesis | Plain words |
 |---|---|---|
-| H1 | 傳回過去的資訊必定自洽 | 祖父悖論不會發生，因為會造成矛盾的歷史根本不存在 |
-| H2 | 迴圈的可觀察效應出現在未來 | 迴圈之後的統計，跟沒有迴圈的世界不同，而且差異可以計算 |
-| H3 | 因果律等於「整體自洽」 | 沒有迴圈時，H1 會退化成一般的「原因在結果之前」 |
+| H1 | Information sent to the past is always self-consistent | The grandfather paradox cannot happen, because contradictory histories do not exist |
+| H2 | The loop's observable effect appears in the future | Statistics after the loop differ from a world without it, by a computable amount |
+| H3 | Causality is global consistency | Without a loop, H1 reduces to ordinary "cause before effect" |
 
-## 不主張的事
+## What this project does not claim
 
-- 不主張人類能把資訊傳回過去。
-- 不主張任何模擬或實驗能證明資訊回到過去。用後選擇做的模擬，都能用正常的時間方向解釋。
-- 不拿這套理論支持任何個人的時間旅行說法。
+- It does not claim that people can send information to the past.
+- It does not claim that any simulation or experiment can prove information reached the past. Postselected simulations can always be explained in the normal time direction.
+- It does not support any personal time-travel claim.
 
-## 目前為止的主要發現
+## Main findings so far
 
-這些發現改變了假設的具體內容，細節見各連結文件。
+These findings changed the content of the hypotheses; details in the linked documents.
 
-1. **H2 需要一條獨立的假設：宇宙偏好自洽的分支。** 在 κ–β 模型裡，只要沒有自洽篩選（β = 0），不管訊息從哪裡來，世界本身的機率都完全不變。([ctc/BRANCHES.md](ctc/BRANCHES.md))
-2. **篩選規則不同，結果可以完全相反。** Lloyd 的槍：P-CTC 下永遠殺不成，D-CTC 下殺成的機率是 sin²(θ/2)。KFK 有動機寄件者：壞結果最低的地方是新的「典型但自洽」角落，不是 P-CTC。([ctc/LITERATURE_REPRODUCTION.md](ctc/LITERATURE_REPRODUCTION.md)、[ctc/BRANCHES.md](ctc/BRANCHES.md))
-3. **改變未來的可以是篩選本身，不是訊息。** P-CTC 下，提醒一定有效時壞結果消失，但剩下的唯一歷史是「沒收到提醒，而這個人剛好自己選對」。([ctc/README.md](ctc/README.md))
-4. **量子版本裡，H1 的「自洽」有兩種不相容的定義。** 邏輯自洽和振幅自洽不同：兩條各自邏輯自洽的歷史，可以因為干涉互相抵消，讓整個分支消失。([ctc/QUANTUM_EFFECTS.md](ctc/QUANTUM_EFFECTS.md))
-5. **H3 在 P-CTC 下有角落案例。** 迴圈訊息只帶一個相位時，P-CTC 沒有定義，即使沒有任何矛盾。([ctc/QUANTUM_EFFECTS.md](ctc/QUANTUM_EFFECTS.md))
-6. **無條件寄出的訊息，跟一般訊息一樣。** 只看收件者這邊，無法分辨訊息是否來自未來。在 D-CTC 和 P-CTC 下結果完全相同；在 T-CTC 下，它像一則只部分送達的普通訊息（有一部分機率收到雜訊），但仍然不重新加權世界。([ctc/README.md](ctc/README.md)、[ctc/T_CTC.md](ctc/T_CTC.md))
-7. **H2 照目前的寫法違反無訊號條件。** 在所有測過的規則裡，「迴圈重新加權 Alice 的世界」等於「Alice 能對遠方共享相關性的 Bob 超光速傳訊」，傳訊量正好等於重新加權的量。只有不重新加權的規則（D-CTC 套用在約化態上、β = 0）不能傳訊。P-CTC 不能傳訊若且唯若 C†C ∝ 𝟙。D-CTC 若對 Bob 的每個測量結果分別套用，Bob 可以完美地對 Alice 傳訊。([ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md))
-8. **「過去守恆篩選」是 H2 的一條可行出路。** 過去的機率不變，只在每個已記錄的過去世界內做自洽篩選。它是普通的量子通道，所以一定不能傳訊；祖父悖論不變，KFK 壞結果從 0.30 降到 0.21。在有時間迴圈的雙縫實驗裡，迴圈的效應只出現在按閒置光子結果分組後的條紋裡，跟量子擦除同構。未解決：「已記錄」的基底由誰決定，不同選擇給出不同預測。([ctc/PAST_PRESERVING.md](ctc/PAST_PRESERVING.md))
-9. **在過去守恆篩選下，H1–H3 能以修改後的形式（H1′–H3′）證明成定理。** 每個已記錄的世界都自洽；迴圈不改變已記錄的過去機率，只在每個過去世界之內以自洽為條件；迴圈不回頭作用時完全回到一般量子力學。原本的 H3 在 P-CTC 下有反例。每條定理都用隨機電路驗證過。([ctc/THEOREMS.md](ctc/THEOREMS.md))
-10. **這些預測在 IBM 量子電腦上量得出來。** 第三次執行（`ibm_kingston`）事先登錄的 21 項判準全部通過。三種規則是同一批 shots 的三種整理方式，所以這只說明預測量得出來，不說明自然界用哪一種規則。([ctc/hardware/README.md](ctc/hardware/README.md))
-11. **過去守恆篩選的計算能力至少跟 P-CTC 一樣強。** 輸入是確定的記錄時，兩者的輸出完全相同，所以它繼承了 P-CTC 的 PostBQP 計算能力；上界沒有證明。這是 2026-11-24 外部閱讀時提出的，見 [PERSPECTIVES.md](PERSPECTIVES.md) 1.5 和 `ctc/tests/test_computational_power.py`。
+1. **H2 needs a separate assumption: the universe prefers consistent branches.** In the κ–β model, without consistency selection (β = 0) the world's probabilities never change, wherever the message comes from. ([ctc/BRANCHES.md](ctc/BRANCHES.md))
+2. **Different selection rules can give opposite results.** Lloyd's gun never kills under P-CTC but kills with probability sin²(θ/2) under D-CTC. For the motivated KFK sender, the lowest bad-outcome probability is at the new "typical but consistent" corner, not at P-CTC. ([ctc/LITERATURE_REPRODUCTION.md](ctc/LITERATURE_REPRODUCTION.md), [ctc/BRANCHES.md](ctc/BRANCHES.md))
+3. **What changes the future can be the selection itself, not the message.** Under P-CTC, when the warning always works the bad outcome disappears, but the only remaining history is "no warning arrives, and the person happens to choose well". ([ctc/README.md](ctc/README.md))
+4. **In the quantum version, H1's "consistency" has two incompatible meanings.** Logical and amplitude consistency differ: two logically consistent histories can cancel by interference and delete a whole branch. ([ctc/QUANTUM_EFFECTS.md](ctc/QUANTUM_EFFECTS.md))
+5. **H3 has a corner case under P-CTC.** When the loop message only picks up a phase, P-CTC is undefined although nothing is contradictory. ([ctc/QUANTUM_EFFECTS.md](ctc/QUANTUM_EFFECTS.md))
+6. **An unconditional message looks like an ordinary one.** From the receiver's side alone one cannot tell whether a message came from the future. D-CTC and P-CTC agree; under T-CTC it behaves like an ordinary message that is only partly delivered, but still does not reweight the world. ([ctc/README.md](ctc/README.md), [ctc/T_CTC.md](ctc/T_CTC.md))
+7. **H2 as first stated violates no-signalling.** In every rule tested, "the loop reweights Alice's world" equals "Alice can signal faster than light to a distant Bob who shares correlations", by exactly the reweighted amount. Only non-reweighting rules (D-CTC on the reduced state, β = 0) cannot signal. P-CTC cannot signal if and only if C†C ∝ 𝟙. D-CTC applied separately to each of Bob's outcomes lets Bob signal perfectly to Alice. ([ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md))
+8. **Past-preserving selection (PPS) is a viable way out for H2.** Past probabilities are unchanged; consistency selection acts only inside each recorded past world. It is an ordinary quantum channel and so cannot signal; the grandfather paradox is unchanged, and the KFK bad outcome drops from 0.30 to 0.21. In a double slit with a time loop, the loop's effect appears only in fringes sorted by the idler, isomorphic to a quantum eraser. Open: what fixes the "record" basis, since different choices predict different things. ([ctc/PAST_PRESERVING.md](ctc/PAST_PRESERVING.md))
+9. **Under PPS, H1–H3 can be proved as theorems in modified form (H1′–H3′).** Every recorded world is self-consistent; the loop never changes recorded past probabilities and inside each past world conditions the future on consistency; when the loop does not act back, ordinary quantum mechanics is recovered exactly. The original H3 has a counterexample under P-CTC. Each theorem is checked on random circuits. ([ctc/THEOREMS.md](ctc/THEOREMS.md))
+10. **The predictions are measurable on IBM quantum computers.** Three runs (two on ibm_marrakesh, one on ibm_kingston); the third had preregistered predictions and criteria, and all 21 pass: P-CTC changes the recorded past and a distant Bob's which-path statistics (0.5 → 0.662), PPS does not (0.501); inconsistent histories are suppressed to 0.035; the eraser's Bob-sorted fringe visibility is 0.870 (theory 0.943) with a shift of 0.774 rad (theory π/4). All rules come from the same shots, so this shows the predictions are measurable, **not** which rule nature uses, and not that loops exist. ([ctc/hardware/README.md](ctc/hardware/README.md))
+11. **PPS is computationally at least as powerful as P-CTC.** On definite inputs the two give identical outputs, so PPS inherits P-CTC's PostBQP power; no upper bound is proved. Raised in the outside reading of 2026-11-24. ([PERSPECTIVES.md](PERSPECTIVES.md) 1.5, `ctc/tests/test_computational_power.py`)
+12. **PPS is a causal modification of Hartle 1994.** Its within-world rule is Hartle's Eq. (5.6); the only difference is that PPS does not reweight the recorded past. PPS cannot be claimed as a new rule as a whole. ([ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md), third round)
+13. **Strong, common microscopic loops are ruled out.** If every particle coupled to a loop (Z-basis model), the loop phase would have to be below 0.136 rad: a direct pure-vs-recorded test on ibm_kingston bounds the population shift at |S| < 1.16×10⁻³ (95%), stronger than existing Born-rule data for φ between 0.14 and 0.98 rad. A first run's 10σ "anomaly" was traced, with a preregistered control, to CNOT crosstalk that the design failed to cancel because ±π/2 compiled to the same physical pulse. ([ctc/born_rule/README.md](ctc/born_rule/README.md))
+14. **Two intuitive conjectures about PPS are false in general.** In a preregistered "conjecture lottery" (credences hashed before any checking code existed), "the PPS effect never exceeds P-CTC's" holds for single-qubit CR systems but fails for two qubits, and "PPS never increases entropy" fails for classical circuits. Brier score 0.213, close to chance, as intended. ([ctc/conjectures/README.md](ctc/conjectures/README.md))
 
-## 階段
+## Phases
 
-### 階段 0：整理專案 ✅
-- [x] 新增 ROADMAP.md 和 HYPOTHESIS.md
-- [x] 建立 git 版本控制，推送到 GitHub 分支 `ctc-phase1`
-- [x] 文獻盤點，見 [LITERATURE_REVIEW.md](LITERATURE_REVIEW.md)（多數論文只讀了摘要，引用前要核對原文）
-- [x] 更新 LITERATURE_REVIEW.md 中已經被後續工作解決的幾行（2026-11-24 完成）：(a) 的數值已對照 Lloyd 2011、Brun–Harrington–Wilde 2009 已讀全文、(c) 和 Lloyd「完全混合」的說法已經釐清
+### Phase 0: project setup ✅
+- [x] ROADMAP.md and HYPOTHESIS.md
+- [x] git version control, pushed to GitHub
+- [x] literature review, see [LITERATURE_REVIEW.md](LITERATURE_REVIEW.md) (most papers read at abstract level; check originals before citing)
+- [x] update the rows of LITERATURE_REVIEW.md resolved by later work (2026-11-24)
+- [x] repository cleanup: English throughout, legacy evidence package moved to a tag (2026-11-24)
 
-### 階段 1：玩具模型模擬器，程式在 `ctc/`
-已完成：
-- [x] 三種規則：無迴圈、P-CTC、D-CTC，另有直接模擬後選擇 teleportation 的獨立檢查
-- [x] 三個情境：有失敗機率 ε 的祖父悖論、KFK 型提醒、自舉悖論
-- [x] 重現 Lloyd 等人 2011 的 6 項說法、Brun–Harrington–Wilde 2009 的 3 項說法 ([ctc/LITERATURE_REPRODUCTION.md](ctc/LITERATURE_REPRODUCTION.md))
-- [x] 古典 κ–β 分支模型：P-CTC 和 D-CTC 是兩個角落，另外找到兩個新角落 ([ctc/BRANCHES.md](ctc/BRANCHES.md))
-- [x] 量子干涉效應：受控相位會讓 P-CTC 刪掉沒有矛盾的分支 ([ctc/QUANTUM_EFFECTS.md](ctc/QUANTUM_EFFECTS.md))
-- [x] 無訊號測試：P-CTC、D-CTC、古典 κ–β 模型，Alice → Bob 和 Bob → Alice 兩個方向 ([ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md))
-- [x] 第四種規則 T-CTC（Allen 2014），重現 Allen 的 Eq. 33、35、38、40；它也能傳訊，判準跟 P-CTC 相同 ([ctc/T_CTC.md](ctc/T_CTC.md))
-- [x] H2 候選出路「過去守恆篩選」，以及有時間迴圈的雙縫實驗和量子擦除 ([ctc/PAST_PRESERVING.md](ctc/PAST_PRESERVING.md))
-- [x] 用去相干決定記錄基底：新鮮光子的過去隨記錄強度連續地變固定；擦除實驗中基底由環境監測的基底決定，但效果是全有或全無 ([ctc/DECOHERENCE.md](ctc/DECOHERENCE.md))
-- [x] H1′–H3′ 的定理與證明，每條都用隨機電路驗證 ([ctc/THEOREMS.md](ctc/THEOREMS.md))
-- [x] IBM 量子電腦上的實驗，三次執行，第三次事先登錄的 21 項判準全部通過 ([ctc/hardware/README.md](ctc/hardware/README.md))
-- [x] 過去守恆篩選在確定輸入上等於 P-CTC 的數值檢查 (`ctc/tests/test_computational_power.py`)
-- [x] 99 項測試，全部通過（2026-11-24；閘層級的 3 項硬體測試沒有 qiskit 時跳過）
+### Phase 1: toy-model simulator, code in `ctc/`
+Done:
+- [x] three rules: no loop, P-CTC, D-CTC, plus an independent check by direct simulation of postselected teleportation
+- [x] three scenarios: grandfather paradox with failure probability ε, KFK-type warning, bootstrap paradox
+- [x] reproduce 6 claims of Lloyd et al. 2011 and 3 of Brun–Harrington–Wilde 2009 ([ctc/LITERATURE_REPRODUCTION.md](ctc/LITERATURE_REPRODUCTION.md))
+- [x] classical κ–β branch model with P-CTC and D-CTC as corners, and two new corners ([ctc/BRANCHES.md](ctc/BRANCHES.md))
+- [x] quantum interference: a controlled phase makes P-CTC delete a branch with no contradiction ([ctc/QUANTUM_EFFECTS.md](ctc/QUANTUM_EFFECTS.md))
+- [x] no-signalling tests for P-CTC, D-CTC and the classical κ–β model, both directions ([ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md))
+- [x] a fourth rule, T-CTC (Allen 2014), reproducing Allen's Eqs. 33, 35, 38 and 40; it also signals, with the same criterion as P-CTC ([ctc/T_CTC.md](ctc/T_CTC.md))
+- [x] the H2 way out "past-preserving selection", with a double slit and quantum eraser with a time loop ([ctc/PAST_PRESERVING.md](ctc/PAST_PRESERVING.md))
+- [x] decoherence-defined record basis: a fresh photon's past becomes fixed continuously with record strength; in the eraser the basis is set by what the environment monitors, but all-or-nothing ([ctc/DECOHERENCE.md](ctc/DECOHERENCE.md))
+- [x] **choose a way out for H2:** PPS chosen; H2 rewritten as H2′ (reweighting only inside each recorded past world) and proved as a theorem ([ctc/THEOREMS.md](ctc/THEOREMS.md)). Other candidates (global non-local rules, D-CTC-like effects on the message only) are not pursued; see [ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md)
+- [x] **decision point:** only rules that do not reweight the world are compatible with relativity. Decision: keep no-signalling, rewrite H2 as H2′, adopt PPS (it still reweights the future inside each past world, but weights between worlds do not change)
+- [x] novelty checks, rounds 1–3 ([ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md)): P-CTC signalling and D-CTC's interpretation dependence are known (Bub–Stairs 2014 and others); the C†C criterion is essentially Araújo–Guérin–Baumeler 2017's linearity condition; Allen 2014 is the closest prior work to the κ–β model; PPS's within-world rule is Hartle 1994 Eq. (5.6)
+- [x] 135 tests, all passing (2026-11-24; 3 gate-level hardware tests are skipped without qiskit)
 
-接下來，依優先順序：
-- [ ] **讓去相干規則在糾纏系統上變得連續：** 目前在擦除實驗裡，任意小的環境紀錄就完全決定基底。候選：改用不需要取本徵基底的分解（例如 Gell-Mann–Hartle 的去相干歷史泛函），或讓篩選強度跟紀錄強度一起變化（接回 κ–β 的 β）
-- [ ] 讓環境的讀取基底由環境自身的動力學決定，而不是人為指定
-- [ ] 過去守恆篩選的新穎性檢查。**部分完成（11-24）：** 已讀 Hartle 1994 全文；世界之內的規則就是 Hartle Eq. (5.6)，差別只在不重新加權已記錄的過去（[ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md) 第三輪）。下一步：引用 Hartle 1994 的後續工作
-- [ ] **選一條 H2 的出路**（目前最有希望的是過去守恆篩選，見上）： 無訊號測試排除了「迴圈直接重新加權局部世界」。候選：只重新加權跟外界無相關的變數、全域（非局部）自洽規則、把 H2 改寫成只改變訊息內容的 D-CTC 式效應。細節見 [ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md)
-- [x] 新穎性檢查（初步）：P-CTC 傳訊、D-CTC 的解讀依賴已有 Bub–Stairs 2014 等文獻；C†C 判準實質上是 Araújo–Guérin–Baumeler 2017 的線性條件；只有 κ–β 內插模型本身沒找到前例 ([ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md))
-- [x] 新穎性檢查第二輪：Allen 2014 把 T-CTC 寫成「P-CTC 加普通通道」的加權混合，是 κ–β 模型最接近的前人工作；Silva 等人 2017 沒有談 CTC；仍未找到內插 D-CTC 和 P-CTC 的連續家族 ([ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md))
-- [ ] 引用追蹤（INSPIRE / Semantic Scholar）並請熟悉 CTC 文獻的研究者確認 κ–β 模型是否已有人做過
-- [ ] **量子版 κ–β 模型：** 加上去相干強度當作第三個參數。完全去相干時應該退回古典模型，沒有去相干時應該重現干涉效應。可以考慮以 Gell-Mann–Hartle 的去相干歷史框架為基礎
-- [ ] Brun–Harrington–Wilde 的一般 N 態構造
-- [ ] **決策點：** 無訊號測試顯示，只有 β = 0 那條邊（含 D-CTC）跟相對論相容，而那條邊上世界不被重新加權。要嘛接受時間觀 B 並修改 H2，要嘛保留 H2 但接受非局部規則或有限的傳訊
+Next, in priority order:
+- [ ] **make the record basis state independent:** let the system–environment interaction, not the conditional state, fix the basis (PERSPECTIVES.md 3.1). This makes the rule linear, so Theorem 0 applies, and should also remove the all-or-nothing behaviour in the eraser
+- [ ] let the environment's readout basis follow from its own dynamics instead of being chosen by hand
+- [ ] citation tracking forward from Hartle 1994, Lloyd 2011 and Allen 2014 (INSPIRE / Semantic Scholar), and ask researchers familiar with the CTC literature whether PPS and the κ–β model have precedents
+- [ ] **quantum κ–β model:** decoherence strength as a third parameter. Full decoherence should give back the classical model, none should reproduce the interference effect; possibly built on Gell-Mann–Hartle decoherent histories
+- [ ] Brun–Harrington–Wilde's general N-state construction
 
-### 階段 2：放進正式框架（約 2–4 個月）
-- [ ] 用 process matrix 框架（Oreshkov–Costa–Brukner 2012）重新表述 H1–H3。Araújo–Guérin–Baumeler 2017 指出 process matrix 是 P-CTC 的線性特例，這是第一手參考
-- [ ] 用半正定規劃檢查因果不等式（需要新增依賴，例如 `cvxpy`）
-- [ ] 重現 Baumeler–Wolf 的古典非因果自洽例子。**注意：** arXiv 2512.23599（2025 年 12 月）提出一個反例，可能影響 Baumeler–Costa–Ralph–Wolf–Zych 2019 的刻畫定理，依賴該定理之前要先讀
-- [ ] 把「過去不變，未來被重新加權」寫成數學條件
-- [ ] 寫一份 arXiv 研究筆記。暫定核心：κ–β 內插模型與它上面的傳訊圖。「H2 和無訊號條件互斥」已有文獻，只能當作背景引用
+### Phase 1b: IBM quantum hardware ✅, code in `ctc/hardware/`
+Done:
+- [x] postselected-teleportation circuits: the same shots give the no-loop, P-CTC and PPS results
+- [x] five scenarios: grandfather paradox, refusal to send, one-way control (the P-CTC counterexample to H3), and a delayed-choice quantum eraser with a time loop (Bob reads X or Z)
+- [x] error suppression: dynamical decoupling, Pauli twirling of gates and measurements, readout calibration in the same job; the refusal circuit uses a relative-phase Toffoli, cutting two-qubit gates from 13 to 7
+- [x] layout chosen from preflight-measured readout errors of all qubits (published calibration data was badly off once)
+- [x] predictions and criteria fixed and hashed before submission ([ctc/hardware/PREREGISTRATION.md](ctc/hardware/PREREGISTRATION.md)); run 3 passes all 21 criteria
 
-### 階段 3：證明定理（約 6–12 個月以上）
-- [ ] T1 無悖論：在選擇規則 X 下，過去的任何局部操作都只產生自洽的歷史。必須先指定是邏輯自洽還是振幅自洽。**部分完成（11-23）：** 過去守恆篩選下、經典可逆電路的版本已證明（THEOREMS.md 定理 1）
-- [ ] T2 效應只在未來：迴圈唯一可觀察的效應是未來統計的重新加權，並給出明確公式。**部分完成（11-23）：** 過去守恆篩選下的版本已證明，重新加權只發生在每個過去世界之內（定理 2）
-- [ ] T3 因果律復原：沒有迴圈時，規則 X 退化成標準的因果量子力學，包括處理只帶相位的迴圈。**部分完成（11-23）：** 受控形式的 U 已證明，包括只帶相位的情形（定理 3）；一般的 U 還沒有
-- [ ] T4 後果邊界：計算能力，以及與熱力學、無複製定理、**無訊號條件**是否相容。**部分完成：** 固定記錄基底時不能傳訊（定理 0）；計算能力至少是 PostBQP（11-24，PERSPECTIVES.md 1.5）
-- [ ] 選項：把一兩個小定理用 Lean 形式化
+Next:
+- [ ] **repeat the preregistered experiment on a second device** (for example ibm_fez), with the preregistration pushed to GitHub before submission
+- [ ] find out why qubit 147's readout error went from 0.46% to about 8% within minutes (drift, or related to measurement twirling)
+- [ ] zero-noise extrapolation or similar mitigation to push the inconsistent history (now 0.035) further down
+- [ ] a full fringe scan of the eraser (several screen phases), not just X and Y settings
+- [ ] the hardware experiment cannot tell the rules apart (all from the same shots); treat it as a demonstration of measurability and do not expand it
 
-### 階段 4：讓舊內容發揮新作用（可以和階段 2–3 並行）
-- [ ] plan-a（SYK 蟲洞）改當反例：看起來有「時間反轉」，但在因果不等式下完全是因果的
-- [ ] plan-b（時間戳檢查）改成預言登錄器：事先公開預言的雜湊值，事後比對
+### Phase 1c: testing for loops in nature ✅ (first round), code in `ctc/born_rule/`, `ctc/conjectures/`, `ctc/blockchain/`
+Done:
+- [x] loop model vs published Sorkin (three-slit) bounds: small loop phases were untested because κ₃ scales as φ⁴ while the two-path shift is second order
+- [x] direct pure-vs-recorded test on ibm_kingston, preregistered; the first run's anomaly was traced to crosstalk by a preregistered physical-coherence control; new bound |S| < 1.16×10⁻³
+- [x] conjecture lottery: 11 conjectures at 35–65% credence settled by exhaustive enumeration or counterexample search
+- [x] blockchain loop lottery: protocol v2 designed, loophole-reviewed, 22 offline tests
 
-### 階段 5：發表與合作
-- [ ] 寫一頁摘要，寄給 Brukner、Costa、Ralph 等研究群，詢問結果是否已有人做過。附上程式碼和 κ–β 平面圖
-- [ ] 階段 2 的筆記放上 arXiv
-- [ ] 繼續揭露 AI 輔助和缺乏外部審查的狀況，並保留失敗結果
+Next:
+- [ ] **GHZ amplification:** if loops couple to a collective quantity, an N-qubit GHZ state picks up phase Nφ; the same pure-vs-recorded test on GHZ states would tighten the φ bound by up to N (limited by GHZ fidelity)
+- [ ] **isolation-time dependence:** add delays (with dynamical decoupling) between preparation and measurement to bound a loop "encounter rate"
+- [ ] other coupling bases (X basis) for the direct test
+- [ ] next conjecture-lottery round, including "for a single-qubit CR system, the PPS effect never exceeds P-CTC's"
+- [ ] run the blockchain lottery (needs `opentimestamps-client`; standard physics and H2′ both predict no hits)
+- [ ] bounds from published molecule-interference data, for a model where the loop phase scales with mass
 
-### 暫不處理（另開專案比較合適）
-- Page–Wootters 機制的模擬：時間從靜止宇宙中的糾纏湧現。跟本專案相關，但是不同的問題
-- 主觀時間與意識狀態：屬於心理學和神經科學，方法完全不同，放在同一個 repo 會混淆物理主張
+### Phase 2: formal framework (about 2–4 months)
+- [ ] restate H1–H3 in the process-matrix framework (Oreshkov–Costa–Brukner 2012). Araújo–Guérin–Baumeler 2017 show that process matrices are a linear special case of P-CTC; this is the primary reference
+- [ ] check causal inequalities by semidefinite programming (needs a new dependency such as `cvxpy`)
+- [ ] reproduce Baumeler–Wolf classical non-causal consistent examples. **Note:** arXiv 2512.23599 (December 2025) gives a counterexample that may affect the characterization theorem of Baumeler–Costa–Ralph–Wolf–Zych 2019; read it before relying on the theorem
+- [x] write "the past is unchanged, the future is reweighted" as a mathematical condition: Theorem 2 (H2′) in [ctc/THEOREMS.md](ctc/THEOREMS.md)
+- [ ] write an arXiv research note. Candidate core: PPS as a causal modification of Hartle's framework, with H1′–H3′ and its computational power; and the κ–β interpolation with its signalling map. "H2 and no-signalling are incompatible" is known and can only be background
 
-## 新穎性評估
+### Phase 3: theorems (6–12 months or more)
+The rule X is chosen as PPS, and first versions of T1–T3 are done in [ctc/THEOREMS.md](ctc/THEOREMS.md), but only for restricted cases.
+- [ ] T1 no paradox: under rule X, any local operation in the past produces only consistent histories; logical vs amplitude consistency must be specified. **Partly done (11-23):** proved for classical reversible circuits under PPS (Theorem 1)
+- [ ] T2 effect only in the future: the loop's only observable effect is a reweighting of future statistics, with an explicit formula. **Partly done (11-23):** proved under PPS, with reweighting only inside each past world (Theorem 2)
+- [ ] T3 causality recovered: without a loop, rule X reduces to standard causal quantum mechanics, including phase-only loops. **Partly done (11-23):** proved for controlled-form U, including phase-only loops (Theorem 3); general U open
+- [ ] T4 consequences: computational power, thermodynamics, no-cloning, no-signalling. **Partly done:** no signalling with a fixed record basis (Theorem 0); computational power at least PostBQP (PERSPECTIVES.md 1.5)
+- [ ] uniqueness of PPS: the only rule that is CPTP, keeps recorded probabilities, gives consistent outcomes and recovers ordinary QM (PERSPECTIVES.md 3.2)
+- [ ] the seam of falling back to D-CTC in paradox worlds: justify it or find a rule without a seam
+- [ ] how "the recorded past" is defined in relativity (PERSPECTIVES.md 1.3)
+- [ ] optional: formalize one or two small theorems in Lean
 
-在目前讀到的範圍內沒看到、而且可能是新的東西。「沒看到」只代表這次的檢索範圍，不代表確定沒人做過。
+### Phase 4: publication and collaboration
+- [ ] a one-page summary to groups such as Brukner, Costa and Ralph, asking whether the results are known. Attach the code, the κ–β map, THEOREMS.md and the hardware figure, and ask specifically about precedents for PPS
+- [ ] post the phase 2 note on arXiv
+- [ ] keep disclosing AI assistance and the lack of external review, and keep failed results
 
-| 候選 | 是新結果的可能性 | 價值 |
+### Not in scope (better as separate projects)
+- Page–Wootters simulations: time emerging from entanglement in a static universe. Related, but a different question
+- Subjective time and states of consciousness: psychology and neuroscience, with completely different methods; mixing them into this repository would confuse the physical claims
+- The earlier evidence package (finite SYK model, cost checks): archived at the tag `archive/evidence-package-v0.34`; the former phase-4 idea of reusing it was dropped with the cleanup
+
+## Novelty assessment
+
+Things not seen in the literature read so far that might be new. "Not seen" refers only to this search.
+
+| Candidate | Chance it is new | Value |
 |---|---|---|
-| 在連續的規則家族裡證明「重新加權等於傳訊」 | 低（P-CTC 版本已知；古典家族版本隱含在 process function 定義裡） | 中 |
-| κ–β 雙參數模型本身（最接近的前人工作：Allen 2014 的 T-CTC） | 中偏低 | 中 |
-| 「沒有篩選就沒有重新加權」 | 低到中 | 中 |
-| 「典型但自洽」比 P-CTC 更能改變未來 | 取決於上一項 | 低到中 |
-| 邏輯自洽和振幅自洽的區分 | 低 | 中 |
-| 有動機寄件者的閉式解 | 低 | 低到中 |
+| PPS as a causal modification of Hartle 1994, with H1′–H3′ | moderate (Hartle does not propose it; later work unchecked) | moderate to high |
+| Direct pure-vs-recorded Born-rule test and its bound | moderate (no dedicated published bound found) | moderate |
+| "Reweighting equals signalling" in a continuous family of rules | low (known for P-CTC; implicit for classical families in process functions) | moderate |
+| The κ–β two-parameter model itself (closest prior work: Allen 2014's T-CTC) | low to moderate | moderate |
+| "No selection, no reweighting" | low to moderate | moderate |
+| "Typical but consistent" changes the future more than P-CTC | depends on the previous item | low to moderate |
+| The logical vs amplitude consistency distinction | low | moderate |
+| Closed forms for the motivated sender | low | low to moderate |
 
-## 風險
+## Risks
 
-| 風險 | 對策 |
+| Risk | Response |
 |---|---|
-| 結果已經有人做過，新意不足 | 先做新穎性檢查，讀全文並直接詢問專家 |
-| 無訊號測試顯示只有 β = 0 才相容，等於否定 H2（**已經發生**，至少在目前測過的模型裡） | 這仍然是有價值的結論，照實記錄；接著研究 H2 能不能用修改過的形式保住 |
-| 選擇規則推出的後果太強，違反已知物理 | T4 用來及早發現 |
-| 程式或推導出錯 | 每個結果都要有獨立的檢查方法。目前已靠這種方式抓到兩個程式錯誤 |
-| 審查者看到「時間旅行」就不讀 | 對外使用「因果結構」「process matrix」「CTC 模型」等術語 |
-| 一個人做不完 | 用目前的成果尋找合作者 |
+| The results are already known | novelty checks, full-text reading, asking experts directly (round 3 found Hartle 1994) |
+| No-signalling allows only β = 0, refuting H2 (**happened**, at least in the models tested) | still a valuable conclusion, recorded as is; H2 was rescued in modified form (H2′) |
+| The selection rule has consequences too strong for known physics | T4; PPS's PostBQP power is one such cost |
+| Errors in code or derivations | every result has an independent check; this caught two code errors and one misread hardware result so far |
+| Hardware results read as evidence that loops exist or that nature uses PPS | every result file says the rules come from the same shots; criteria preregistered; failed or doubtful numbers kept |
+| Symmetry-based error cancellation fooled by compiler frame changes | check the physical pulses actually executed (lesson of the first direct Born-rule test) |
+| Reviewers stop reading at "time travel" | use terms such as "causal structure", "process matrix", "CTC models" |
+| Too much for one person | use the current results to find collaborators |
 
-## 已更正的錯誤
+## Corrected errors
 
-- teleportation 檢查函式的部分跡寫錯，成功率多了一倍。已修正，第一版 commit 的結果不受影響。
-- `branches.py` 原本會把帶相位的電路誤讀成古典移動。已改成遇到相位就報錯，先前的結果不受影響。
-- 之前說「古典輸入時，量子版本不會改變任何數字」，只對不帶相位的電路成立。
-- 交代文獻盤點任務時，把 Baumeler 等人 2019 的作者寫成 Woods，正確是 Zych。
+- The partial trace in the teleportation check was wrong, doubling the success rate. Fixed; the first commit's results were unaffected.
+- `branches.py` used to misread circuits with phases as classical moves. It now raises an error on phases; earlier results were unaffected.
+- The claim "with classical inputs the quantum version changes no numbers" holds only for circuits without phases.
+- When commissioning the literature review, the authors of Baumeler et al. 2019 were given as including Woods; the correct name is Zych.
+- In the first hardware run, the low Bell pass rate (0.383) of the one-way circuit was read as a phase error. Readout correction in the second run showed the real cause: about 40% readout error on qubit 42, which held the loop qubit (published value 0.66%). The results file and [ctc/hardware/README.md](ctc/hardware/README.md) were corrected, and layouts are now chosen from measured readout errors.
+- NOVELTY_CHECK.md overstated two citations: Bub & Stairs 2014 discuss frame dependence, not "reduced state vs. branch by branch" directly; Araújo et al. 2017 prove the linearity condition but do not discuss signalling. Corrected on 2026-11-24.
+- In the direct Born-rule test design, over-rotation of the preparation pulse was first assumed to be a second-order effect; it is first order. The ±π endpoints and the `prep_systematic` estimator were added before the hardware run.
+- The first direct Born-rule run reported a 10σ anomaly; a preregistered control traced it to uncancelled CNOT crosstalk (see finding 13).
