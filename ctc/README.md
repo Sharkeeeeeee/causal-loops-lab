@@ -20,11 +20,12 @@ python -B ctc/tests/test_decoherence.py # 6 項測試，用去相干決定記錄
 python -B ctc/run_decoherence.py        # 記錄強度掃描的 JSON 和圖
 python -B ctc/tests/test_theorems.py    # 11 項測試，THEOREMS.md 的每條定理都用隨機電路驗證
 python -B ctc/tests/test_computational_power.py  # 5 項測試，過去守恆篩選在確定輸入上等於 P-CTC（計算能力）
+python -B ctc/tests/test_hartle.py      # 1 項測試，過去守恆篩選對照 Hartle 1994 Eq. (5.5)–(5.6)
 python -B ctc/tests/test_hardware.py    # 8 項測試，硬體實驗的電路與估計方法；閘層級的 3 項需要 qiskit
 python -B ctc/hardware/run_local.py     # 硬體實驗在理想模擬器上的完整分析（需要 qiskit）
 ```
 
-全部 98 項測試（2026-11-24）。
+全部 99 項測試（2026-11-24）。
 
 H1–H3 的定理版本與證明見 [THEOREMS.md](THEOREMS.md)，IBM 硬體實驗見 [hardware/README.md](hardware/README.md)。只有量子版本才有的效應見 [QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md)。無訊號測試的結果見 [NO_SIGNALLING.md](NO_SIGNALLING.md)。第四種規則 T-CTC 見 [T_CTC.md](T_CTC.md)，H2 的候選出路「過去守恆篩選」和雙縫實驗見 [PAST_PRESERVING.md](PAST_PRESERVING.md)，用去相干決定記錄基底見 [DECOHERENCE.md](DECOHERENCE.md)，新穎性檢查見 [NOVELTY_CHECK.md](NOVELTY_CHECK.md)。
 
@@ -56,6 +57,7 @@ H1–H3 的定理版本與證明見 [THEOREMS.md](THEOREMS.md)，IBM 硬體實�
 | `run_decoherence.py` | 記錄強度 s 的掃描與圖 |
 | `THEOREMS.md`、`tests/test_theorems.py` | H1′–H3′ 的敘述、證明與隨機電路檢查 |
 | `tests/test_computational_power.py` | 過去守恆篩選在確定輸入上等於 P-CTC；一個以自洽篩選做搜尋的例子（見根目錄 PERSPECTIVES.md 1.5） |
+| `tests/test_hartle.py` | 過去守恆篩選對照 Hartle 1994：世界之內的條件機率相同，Hartle 會重新加權過去（見 NOVELTY_CHECK.md 第三輪） |
 | `hardware/` | IBM 量子電腦上的實驗：電路、事先登錄、分析、三次執行的原始資料 |
 | `tests/test_hardware.py` | 硬體實驗的電路、估計方法、讀取校正 |
 | `run_branches.py` | κ–β 平面的掃描與畫圖 |

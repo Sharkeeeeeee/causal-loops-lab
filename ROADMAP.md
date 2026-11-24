@@ -58,12 +58,12 @@
 - [x] H1′–H3′ 的定理與證明，每條都用隨機電路驗證 ([ctc/THEOREMS.md](ctc/THEOREMS.md))
 - [x] IBM 量子電腦上的實驗，三次執行，第三次事先登錄的 21 項判準全部通過 ([ctc/hardware/README.md](ctc/hardware/README.md))
 - [x] 過去守恆篩選在確定輸入上等於 P-CTC 的數值檢查 (`ctc/tests/test_computational_power.py`)
-- [x] 98 項測試，全部通過（2026-11-24；閘層級的 3 項硬體測試沒有 qiskit 時跳過）
+- [x] 99 項測試，全部通過（2026-11-24；閘層級的 3 項硬體測試沒有 qiskit 時跳過）
 
 接下來，依優先順序：
 - [ ] **讓去相干規則在糾纏系統上變得連續：** 目前在擦除實驗裡，任意小的環境紀錄就完全決定基底。候選：改用不需要取本徵基底的分解（例如 Gell-Mann–Hartle 的去相干歷史泛函），或讓篩選強度跟紀錄強度一起變化（接回 κ–β 的 β）
 - [ ] 讓環境的讀取基底由環境自身的動力學決定，而不是人為指定
-- [ ] 過去守恆篩選的新穎性檢查
+- [ ] 過去守恆篩選的新穎性檢查。**部分完成（11-24）：** 已讀 Hartle 1994 全文；世界之內的規則就是 Hartle Eq. (5.6)，差別只在不重新加權已記錄的過去（[ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md) 第三輪）。下一步：引用 Hartle 1994 的後續工作
 - [ ] **選一條 H2 的出路**（目前最有希望的是過去守恆篩選，見上）： 無訊號測試排除了「迴圈直接重新加權局部世界」。候選：只重新加權跟外界無相關的變數、全域（非局部）自洽規則、把 H2 改寫成只改變訊息內容的 D-CTC 式效應。細節見 [ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md)
 - [x] 新穎性檢查（初步）：P-CTC 傳訊、D-CTC 的解讀依賴已有 Bub–Stairs 2014 等文獻；C†C 判準實質上是 Araújo–Guérin–Baumeler 2017 的線性條件；只有 κ–β 內插模型本身沒找到前例 ([ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md))
 - [x] 新穎性檢查第二輪：Allen 2014 把 T-CTC 寫成「P-CTC 加普通通道」的加權混合，是 κ–β 模型最接近的前人工作；Silva 等人 2017 沒有談 CTC；仍未找到內插 D-CTC 和 P-CTC 的連續家族 ([ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md))

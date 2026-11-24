@@ -2,7 +2,7 @@
 
 **Exact toy models of information sent around a closed timelike curve (CTC), and what self-consistency would do to the future.**
 
-[![tests](https://img.shields.io/badge/tests-98%20passing-2a78d6)](ctc/README.md)
+[![tests](https://img.shields.io/badge/tests-99%20passing-2a78d6)](ctc/README.md)
 [![IBM hardware](https://img.shields.io/badge/IBM%20hardware-predictions%20measurable%2C%2021%2F21%20checks-2a78d6)](ctc/hardware/README.md)
 [![python](https://img.shields.io/badge/python-3.11-2a78d6)](ctc/README.md)
 [![code license](https://img.shields.io/badge/code-MIT-6b6a63)](LICENSE)
@@ -59,6 +59,7 @@ python -B ctc/tests/test_past_preserving.py
 python -B ctc/tests/test_decoherence.py
 python -B ctc/tests/test_theorems.py
 python -B ctc/tests/test_computational_power.py
+python -B ctc/tests/test_hartle.py
 python -B ctc/tests/test_hardware.py      # gate-level checks need qiskit, skipped without it
 python -B ctc/run_signalling.py           # regenerates the no-signalling map
 ```

@@ -2,7 +2,7 @@
 
 建立日期：2026-11-22，最後更新：2026-11-24。撰寫時使用 AI 輔助（Claude），沒有外部審查。
 
-**2026-11-24 更新：** 把已經被後續工作解決的幾格標成已解決（(a) 的定量對照、(c) 的「完全混合」、Brun–Harrington–Wilde 的閱讀程度），並補上一篇在雲端量子電腦上模擬 P-CTC 的實驗。其餘內容維持 11-22 的原樣。這是 ROADMAP 階段 0「文獻盤點」的成果，不是已發表的綜述。
+**2026-11-24 更新：** 把已經被後續工作解決的幾格標成已解決（(a) 的定量對照、(c) 的「完全混合」、Brun–Harrington–Wilde 的閱讀程度），並補上一篇在雲端量子電腦上模擬 P-CTC 的實驗；Hartle 1994 讀了全文。其餘內容維持 11-22 的原樣。這是 ROADMAP 階段 0「文獻盤點」的成果，不是已發表的綜述。
 
 **閱讀程度的分級**（每一條主張都應該能對回這裡）：
 
@@ -64,7 +64,7 @@
 
 **Novikov / Echeverria–Klinkhammer–Thorne 1991。** 我只有 OSTI 紀錄（https://www.osti.gov/biblio/5219973）確認論文存在與標題；卷頁數**未驗證**，Novikov 原始論文**未找到一手來源**，不給編號。二手說明稱 Echeverria–Klinkhammer 發現了不只一個自洽解 [摘要層級]。對本專案：古典層次的「自洽不保證唯一」是 H1 在古典下要面對的事實，這也是 D-CTC 的不動點非唯一問題的古典前身。
 
-**Politzer（hep-th/9207076）、Hartle（gr-qc/9309012）[摘要]。** 路徑積分／推廣量子力學對非時序時空的處理：Hartle 的框架在非么正下仍保持機率規則；Lloyd 等人聲稱 P-CTC 與這些路徑積分作法一致 [全文]。
+**Politzer（hep-th/9207076）[摘要]、Hartle（gr-qc/9309012）[摘要；11-24 之後：全文，比對見 [ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md) 第三輪]。** 路徑積分／推廣量子力學對非時序時空的處理：Hartle 的框架在非么正下仍保持機率規則；Lloyd 等人聲稱 P-CTC 與這些路徑積分作法一致 [全文]。
 
 **Oreshkov–Costa–Brukner 2012，Quantum correlations with no causal order（arXiv 1105.4464，Nat. Commun. 3, 1092）[摘要]。** 只假設局部量子力學成立，建立沒有預設因果順序的 process matrix 框架，找到違反因果不等式的相關性。**Araújo–Feix–Navascués–Brukner 2017，A purification postulate for quantum mechanics with indefinite causal order（arXiv 1611.08535，Quantum 1, 10）[摘要]：** 只有可純化的 process 才算物理，並說有些已知 process 不滿足；摘要沒有說原始 OCB process 是否在內，也沒有談後選擇。
 
@@ -151,7 +151,7 @@
 | Bub & Stairs 2014 (arXiv:1309.4751) | https://arxiv.org/abs/1309.4751 | 摘要 |
 | Dunlap 2015 (arXiv:1510.02742) | https://arxiv.org/abs/1510.02742 | 摘要 |
 | Echeverria, Klinkhammer, Thorne 1991 | https://www.osti.gov/biblio/5219973 | 只有書目紀錄 |
-| Politzer (hep-th/9207076); Hartle (gr-qc/9309012) | https://arxiv.org/abs/hep-th/9207076 ; https://arxiv.org/abs/gr-qc/9309012 | 摘要 |
+| Politzer (hep-th/9207076); Hartle (gr-qc/9309012) | https://arxiv.org/abs/hep-th/9207076 ; https://arxiv.org/abs/gr-qc/9309012 | Politzer 摘要；Hartle 全文（11-24） |
 | Oreshkov, Costa, Brukner 2012 (arXiv:1105.4464) | https://arxiv.org/abs/1105.4464 ; https://doi.org/10.1038/ncomms2076 | 摘要 |
 | Araújo, Feix, Navascués, Brukner 2017 (arXiv:1611.08535) | https://arxiv.org/abs/1611.08535 ; https://doi.org/10.22331/q-2017-04-26-10 | 摘要 |
 | Baumeler & Wolf 2014 (arXiv:1312.5916) | https://arxiv.org/abs/1312.5916 | 摘要 |
