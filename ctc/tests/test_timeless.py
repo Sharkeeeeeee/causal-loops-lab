@@ -10,14 +10,15 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'timeless'))
 from paw import BY_NAME, EXPERIMENTS, ORDERS, Model, reduced  # noqa: E402
-from experiments import exact  # noqa: E402
+from experiments import exact, initial_state  # noqa: E402
+from past_preserving import apply_kraus, past_preserving_kraus  # noqa: E402
 
 ATOL = 1e-9
 MODELS = {(e.name, o): Model(e, o) for e in EXPERIMENTS for o in ORDERS}
 
 
 def p_log_given_a1(m, hist):
-    rho = reduced(hist[-1], m.n, [m.regs.index('a'), m.regs.index('log')])
+    rho = m.reduced_at(hist, -1, ['a', 'log'])
     return rho[3, 3].real / (rho[2, 2].real + rho[3, 3].real)
 
 
@@ -37,15 +38,26 @@ class Timeless(unittest.TestCase):
 
 class SamePredictions(unittest.TestCase):
     def test_reproduces_the_circuit_model_with_either_clock(self):
-        """No-loop, P-CTC and PPS (influence definition) equal experiments.exact for every hardware
-        experiment, whichever of the two clocks orders the record and loop steps."""
+        """No-loop and P-CTC equal experiments.exact for every hardware experiment, whichever of the two
+        clocks orders the record and loop steps."""
         for (name, order), m in MODELS.items():
             ex = exact(BY_NAME[name])
-            for rule, (r, d) in {'no_loop': ('no_loop', None), 'p_ctc': ('p_ctc', None),
-                                 'past_preserving': ('pps', 'influence')}.items():
-                j = m.joint(m.state(r, d) if d else m.state(r))
+            for rule in ('no_loop', 'p_ctc'):
+                j = m.joint(m.state(rule))
                 for key, val in ex[rule].items():
                     self.assertAlmostEqual(j[key], val, delta=ATOL, msg=f'{name} {order} {rule} {key}')
+
+    def test_pps_equals_the_circuit_rule_in_the_pointer_basis(self):
+        """PPS (influence definition) equals the circuit-model rule with the pointer basis of the record
+        CNOTs (Z), as a full density matrix on CR and records, for every experiment and both clocks.
+        For eraser_x/y this differs from the hardware design's X record basis (Theorem 4)."""
+        for (name, order), m in MODELS.items():
+            exp = BY_NAME[name]
+            d, d_r = exp.d_cr, 2 ** len(exp.recorded)
+            kraus = past_preserving_kraus(exp.unitary(), d, 2, np.eye(d))
+            circuit = apply_kraus(kraus, initial_state(exp), d_r)
+            paw = m.reduced_at(m.state('pps', 'influence'), -1, [r for r in m.regs if r not in ('m', 'p')])
+            np.testing.assert_allclose(paw, circuit, atol=ATOL, err_msg=f'{name} {order}')
 
 
 class WhatCountsAsThePast(unittest.TestCase):
@@ -106,16 +118,54 @@ class ThePastAtEveryClockReading(unittest.TestCase):
         m = MODELS[('refusal', 'record-first')]
         self.assertAlmostEqual(m.prob(m.state('p_ctc'), 1, 'a'), 1 / 3, delta=ATOL)
 
-    def test_the_unrecorded_beginning_is_not_protected(self):
-        """At clock reading 0 the input register is reset to 0 and nothing records that. Wherever
-        the loop has an effect, every rule moves this reading, PPS included (refusal: 0.146)."""
+    def test_global_back_propagation_moves_the_beginning(self):
+        """Spreading the rule back over the whole history moves clock reading 0 (all registers reset,
+        nothing recorded): P-CTC and PPS in refusal, and even PPS in one_way, where the loop has no
+        effect at all (each sector's history goes back to a different reading 0)."""
         m = MODELS[('refusal', 'record-first')]
         self.assertAlmostEqual(m.prob(m.history, 0, 'a'), 0.0, delta=ATOL)
-        self.assertGreater(m.prob(m.state('pps', 'influence'), 0, 'a'), 0.1)
         self.assertGreater(m.prob(m.state('p_ctc'), 0, 'a'), 0.1)
-        # where PPS has no effect (Theorem 3: one_way), reading 0 is untouched
+        self.assertGreater(m.prob(m.state('pps', 'influence'), 0, 'a'), 0.1)
         m1 = MODELS[('one_way', 'record-first')]
-        self.assertLess(m1.constraint_residual(m1.state('pps', 'influence'))[0], 1e-8)
+        self.assertGreater(m1.constraint_residual(m1.state('pps', 'influence'))[0], 0.1)
+
+
+class SeamAtTheLoopEvent(unittest.TestCase):
+    RULES = (('pps', 'influence'), ('p_ctc', None))
+
+    def test_initial_condition_holds_and_the_only_break_is_the_loop_event(self):
+        for m in MODELS.values():
+            for rule, d in self.RULES:
+                init, breaks = m.step_breaks(m.state_seam(rule, d))
+                self.assertLess(init, ATOL)
+                for t, b in enumerate(breaks, 1):
+                    if t != m.step_of['loop']:
+                        self.assertLess(b, 1e-8, f'{m.exp.name} {m.order} {rule} step {t}')
+
+    def test_final_predictions_are_unchanged(self):
+        for m in MODELS.values():
+            for rule, d in self.RULES:
+                g = m.state(rule, d) if d else m.state(rule)
+                s = m.state_seam(rule, d)
+                a, b = m.joint(g), m.joint(s)
+                self.assertLess(max(abs(a[k] - b[k]) for k in a), ATOL)
+
+    def test_pps_changes_nothing_the_loop_does_not_touch(self):
+        """Across the seam, under PPS with the pointer basis, no record and no register outside the loop
+        interaction changes: the discontinuity is local to the loop event."""
+        for m in MODELS.values():
+            h = m.state_seam('pps', 'influence')
+            for reg in m.regs:
+                if reg not in m.support_of_loop():
+                    self.assertLess(m.jump(h, reg), 1e-9, f'{m.exp.name} {m.order} {reg}')
+
+    def test_p_ctc_changes_records_it_never_touches(self):
+        """Under P-CTC, an existing record outside the loop interaction jumps at the seam (record-first
+        clock): P-CTC cannot be made local; it has to rewrite the past."""
+        for name, size in (('one_way', 0.5), ('grandfather', 0.8), ('refusal', 1 / 6)):
+            m = MODELS[(name, 'record-first')]
+            reg = 'rec_' + m.exp.recorded[0]
+            self.assertAlmostEqual(m.jump(m.state_seam('p_ctc'), reg), size, delta=1e-9)
 
 
 if __name__ == '__main__':

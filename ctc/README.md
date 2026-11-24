@@ -16,17 +16,19 @@ python -B ctc/tests/test_t_ctc.py               # 12  T-CTC (Allen 2014)
 python -B ctc/tests/test_past_preserving.py     #  9  past-preserving selection, double slit
 python -B ctc/tests/test_decoherence.py         #  6  decoherence-defined record basis
 python -B ctc/tests/test_theorems.py            # 11  every theorem in THEOREMS.md on random circuits
+python -B ctc/tests/test_records.py             # 11  Theorem 4: record basis from the interaction, no-signalling
+python -B ctc/tests/test_readouts.py            # 10  Theorem 4a-4c: incompatible, coarse and weak readouts
 python -B ctc/tests/test_computational_power.py #  5  PPS equals P-CTC on definite inputs
 python -B ctc/tests/test_hartle.py              #  1  PPS vs Hartle 1994, Eqs. (5.5)–(5.6)
 python -B ctc/tests/test_hardware.py            #  8  hardware circuits and estimators (3 need qiskit)
 python -B ctc/tests/test_born_rule.py           #  6  loop model vs Born-rule tests
 python -B ctc/tests/test_born_direct.py         #  8  direct pure-vs-recorded test design
 python -B ctc/tests/test_blockchain.py          # 22  blockchain lottery protocol (offline)
-python -B ctc/tests/test_timeless.py            # 11  loop rules in a timeless (Page–Wootters) universe
+python -B ctc/tests/test_timeless.py            # 16  loop rules in a timeless (Page–Wootters) universe, seam at the loop event
 python -B ctc/tests/test_clocks.py              #  8  local clocks (frames) and a superposed clock
 ```
 
-154 tests in total (2026-11-24). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
+180 tests in total (2026-11-24). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
 
 ## Regenerating results
 
@@ -49,7 +51,7 @@ Requires NumPy; figures need matplotlib; hardware code needs qiskit (and qiskit-
 
 | Document | Content |
 |---|---|
-| [THEOREMS.md](THEOREMS.md) | H1′–H3′ under past-preserving selection: statements, proofs, checks |
+| [THEOREMS.md](THEOREMS.md) | H1′–H3′ under past-preserving selection, and Theorem 4 (where the record basis comes from): statements, proofs, checks |
 | [PAST_PRESERVING.md](PAST_PRESERVING.md) | the PPS rule; a double slit and quantum eraser with a time loop |
 | [DECOHERENCE.md](DECOHERENCE.md) | letting decoherence fix the record basis |
 | [timeless/README.md](timeless/README.md) | PPS in a timeless (Page–Wootters) universe: the past must be defined by influence, not clock order |
@@ -74,6 +76,7 @@ Requires NumPy; figures need matplotlib; hardware code needs qiskit (and qiskit-
 | `branches.py` | the classical weighted-branch model: κ (where the message comes from) and β (selection strength) |
 | `signalling.py` | adds a distant Bob and checks signalling in both directions |
 | `past_preserving.py` | past-preserving selection |
+| `records.py` | the record basis read off an interaction (pointer basis), for Theorem 4 |
 | `double_slit.py` | double slit with a time loop, including the quantum-eraser version |
 | `decoherence.py` | environment partly recording the path; decoherence-defined PPS |
 | `run_*.py`, `reproduce_literature.py` | parameter sweeps and figures |

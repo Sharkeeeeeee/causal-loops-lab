@@ -58,27 +58,41 @@ class Static:
         e[value] = 1
         return self.op(np.outer(e, e), [reg])
 
-    def prob(self, psi, reg, value=1):
-        return float(reduced(psi, self.n, [self.ix(reg)])[value, value].real)
+    def red(self, state, regs):
+        """Reduced density matrix of `regs` from a state vector or a density matrix."""
+        keep = [self.ix(r) for r in regs]
+        if state.ndim == 1:
+            return reduced(state, self.n, keep)
+        others = [i for i in range(self.n) if i not in keep]
+        t = state.reshape((2,) * (2 * self.n))
+        perm = keep + others
+        t = np.transpose(t, perm + [self.n + i for i in perm])
+        dk, do = 2 ** len(keep), 2 ** len(others)
+        return np.einsum('aibi->ab', t.reshape(dk, do, dk, do))
 
-    def x_plus(self, psi, reg):
-        rho = reduced(psi, self.n, [self.ix(reg)])
-        return float(0.5 + rho[0, 1].real)
+    def prob(self, state, reg, value=1):
+        return float(self.red(state, [reg])[value, value].real)
+
+    def x_plus(self, state, reg):
+        return float(0.5 + self.red(state, [reg])[0, 1].real)
 
     # subclasses provide: self.final (no-loop final state), self.W {point: evolution to the end},
     # self.points, and final_with_loop_input(prep)
 
-    def back(self, final):
-        return {pt: self.W[pt].conj().T @ final for pt in self.points}
+    def back(self, final_rho):
+        return {pt: self.W[pt].conj().T @ final_rho @ self.W[pt] for pt in self.points}
 
     def rule(self, name, sectors=None):
+        """Density matrices at every clock point. PPS sectors are combined as a mixture (a sum of
+        amplitudes is not a channel and can signal; THEOREMS.md, Theorem 4)."""
         if name == 'no_loop':
-            return self.back(self.final)
+            return self.back(np.outer(self.final, self.final.conj()))
         if name == 'p_ctc':
             F = self.Pi @ self.final
-            return self.back(F / np.linalg.norm(F))
+            F = F / np.linalg.norm(F)
+            return self.back(np.outer(F, F.conj()))
         if name == 'pps':
-            total = np.zeros(self.D, complex)
+            total = np.zeros((self.D, self.D), complex)
             for P in sectors:
                 S = P @ self.final
                 w = np.linalg.norm(S) ** 2
@@ -86,7 +100,8 @@ class Static:
                     continue
                 F = self.Pi @ S
                 f = np.linalg.norm(F) ** 2
-                total += S if f < TOL * w else F * np.sqrt(w / f)
+                v = S / np.sqrt(w) if f < TOL * w else F / np.sqrt(f)
+                total += w * np.outer(v, v.conj())
             return self.back(total)
         raise ValueError(name)
 

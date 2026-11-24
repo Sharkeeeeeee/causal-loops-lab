@@ -3,7 +3,7 @@
 Created 2026-11-24 with AI assistance (Claude). No external review. Novelty not established (see the last section).
 
 ```text
-python -B ctc/tests/test_timeless.py   # 11 tests: one clock, two orderings
+python -B ctc/tests/test_timeless.py   # 16 tests: one clock, two orderings, the seam
 python -B ctc/tests/test_clocks.py     #  8 tests: local clocks, superposed clock
 ```
 
@@ -46,7 +46,18 @@ In one_way the record is the copy a distant partner holds, so the loop-first col
 
 **5. P-CTC rewrites the history at clock readings before the loop.** In refusal with the record-first clock, P(a = 1) is already 1/3 at reading 1, before the record is written and before the loop interaction. In the timeless picture this is literal: the constraint acts on the whole history at once.
 
-**6. An open problem: the unrecorded beginning.** At clock reading 0 every register is reset to 0, and nothing records that. Wherever the loop has an effect, every rule moves this reading, PPS included: in refusal P(a = 1) at reading 0 becomes 0.146 (0.167 under P-CTC). Only the initial-condition term of H_FK is violated; the transport from one reading to the next stays exact. This is the familiar backward-evolved state of pre- and post-selected quantum mechanics. PPS protects persistent records, and the reset value is overwritten by the preparation, so it is not one. Whether an initial condition should count as a record, and how, is not settled here.
+**6. The beginning: solved by putting the seam at the loop event.** Spreading a rule back over the whole history moves clock reading 0 (all registers reset, nothing recorded): under P-CTC, under PPS where the loop has an effect, and, once PPS sectors are combined as a mixture (as Theorem 4 requires), even where it has none, because each sector's history goes back to a different reading 0. The fix is to keep every reading before the loop interaction as the forward history and apply the rule from the loop event on (`Model.state_seam`). Then (all tested, for all six experiments and both clocks):
+
+- the initial condition holds exactly, and the only break in the transport between readings is at the loop event, for every rule;
+- final predictions are unchanged;
+- **under PPS nothing outside the loop interaction changes across the seam**: no record, no other register. The discontinuity is local to the loop event;
+- **under P-CTC, existing records the loop never touches jump at the seam** (one_way 0.5, grandfather 0.8, refusal 1/6). P-CTC cannot be made local: it has to rewrite the past.
+
+An earlier version of result 6 called the moved beginning an open problem. With the seam it is not one; the moved beginning was an artifact of propagating the rule backwards past the loop event.
+
+**7. Two corrections from Theorem 4 (same day).** The record sectors now use the pointer basis of the CNOT that wrote each record (Z), not the hardware design's measurement basis (X for eraser_x/y); and sectors are combined as a mixture, not as amplitudes, since an amplitude sum is not a channel and can signal. With these, PPS in the timeless model equals the circuit rule in the pointer basis as a full density matrix (tested).
+
+**Correction (2026-11-24, later the same day).** "Records the loop cannot influence" must include every outside system that holds information about the input, not only designated record registers: with a bare entangled partner and no record register, the definition protects nothing, collapses to P-CTC and signals. The fix is Theorem 4 in [THEOREMS.md](../THEOREMS.md): split Alice's input in the pointer basis of the interaction that correlated it with the outside.
 
 ## Fuller clocks: local clocks and a superposed clock
 
@@ -71,10 +82,10 @@ A control qubit c in |+⟩ decides whether Alice records her input before or aft
 | Case | Clock definition | Influence definition |
 |---|---|---|
 | Order recorded (c copied into rec_c) | protects the record in the "record first" branch | same sectors and same predictions (tested) |
-| Order not recorded, Bob holds an earlier copy of a | protects Bob's copy; no signalling | same; no signalling. P-CTC changes Bob's copy from 0.3 to 0 |
-| Order not recorded, nobody holds a copy ("fresh" qubit) | **must split the state by c, which nothing recorded.** The order's interference P(c = +) drops from 0.750 to 0.709: the rule behaves as if it had measured the order | **no split**: the record is written by the loop in one branch, so it is not past in any branch. The fresh qubit is selected (P(rec = 1 \| c = 0) = 0, as under P-CTC) and P(c = +) stays 0.750 |
+| Order not recorded, Bob holds an earlier copy of a | protects Bob's copy; no signalling; but **splits by c**, so the order's interference P(c = +) drops from 0.750 to 0.500 | protects Bob's copy; no signalling; P(c = +) stays 0.750. P-CTC changes Bob's copy from 0.3 to 0 |
+| Order not recorded, nobody holds a copy ("fresh" qubit) | **must split the state by c, which nothing recorded.** The order's interference P(c = +) drops from 0.750 to 0.500, exactly as if the order had been measured | **no split**: the record is written by the loop in one branch, so it is not past in any branch. The fresh qubit is selected (P(rec = 1 \| c = 0) = 0, as under P-CTC) and P(c = +) stays 0.750 |
 
-So when the order is a recorded fact the two definitions agree, and when it is not, only the influence definition stays within PPS's own principle (only records are facts). In this example no rule signals even if c has a distant entangled partner (checked: the partner stays at 0.5 in Z and X). That is one example, not a proof.
+So when the order is a recorded fact the two definitions agree, and when it is not, only the influence definition stays within PPS's own principle (only records are facts). (Corrected 2026-11-24: the first version combined PPS sectors as amplitudes and reported 0.709; combined as a mixture, as Theorem 4 requires, the clock definition removes the order's interference completely.) In this example no rule signals even if c has a distant entangled partner (checked: the partner stays at 0.5 in Z and X). That is one example, not a proof.
 
 To make this work, influence is decided sector by sector: a record can be past inside one sector of other protected records (order recorded as "record first") and not in another.
 

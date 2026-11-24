@@ -28,7 +28,7 @@ Past-preserving selection (PPS) needs to know which basis counts as the "recorde
 
 Everything the rule uses (the split into worlds and the basis) depends only on the state of S and the environment, which Bob cannot change, and within each world it is an ordinary channel on S. So **it cannot signal** in either direction. Tests cover both environment bases, four record strengths, two values of p, and two environment qubits.
 
-**Caveat added 2026-11-24:** because the basis depends on the state, the rule is nonlinear in ρ, and Theorem 0 (which needs a fixed basis) does not apply directly. The numerical tests do not settle the preparation problem for nonlinear rules. See [PERSPECTIVES.md](../PERSPECTIVES.md), section 3.1, for the proposed fix: let the interaction, not the state, fix the basis.
+**Caveat added 2026-11-24:** because the basis depends on the state, the rule is nonlinear in ρ, and Theorem 0 (which needs a fixed basis) does not apply directly. The numerical tests do not settle the preparation problem for nonlinear rules. See [PERSPECTIVES.md](../PERSPECTIVES.md), section 3.1, for the proposed fix: let the interaction, not the state, fix the basis. That fix is now Theorem 4 in [THEOREMS.md](THEOREMS.md).
 
 ## Result 1: a fresh photon — how much of the past is fixed
 

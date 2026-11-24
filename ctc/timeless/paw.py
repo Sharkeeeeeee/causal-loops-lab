@@ -1,5 +1,8 @@
 """SPDX-License-Identifier: MIT. Loop rules in a timeless (Page-Wootters) universe.
 
+Record sectors use the pointer basis of the writing interaction (Z for every CNOT copy here), as
+Theorem 4 requires; `state_seam` puts the rule's seam at the loop event (initial condition kept).
+
 The whole history is one static state on clock (x) system,
 
     Psi = sum_t |t>_clock (x) psi_t,     psi_t = G_t ... G_1 psi_0,
@@ -130,7 +133,10 @@ class Model:
         return np.array([ops[t] @ hist[t] for t in range(len(ops))])
 
     def basis_of(self, reg):
-        return BASIS[self.exp.record_basis] if reg.startswith('rec_') else BASIS['Z']
+        """Sector basis of a record: the pointer basis of the interaction that wrote it (Theorem 4).
+        Every record here is written by a CNOT, which reads its source in Z. (The hardware design's
+        record_basis, X for eraser_x/y, is only the basis the record is measured in; see joint().)"""
+        return BASIS['Z']
 
     def sectors(self, registers):
         """(key, projector at the final clock reading) for every joint record value."""
@@ -176,7 +182,9 @@ class Model:
             f = np.linalg.norm(F[-1])
             return None if f < TOL else F / f
         if rule == 'pps':
-            total = np.zeros_like(Psi)
+            # sectors are combined as a mixture, not as amplitudes: an amplitude sum is not a
+            # channel and can signal (THEOREMS.md, Theorem 4, second counterexample)
+            out = Mix()
             for _, P in self.sectors(self.protected(definition)):
                 S = self.act(self.lift(P), Psi)
                 w = np.linalg.norm(S[-1]) ** 2
@@ -184,9 +192,44 @@ class Model:
                     continue
                 F = self.act(PiL, S)
                 f = np.linalg.norm(F[-1]) ** 2
-                total += S if f < TOL * w else F * np.sqrt(w / f)
-            return total
+                out.append((w, S / np.sqrt(w) if f < TOL * w else F / np.sqrt(f)))
+            return out
         raise ValueError(rule)
+
+    def state_seam(self, rule, definition='influence'):
+        """The same rule with its seam at the loop event instead of spread back to clock reading 0.
+
+        Readings before the loop interaction are the forward (no-loop) history, so the initial
+        condition holds; from the loop interaction on, the history is the rule's. The only break in
+        the transport from one reading to the next is at the loop step."""
+        global_hist = self.state(rule, definition) if rule == 'pps' else self.state(rule)
+        t_loop = self.step_of['loop']
+        out = Mix()
+        for w, h in components(global_hist):
+            seamed = self.history.copy()
+            seamed[t_loop:] = h[t_loop:]
+            out.append((w, seamed))
+        return out if isinstance(global_hist, Mix) else out[0][1]
+
+    def step_breaks(self, hist):
+        """(max ||psi_0 - initial||, [max ||G_t psi_{t-1} - psi_t|| for every step t]) over components."""
+        inits, breaks = [], []
+        for _, h in components(hist):
+            inits.append(float(np.linalg.norm(h[0] - self.psi0)))
+            breaks.append([float(np.linalg.norm(G @ h[t] - h[t + 1])) for t, (_, G) in enumerate(self.steps)])
+        return max(inits), [max(col) for col in zip(*breaks)]
+
+    def reduced_at(self, hist, t, regs):
+        ix = [self.regs.index(r) for r in regs]
+        return sum(w * reduced(h[t], self.n, ix) for w, h in components(hist))
+
+    def jump(self, hist, reg):
+        """Change of a register's reduced state across the loop step, relative to the no-loop history."""
+        t = self.step_of['loop']
+        return float(np.abs(self.reduced_at(hist, t, [reg]) - self.reduced_at(self.history, t, [reg])).max())
+
+    def support_of_loop(self):
+        return set(self.exp.cr_labels) | {'m', 'p'}
 
     # ---------------------------------------------------------------- timelessness
     def constraint_operator(self):
@@ -208,18 +251,22 @@ class Model:
     def constraint_residual(self, hist):
         """(total residual of H_FK, residual of its transport part alone) for a history."""
         Hfk, transport = self.constraint_operator()
-        v = hist.reshape(-1)
-        return float(np.linalg.norm(Hfk @ v)), float(np.linalg.norm(transport @ v))
+        res = [(float(np.linalg.norm(Hfk @ h.reshape(-1))), float(np.linalg.norm(transport @ h.reshape(-1))))
+               for _, h in components(hist)]
+        return max(r[0] for r in res), max(r[1] for r in res)
 
     # ---------------------------------------------------------------- readout
     def prob(self, hist, t, reg, value=1, basis=None):
         """P(reg reads `value`) in the conditional state at clock reading t."""
         b = (self.basis_of(reg) if basis is None else BASIS[basis])[:, value]
-        rho = reduced(hist[t], self.n, [self.regs.index(reg)])
+        rho = self.reduced_at(hist, t, [reg])
         return float(np.real(b.conj() @ rho @ b))
 
     def joint(self, hist):
         """Final distribution {(record bits, CR outcome y): prob} in the format of experiments.exact."""
+        if isinstance(hist, Mix):
+            parts = [(w, self.joint(h)) for w, h in hist]
+            return {k: sum(w * j[k] for w, j in parts) for k in parts[0][1]}
         exp, ix = self.exp, self.regs.index
         psi = hist[-1].copy()
         for label in exp.cr_labels:
@@ -236,6 +283,14 @@ class Model:
             k = tuple(val['rec_' + l] for l in exp.recorded)
             out[(k, y)] = out.get((k, y), 0.0) + float(p[bits])
         return out
+
+
+class Mix(list):
+    """A mixture of histories: [(weight, history array)], weights summing to 1."""
+
+
+def components(hist):
+    return hist if isinstance(hist, Mix) else [(1.0, hist)]
 
 
 def reduced(psi, n, keep):

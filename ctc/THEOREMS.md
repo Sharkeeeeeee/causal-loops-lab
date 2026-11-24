@@ -100,6 +100,85 @@ So Φ(ρ) = V Δ(ρ) V†, where Δ removes the off-diagonal terms in {|k⟩}. W
 
 *Check:* `Theorem3_CausalityRecovered`: 5 dimensions, W_k a random mix of generic and zero-trace unitaries, always including at least one paradox world; random V, random external input; plus the P-CTC counterexample above.
 
+## Theorem 4: the record basis comes from the interaction, and then PPS cannot signal
+
+Added 2026-11-24. Theorem 0 needs a record basis that does not depend on the state, but did not say where the basis comes from. Without an answer, the definition of "the past" can quietly fail (see the counterexamples below).
+
+**Setting.** Alice's loop input A (dimension d), the loop L, and an outside system O: everything the loop cannot influence (a distant Bob, an environment). A interaction V on A ⊗ O **reads A in the basis {|k⟩}** if it has the controlled form V = Σ_k |k⟩⟨k| ⊗ V_k, with V_k acting on O. Then O ends up holding a record of k (a perfect one when the states V_k|o⟩ are orthogonal). Call {|k⟩} the **pointer basis** of V (Zurek's einselection).
+
+**Lemma 2 (the pointer basis is found from V alone).** Write V = Σ_i A_i ⊗ B_i (operator Schmidt decomposition). V reads A in some basis if and only if the A_i are normal and commute; the basis is their joint eigenbasis. If the readout is fine (the V_k are distinct), the basis is unique up to order and phases.
+
+*Proof.* (⇒) If V = Σ_k |k⟩⟨k| ⊗ V_k, every V_k lies in the span of the B_i, so each A_i is a linear combination of the projectors |k⟩⟨k|: diagonal in {|k⟩}, hence normal and commuting. (⇐) Commuting normal operators have a joint eigenbasis; with A_i = Σ_k a_ik |k⟩⟨k|, V = Σ_k |k⟩⟨k| ⊗ (Σ_i a_ik B_i). If the V_k = Σ_i a_ik B_i are distinct, the signatures (a_ik)_i are distinct, so the joint eigenspaces are one-dimensional. ∎
+
+A SWAP or a generic entangling unitary has non-commuting A_i: it reads A in no single basis.
+
+**Theorem 4.** Suppose every interaction that correlates A with the outside reads A in the same basis {|k⟩}, and take {|k⟩} as the record basis. Then PPS is the fixed-basis channel of Theorem 0 on A, so:
+
+1. for every joint state produced this way, the outside party's reduced state is unchanged (no signalling Alice → Bob);
+2. no operation on O before the loop changes Alice's output (no signalling Bob → Alice);
+3. the basis is set by the dynamics, not by the state, so the rule is linear and has no preparation problem.
+
+*Proof.* The basis is a function of the interactions only, so it is the same for every state and every outside operation; Theorem 0 applies as stated. ∎
+
+The proof is one line; the content is the choice. It replaces the state-dependent basis of [DECOHERENCE.md](DECOHERENCE.md) (an eigenbasis of the conditional state, which makes the rule nonlinear) with one fixed by who interacted with what.
+
+**Fresh inputs.** If nothing outside has interacted with A (A is pure and uncorrelated), no basis is singled out. Any choice is safe, since there is nobody to signal to; the natural one, a basis containing the state, gives P-CTC, as for the fresh photon in PAST_PRESERVING.md.
+
+**Three definitions of "the past" that signal.** Alice's loop is one_way (C = diag(2, 0)); a and Bob's b are in |Φ⁺⟩, made by CNOT a → b; nobody wrote a separate record register.
+
+| Definition | What goes wrong | Numbers |
+|---|---|---|
+| Only explicit record registers count | Bob's qubit is not a "register", so nothing is protected and the rule is P-CTC | Bob's P(Z = 0): 0.5 → 1 |
+| Split on Bob's side, sectors added as amplitudes | Bob's sectors interfere when he measures in another basis | X split: Bob's P(Z = 0): 0.5 → 1 |
+| Split on Bob's side, sectors mixed | Alice → Bob is fine, but Bob's earlier measurement changes what each sector contains | Bob measures b in X first: Alice's P(a = 0): 0.5 → 1 |
+| **Split on Alice's side, in the pointer basis of CNOT (Z)** | nothing | Bob 0.5, Alice 0.5, whatever Bob does |
+
+So the past must be split **on Alice's side**, in a basis **fixed by the interaction**. The first counterexample also corrects [timeless/README.md](timeless/README.md): "records the loop cannot influence" must include every outside system that holds information about A, not only designated record registers.
+
+**The basis matters for Alice's predictions, not for signalling.** Input with P(1) = 0.3, eraser loop (C = diag(2, 1 + i)). If an outside system read A in Z, PPS gives P(a = 1) = 0.3; if it read A in X, 1/3. Neither changes the outside party's statistics. This is the earlier qualitative result "the basis is set by what the environment monitors" (DECOHERENCE.md), now without any dependence on the state.
+
+*Checks:* `ctc/tests/test_records.py`, 11 tests: Lemma 2 on known and random interactions (dimensions 2–4) and on partial records; Theorem 4 on 24 random combinations of loop, readout interaction and outside operation (unitaries and measurements), including paradox worlds; the three counterexamples; the Z-versus-X example.
+
+**Sectors must be mixed, not added as amplitudes.** The second counterexample also applies to the timeless models of [timeless/](timeless/README.md), which first combined record sectors as amplitudes. They now combine them as a mixture; this changed one reported number (the superposed clock, 0.709 → 0.500) and none of the conclusions.
+
+### 4a. Several readouts in incompatible bases
+
+Bob reads A in Z, then Carol reads it in X. The two interactions act on the same system and do not commute, so their order is physical, not a choice of clock. **Rule:** the last readout fixes the record basis; an earlier readout refines it only if it commutes with it. Reason: the loop finds A as the last readout left it (in each world A is in an X eigenstate; the Z information now lives only in Bob's record). Every earlier record stays protected anyway, because the rule is a channel on A and never touches the outside.
+
+Since the basis is again fixed by the interactions, Theorem 0 applies: no signalling. Example (one_way loop, input P(1) = 0.3): with Bob's Z readout alone PPS leaves P(a = 0) at 0.7; after Carol's X readout both worlds |±⟩ are sent to |0⟩, so P(a = 0) = 1, while Bob's record stays 0.7/0.3 and the joint Bob–Carol statistics are unchanged.
+
+### 4b. Coarse readouts
+
+A readout that only tells which block of states A is in (for example {|0⟩} versus {|1⟩, |2⟩}) has blocks instead of a basis; `pointer_blocks` finds them from V. **Rule:** inside each block, the loop acts on A's pre-readout state projected into the block, P ψ / ‖P ψ‖, because nothing distinguished the alternatives inside it. With no readout at all (one block) this is P-CTC on the fresh input.
+
+**Proposition 4b.** If A's state before the readouts is pure and every correlation with the outside comes from the readouts, the rule is a fixed channel given that pre-readout state (Kraus operators C|φ_b⟩⟨φ_b| / ‖Cφ_b‖ per block plus the identity on the unread remainder), so no operation on the outside, unitary or measurement, changes Alice's output, and the outside's marginal never changes.
+
+*Proof.* Within block b the joint state is |φ_b⟩⟨φ_b| ⊗ β_b with φ_b fixed by ψ; an operation on the outside only changes β_b and the block weights cannot change (they are Alice-side probabilities). The Kraus operators depend on ψ, not on the current state, so Theorem 0 applies. ∎
+
+**The premise matters.** If A was entangled beforehand with a hidden partner D by an interaction that read no basis, there is no fixed state inside a block. Applying P-CTC to whatever the block holds then changes D's statistics: the P-CTC signalling mechanism, confined to the block (tested). Such interactions are the remaining open case.
+
+### 4c. Weak readouts
+
+A readout with record overlap c = |⟨V_0 o|V_1 o⟩| (c = 1: no record, c = 0: perfect) still has a pointer basis. Three candidate rules, compared on an input with P(1) = 0.3 and the eraser loop:
+
+| Overlap c | 1 (no record) | 0.995 | 0.825 | 0.540 | 0 (perfect) | Signals? |
+|---|---|---|---|---|---|---|
+| Pointer basis (Theorem 4 as stated) | 0.176 | **0.300** | 0.300 | 0.300 | 0.300 | no |
+| Eigenbasis of A's reduced state | 0.176 | 0.177 | 0.184 | 0.209 | 0.300 | no |
+| Worlds = the outside's record states | 0.176 | 0.177 | 0.203 | 0.249 | 0.300 | **yes** (Bob's prior measurement shifts Alice's output by up to 0.046) |
+
+Values are P(a = 1). Findings:
+
+- **No-signalling does not force all-or-nothing.** The eigenbasis rule is continuous (no jump at the first trace of a record) and safe: its basis comes from A's reduced state, which nothing done to the outside can change, so it is a fixed channel with respect to every outside operation.
+- **What does signal is splitting on the outside's side,** as in the third counterexample above.
+- **The two safe rules disagree on what a weak record means.** The pointer rule says any readout, however weak, fixes the past in its basis. The eigenbasis rule says a weak readout only partly does, and ignores the record's basis where A's spectrum is degenerate (the all-or-nothing case of DECOHERENCE.md is exactly such a degeneracy, ρ = 𝟙/2). They predict different outputs for weak records; which one nature would use is not decided by any principle found here.
+
+*Checks:* `ctc/tests/test_readouts.py`, 10 tests (4a: basis, no signalling under all operations of both outside parties, the one_way example; 4b: block finding, no signalling for random inputs, loops and outside operations, the fresh limit, the premise counterexample; 4c: the table above).
+
+**A consequence for the eraser.** The idler is made by a CNOT, which reads the path in Z. Under Theorem 4 the record basis of the eraser is therefore Z, not the X basis used in [PAST_PRESERVING.md](PAST_PRESERVING.md) and in the hardware design. With Z, PPS makes the loop act like a which-path measurement: the Bob-sorted fringes disappear instead of shifting by π/4. The hardware PPS values for the eraser (visibility 0.870, shift 0.774) are measured values of the X-basis variant, which Theorem 4 does not support.
+
+**Still open.** Interactions that correlate A with the outside without reading any basis (4b premise); the choice between the pointer and eigenbasis rules for weak records (4c); a superposed order of two incompatible readouts (which one is "last" is then indefinite).
+
 ## Hardware experiments
 
 These examples were all run on IBM quantum computers; code and full results are in [hardware/](hardware/README.md). The last column is the PPS value measured in the third run (ibm_kingston, predictions and criteria fixed before submission, 21 of 21 criteria pass):
@@ -111,14 +190,14 @@ These examples were all run on IBM quantum computers; code and full results are 
 | Refusal to send, P(message recorded \| a = 1) (future) | Thm 1(1), Thm 2(2) | 0.5 | 0 | **0** | 0.035 |
 | One-way control, P(a = 1) | Thm 3, P-CTC counterexample | 0.5 | 0 | **0.5** | 0.495 |
 | Quantum eraser, Bob's which-path statistics | Thm 0 | 0.5 | 0.667 | **0.5** | 0.501 |
-| Quantum eraser, fringe visibility sorted by Bob | PAST_PRESERVING.md | 0.707 | 0.943 | **0.943** | 0.870 |
+| Quantum eraser, fringe visibility sorted by Bob | PAST_PRESERVING.md | 0.707 | 0.943 | **0.943** (X record basis; Theorem 4's Z basis gives no fringes) | 0.870 |
 
 The numbers for all rules come from the same shots, so the hardware results show that the predictions are measurable, not that nature uses PPS. The values are standard quantum mechanics applied to postselected circuits.
 
 ## Not yet proved
 
 1. **Theorem 3 covers only controlled-form U.** Whether every unitary in which "the loop does not affect A" can be written this way is not proved here.
-2. **Choice of record basis.** In Theorem 3 the record basis is fixed naturally, but in general (for example the entangled double slit in PAST_PRESERVING.md) different record bases give different predictions. This is still the largest open problem of PPS.
+2. **Choice of record basis.** Partly answered by Theorem 4: the basis is the pointer basis of the interactions that correlated the input with the outside. Open: incompatible readouts, partial and coarse records (see the end of Theorem 4).
 3. **Falling back to D-CTC in paradox worlds is a seam.** Theorem 1(2) says what it does in those worlds, not why nature should do it.
 4. **The main statements of Theorems 1 and 2 are for classical reversible circuits only.** For a general quantum U the corresponding statement is "world k outputs the state of successful Bell postselection", which is the definition of PPS and has less content.
 5. **Computational power.** On definite inputs PPS equals P-CTC, so it is at least as powerful as P-CTC (PostBQP); no upper bound is proved ([PERSPECTIVES.md](../PERSPECTIVES.md), 1.5; `tests/test_computational_power.py`).

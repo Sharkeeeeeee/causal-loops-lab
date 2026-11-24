@@ -15,8 +15,8 @@ ATOL = 1e-9
 
 
 def conditional(model, final, reg, P):
-    v = P @ final
-    return model.prob(v / np.linalg.norm(v), reg)
+    r = P @ final @ P
+    return model.prob(r / np.trace(r).real, reg)
 
 
 class LocalClockSystem(unittest.TestCase):
@@ -27,7 +27,7 @@ class LocalClockSystem(unittest.TestCase):
     def test_one_static_state_two_clock_constraints(self):
         for m in self.models.values():
             J_A, J_B, H_in = m.constraints()
-            v = m.global_vector(m.rule('no_loop'))
+            v = m.global_vector(m.state)
             for J in (J_A, J_B, H_in):
                 self.assertLess(np.linalg.norm(J @ v), ATOL)
             self.assertLess(np.linalg.norm(J_A @ J_B - J_B @ J_A), ATOL)
@@ -68,15 +68,17 @@ class SuperposedClock(unittest.TestCase):
             self.assertIn(tuple(sorted(['rec_c'] + (['rec_b'] if bob else []))), splits)          # not when rec_c = 1
 
     def test_indefinite_order_clock_definition_disturbs_the_order(self):
-        """Fresh qubit, order unrecorded. The clock definition must split by c and changes the order's
-        interference P(c = +) from 0.75 to 0.709; the influence definition leaves it at 0.75."""
-        s = QuantumSwitch('coherent', 0.3, bob=False)
-        no_loop = s.x_plus(s.rule('no_loop')[2], 'c')
-        clock = s.x_plus(s.rule('pps', s.clock_sectors())[2], 'c')
-        infl = s.x_plus(s.rule('pps', s.influence_sectors(s.candidates()))[2], 'c')
-        self.assertAlmostEqual(no_loop, 0.75, delta=ATOL)
-        self.assertAlmostEqual(infl, no_loop, delta=ATOL)
-        self.assertLess(clock, no_loop - 0.03)
+        """Order unrecorded. The clock definition must split by c, which destroys the order's
+        interference: P(c = +) goes from 0.75 to 0.5, as if the order had been measured. The
+        influence definition leaves it at 0.75. Same with or without Bob's earlier copy."""
+        for bob in (False, True):
+            s = QuantumSwitch('coherent', 0.3, bob=bob)
+            no_loop = s.x_plus(s.rule('no_loop')[2], 'c')
+            clock = s.x_plus(s.rule('pps', s.clock_sectors())[2], 'c')
+            infl = s.x_plus(s.rule('pps', s.influence_sectors(s.candidates()))[2], 'c')
+            self.assertAlmostEqual(no_loop, 0.75, delta=ATOL)
+            self.assertAlmostEqual(infl, no_loop, delta=ATOL)
+            self.assertAlmostEqual(clock, 0.5, delta=ATOL)
 
     def test_indefinite_order_record_is_not_past(self):
         """Influence: the record is written by the loop in one branch, so it is not past anywhere, and the

@@ -203,7 +203,7 @@ But the value is limited: the proofs are short and already checked numerically, 
 1. ~~Fix document inconsistencies (4.1) and add the three-layer table to `HYPOTHESIS.md` (section 1).~~ **Done 2026-11-24.**
 2. ~~Adjust the README's wording about the hardware experiments (2.3).~~ **Done 2026-11-24:** badge reads "predictions measurable, 21/21 checks"; the README and honesty statement add "results are fixed by standard quantum mechanics", "the preregistration has no external timestamp" and the prior work; `ctc/hardware/README.md` caveats add the same two points.
 3. ~~Read Hartle 1994 in full and check the novelty of PPS (3.3).~~ **Done 2026-11-24:** the within-world rule is known (Hartle Eq. 5.6); the difference is only not reweighting the past. Remaining: citation tracking, and reading the billiard-ball paradox originals (1.2).
-4. **Make the record basis state independent** (3.1). This is the largest open problem of PPS and bears directly on whether it really cannot signal.
+4. ~~**Make the record basis state independent** (3.1).~~ **Done 2026-11-24 as Theorem 4** (THEOREMS.md): the pointer basis of the interaction. Open: incompatible readouts, weak and coarse records.
 5. **State PPS's computational power honestly in any research note** (1.5). ~~Rename the abbreviation.~~ Done: PPS.
 6. **Try to prove uniqueness of PPS** (3.2), or at least extend Theorem 3 to general U.
 7. **Think about how "the recorded past" is defined in relativity** (1.3). This is the first problem the outer layer meets.
