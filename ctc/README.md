@@ -1,6 +1,6 @@
 # 階段 1：CTC 玩具模型
 
-建立日期：2026-11-22，撰寫時使用 AI 輔助（Claude）。全部都是小型精確數值計算，沒有硬體執行，也沒有外部審查。這些模型描述的是「如果存在時間迴圈，世界會怎麼運作」，**不是資訊能回到過去的證據**。這些檔案不在 `PUBLIC_MANIFEST.json` 裡。
+建立日期：2026-11-22，最後更新：2026-11-24。撰寫時使用 AI 輔助（Claude），沒有外部審查。這個資料夾的模型都是小型精確數值計算。2026-11-23 起另外有 IBM 量子電腦上的實驗（[hardware/](hardware/README.md)），它們用後選擇實作迴圈規則，只說明預測在硬體上量得出來。這些模型描述的是「如果存在時間迴圈，世界會怎麼運作」，**不是資訊能回到過去的證據**。這些檔案不在 `PUBLIC_MANIFEST.json` 裡。
 
 ```text
 python -B ctc/tests/test_models.py      # 10 項測試，對照手算的解析結果
@@ -18,13 +18,20 @@ python -B ctc/tests/test_past_preserving.py  # 9 項測試，過去守恆篩選�
 python -B ctc/run_double_slit.py        # 雙縫實驗與量子擦除的 JSON 和圖
 python -B ctc/tests/test_decoherence.py # 6 項測試，用去相干決定記錄基底
 python -B ctc/run_decoherence.py        # 記錄強度掃描的 JSON 和圖
+python -B ctc/tests/test_theorems.py    # 11 項測試，THEOREMS.md 的每條定理都用隨機電路驗證
+python -B ctc/tests/test_computational_power.py  # 5 項測試，過去守恆篩選在確定輸入上等於 P-CTC（計算能力）
+python -B ctc/tests/test_hartle.py      # 1 項測試，過去守恆篩選對照 Hartle 1994 Eq. (5.5)–(5.6)
+python -B ctc/tests/test_hardware.py    # 8 項測試，硬體實驗的電路與估計方法；閘層級的 3 項需要 qiskit
+python -B ctc/hardware/run_local.py     # 硬體實驗在理想模擬器上的完整分析（需要 qiskit）
 ```
 
-只有量子版本才有的效應見 [QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md)。無訊號測試的結果見 [NO_SIGNALLING.md](NO_SIGNALLING.md)。第四種規則 T-CTC 見 [T_CTC.md](T_CTC.md)，H2 的候選出路「過去守恆篩選」和雙縫實驗見 [PAST_PRESERVING.md](PAST_PRESERVING.md)，用去相干決定記錄基底見 [DECOHERENCE.md](DECOHERENCE.md)，新穎性檢查見 [NOVELTY_CHECK.md](NOVELTY_CHECK.md)。
+全部 99 項測試（2026-11-24）。
+
+H1–H3 的定理版本與證明見 [THEOREMS.md](THEOREMS.md)，IBM 硬體實驗見 [hardware/README.md](hardware/README.md)。只有量子版本才有的效應見 [QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md)。無訊號測試的結果見 [NO_SIGNALLING.md](NO_SIGNALLING.md)。第四種規則 T-CTC 見 [T_CTC.md](T_CTC.md)，H2 的候選出路「過去守恆篩選」和雙縫實驗見 [PAST_PRESERVING.md](PAST_PRESERVING.md)，用去相干決定記錄基底見 [DECOHERENCE.md](DECOHERENCE.md)，新穎性檢查見 [NOVELTY_CHECK.md](NOVELTY_CHECK.md)。
 
 文獻重現的結果見 [LITERATURE_REPRODUCTION.md](LITERATURE_REPRODUCTION.md)。把 P-CTC 和 D-CTC 放進同一個雙參數模型的結果見 [BRANCHES.md](BRANCHES.md)。
 
-需要 NumPy，畫圖需要 matplotlib。這裡用 Python 3.11.0、NumPy 2.3.2、matplotlib 3.10.0 執行過。
+需要 NumPy，畫圖需要 matplotlib。這裡用 Python 3.11.0、NumPy 2.3.2、matplotlib 3.10.0 執行過。2026-11-24 另外在 Python 3.13.18、NumPy 2.5.3 上跑過全部測試（沒有 matplotlib 和 qiskit，所以沒有重新產生圖，閘層級的 3 項硬體測試被跳過）。
 
 ## 檔案
 
@@ -48,6 +55,11 @@ python -B ctc/run_decoherence.py        # 記錄強度掃描的 JSON 和圖
 | `decoherence.py` | 環境部分記錄光子路徑；去相干定義的過去守恆篩選 |
 | `tests/test_decoherence.py` | 不能傳訊、紀錄不被改寫、新鮮光子閉式解、指標基底決定擦除結果 |
 | `run_decoherence.py` | 記錄強度 s 的掃描與圖 |
+| `THEOREMS.md`、`tests/test_theorems.py` | H1′–H3′ 的敘述、證明與隨機電路檢查 |
+| `tests/test_computational_power.py` | 過去守恆篩選在確定輸入上等於 P-CTC；一個以自洽篩選做搜尋的例子（見根目錄 PERSPECTIVES.md 1.5） |
+| `tests/test_hartle.py` | 過去守恆篩選對照 Hartle 1994：世界之內的條件機率相同，Hartle 會重新加權過去（見 NOVELTY_CHECK.md 第三輪） |
+| `hardware/` | IBM 量子電腦上的實驗：電路、事先登錄、分析、三次執行的原始資料 |
+| `tests/test_hardware.py` | 硬體實驗的電路、估計方法、讀取校正 |
 | `run_branches.py` | κ–β 平面的掃描與畫圖 |
 | `tests/test_models.py` | 么正性、不動點、與解析公式的比對 |
 | `tests/test_literature.py` | 逐條重現論文中的說法 |

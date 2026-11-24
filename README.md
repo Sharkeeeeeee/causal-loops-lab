@@ -2,15 +2,15 @@
 
 **Exact toy models of information sent around a closed timelike curve (CTC), and what self-consistency would do to the future.**
 
-[![tests](https://img.shields.io/badge/tests-93%20passing-2a78d6)](ctc/README.md)
-[![IBM hardware](https://img.shields.io/badge/IBM%20hardware-21%2F21%20preregistered%20checks-2a78d6)](ctc/hardware/README.md)
+[![tests](https://img.shields.io/badge/tests-99%20passing-2a78d6)](ctc/README.md)
+[![IBM hardware](https://img.shields.io/badge/IBM%20hardware-predictions%20measurable%2C%2021%2F21%20checks-2a78d6)](ctc/hardware/README.md)
 [![python](https://img.shields.io/badge/python-3.11-2a78d6)](ctc/README.md)
 [![code license](https://img.shields.io/badge/code-MIT-6b6a63)](LICENSE)
 [![data license](https://img.shields.io/badge/docs%20%26%20data-CC%20BY%204.0-6b6a63)](LICENSES.md)
 [![status](https://img.shields.io/badge/status-research%20prototype-6b6a63)](ROADMAP.md)
 [![AI assisted](https://img.shields.io/badge/AI-assisted-6b6a63)](#honesty-statement)
 
-[繁體中文說明](#繁體中文) · [Roadmap](ROADMAP.md) · [Hypotheses](HYPOTHESIS.md) · [Theorems](ctc/THEOREMS.md) · [Hardware runs](ctc/hardware/README.md) · [Code and results](ctc/README.md)
+[繁體中文說明](#繁體中文) · [Roadmap](ROADMAP.md) · [Hypotheses](HYPOTHESIS.md) · [Theorems](ctc/THEOREMS.md) · [Hardware runs](ctc/hardware/README.md) · [Code and results](ctc/README.md) · [Outside perspectives](PERSPECTIVES.md)
 
 ## The question
 
@@ -36,9 +36,9 @@ This project turns that idea into three testable hypotheses and checks them agai
 3. **Different selection rules give opposite answers.** Lloyd's gun never fires under P-CTC, but fires with probability sin²(θ/2) under D-CTC. ([details](ctc/LITERATURE_REPRODUCTION.md))
 4. **In quantum mechanics "consistent" has two incompatible meanings.** Two logically consistent histories can cancel by interference, deleting a whole branch. ([details](ctc/QUANTUM_EFFECTS.md))
 5. **An unconditional message looks exactly like an ordinary one.** From the receiver's side alone you cannot tell whether a message came from the future. ([details](ctc/README.md))
-6. **A candidate fix for H2: past-preserving selection.** Recorded past facts keep their probabilities; consistency selection acts only inside each recorded past world. It is an ordinary quantum channel, so it can never signal. In a double-slit experiment with a time loop, its effect appears only in fringes sorted by an entangled idler, exactly like a delayed-choice quantum eraser. Letting decoherence fix the "record" basis makes the past continuously more fixed as the environment records it ([details](ctc/PAST_PRESERVING.md), [decoherence](ctc/DECOHERENCE.md)).
+6. **A candidate fix for H2: past-preserving selection.** Recorded past facts keep their probabilities; consistency selection acts only inside each recorded past world. It is an ordinary quantum channel, so it can never signal. In a double-slit experiment with a time loop, its effect appears only in fringes sorted by an entangled idler, exactly like a delayed-choice quantum eraser. Letting decoherence fix the "record" basis makes the past continuously more fixed as the environment records it; in the entangled eraser, however, the effect is still all-or-nothing, and which basis counts as "recorded" remains the main open problem ([details](ctc/PAST_PRESERVING.md), [decoherence](ctc/DECOHERENCE.md)).
 7. **Under past-preserving selection, all three hypotheses hold as theorems, in a modified form (H1′–H3′).** Every recorded world is self-consistent (a definite consistent history when one exists, Deutsch's mixed fixed point otherwise); the loop never changes recorded past probabilities, and inside each past world it conditions the future on consistency; when the loop does not act back, ordinary quantum mechanics is recovered exactly. The original H3 fails under P-CTC: a bit that merely controls the loop still has a branch deleted. Each theorem is checked on random circuits. ([theorems](ctc/THEOREMS.md))
-8. **The predictions are measurable on real quantum hardware.** Postselected-teleportation circuits on IBM's `ibm_kingston` (figure above) reproduce every predicted effect: P-CTC changes the recorded past and a distant partner's statistics, past-preserving selection does not, inconsistent histories are suppressed to 3.5%, and the loop's effect in a delayed-choice eraser appears only in Bob-sorted fringes (visibility 0.870, shift 0.774 rad vs 0.785 predicted). Predictions and pass criteria were preregistered; 21 of 21 pass. Both rules are computed from the same shots, so this shows the predictions are measurable, not which rule nature uses. ([hardware runs](ctc/hardware/README.md))
+8. **The predictions are measurable on real quantum hardware.** Postselected-teleportation circuits on IBM's `ibm_kingston` (figure above) reproduce every predicted effect: P-CTC changes the recorded past and a distant partner's statistics, past-preserving selection does not, inconsistent histories are suppressed to 3.5%, and the loop's effect in a delayed-choice eraser appears only in Bob-sorted fringes (visibility 0.870, shift 0.774 rad vs 0.785 predicted). Predictions and pass criteria were written down before the run and 21 of 21 pass; the preregistration file has no external timestamp, since it was committed together with the results. These are ordinary quantum circuits whose outcomes standard quantum mechanics fixes in advance, and every rule is computed from the same shots, so the runs test the hardware, not the rules: no result could have favoured one rule over another. Earlier hardware work on postselected CTCs includes photonic experiments (Lloyd et al. 2011; Ringbauer et al. 2014, D-CTC) and a 2025 experiment on IBM and Quantinuum processors (arXiv:2501.16335). ([hardware runs](ctc/hardware/README.md))
 
 **Novelty status.** An initial check found that findings 2–4 are already known in the literature (Bub & Stairs 2014; Araújo, Guérin & Baumeler 2017; Lloyd et al. 2011). The code reproduces them independently. The κ–β family interpolating D-CTC and P-CTC has no exact precedent found so far; the closest prior work is Allen's T-CTC (2014), a weighted mixture of P-CTC and an ordinary channel, reproduced [here](ctc/T_CTC.md). Novelty is unconfirmed. See [ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md).
 
@@ -58,6 +58,8 @@ python -B ctc/tests/test_t_ctc.py
 python -B ctc/tests/test_past_preserving.py
 python -B ctc/tests/test_decoherence.py
 python -B ctc/tests/test_theorems.py
+python -B ctc/tests/test_computational_power.py
+python -B ctc/tests/test_hartle.py
 python -B ctc/tests/test_hardware.py      # gate-level checks need qiskit, skipped without it
 python -B ctc/run_signalling.py           # regenerates the no-signalling map
 ```
@@ -76,7 +78,7 @@ python -B ctc/hardware/plot_results.py    # regenerates the figure above
 ## Honesty statement
 
 - This project does **not** claim that information can be sent to the past, and no simulation could show that: postselected simulations can always be explained in the normal time direction.
-- The IBM hardware runs implement the loop rules by postselection. They show that each rule's predictions can be measured on a real device; they do not show that loops exist or which rule nature would use.
+- The IBM hardware runs implement the loop rules by postselection, and their outcomes follow from standard quantum mechanics. They show that each rule's predictions can be measured on a real device; they do not show that loops exist or which rule nature would use.
 - It does not support any personal time-travel claim.
 - Code and writing used AI assistance (Claude). There has been **no external peer review**. Corrections and expert feedback are very welcome: please open an issue.
 
@@ -100,7 +102,7 @@ The repository started as an evidence package for two research proposals on a fi
 - [License scope and exclusions](LICENSES.md)
 - [Recorded local checks](LOCAL_CHECKS.json)
 
-All of those earlier results are simulations, planning arithmetic or synthetic tests; they involve no hardware execution (the IBM runs above belong to the CTC research, not to Plans A and B). The task is classical one-bit classification; no backward communication, physical wormhole, arbitrary-state teleportation or quantum advantage is established. The integrity check is `python -I -S -B VERIFY_PUBLIC.py`; it verifies hashes only. This README replaced the evidence-package README (subset v0.34, 14 October 2026) on 22 November 2026 and was updated with the theorems and hardware results on 23 November 2026; each time only its manifest hash was updated.
+All of those earlier results are simulations, planning arithmetic or synthetic tests; they involve no hardware execution (the IBM runs above belong to the CTC research, not to Plans A and B). The task is classical one-bit classification; no backward communication, physical wormhole, arbitrary-state teleportation or quantum advantage is established. The integrity check is `python -I -S -B VERIFY_PUBLIC.py`; it verifies hashes only. This README replaced the evidence-package README (subset v0.34, 14 October 2026) on 22 November 2026, was updated with the theorems and hardware results on 23 November 2026, and was updated again on 24 November 2026 to fix outdated details; each time only its manifest hash was updated.
 
 ---
 
@@ -121,15 +123,15 @@ All of those earlier results are simulations, planning arithmetic or synthetic t
 3. **篩選規則不同，答案可以完全相反。**
 4. **量子版本裡，「自洽」有兩種不相容的定義**：兩條各自邏輯自洽的歷史，可以因為干涉而互相抵消。
 5. **無條件寄出的訊息，跟一般訊息完全一樣**：只看收件者這邊，分辨不出訊息是否來自未來。
-6. **H2 的候選出路「過去守恆篩選」**：已記錄的過去機率不變，只在每個過去世界內做自洽篩選。它一定不能傳訊；在有時間迴圈的雙縫實驗裡，效應只出現在按閒置光子結果分組後的條紋裡，跟量子擦除同構。未解決：「已記錄」的基底由誰決定。
+6. **H2 的候選出路「過去守恆篩選」**：已記錄的過去機率不變，只在每個過去世界內做自洽篩選。它一定不能傳訊；在有時間迴圈的雙縫實驗裡，效應只出現在按閒置光子結果分組後的條紋裡，跟量子擦除同構。讓去相干決定「已記錄」的基底時，過去會隨環境記錄的程度連續地變得固定；但在糾纏的量子擦除裡，效果仍然是全有或全無，「已記錄」的基底由誰決定仍是主要的開放問題。([細節](ctc/PAST_PRESERVING.md)、[去相干](ctc/DECOHERENCE.md))
 7. **在過去守恆篩選下，三個假設都能以修改後的形式（H1′–H3′）證明成定理。** 每個已記錄的世界都自洽（有自洽歷史時是確定的自洽歷史，沒有時是 Deutsch 混合不動點）；迴圈不改變已記錄的過去機率，只在每個過去世界之內，以自洽為條件改變未來；迴圈不回頭作用時，完全回到一般量子力學。原本的 H3 在 P-CTC 下不成立：只控制迴圈、不受迴圈影響的位元，分支仍會被刪掉。每條定理都用隨機電路驗證過。([定理](ctc/THEOREMS.md))
-8. **這些預測在真實量子硬體上量得出來。** 在 IBM 的 `ibm_kingston` 上用後選擇 teleportation 電路（上圖），每個預測效應都量到了：P-CTC 改變已記錄的過去和遠方夥伴的統計，過去守恆不會；不自洽的歷史被壓到 3.5%；量子擦除裡迴圈的效應只出現在依 Bob 分組的條紋裡（清晰度 0.870，相位移 0.774 弧度，理論 0.785）。預測和判準事先登錄，21 項全部通過。三種規則來自同一批 shots，所以這說明預測量得出來，不說明自然界用哪一種規則。([硬體實驗](ctc/hardware/README.md))
+8. **這些預測在真實量子硬體上量得出來。** 在 IBM 的 `ibm_kingston` 上用後選擇 teleportation 電路（上圖），每個預測效應都量到了：P-CTC 改變已記錄的過去和遠方夥伴的統計，過去守恆不會；不自洽的歷史被壓到 3.5%；量子擦除裡迴圈的效應只出現在依 Bob 分組的條紋裡（清晰度 0.870，相位移 0.774 弧度，理論 0.785）。預測和判準在執行前寫好，21 項全部通過；但登錄檔沒有外部時間戳記，它和結果是在同一個 commit 加進來的。這些是普通的量子電路，結果在跑之前就由標準量子力學決定，而且三種規則都從同一批 shots 算出來，所以實驗檢驗的是硬體，不是規則：不管結果如何，都不可能支持某一種規則、反對另一種。先前在硬體上模擬後選擇 CTC 的工作有光學實驗（Lloyd 等人 2011；Ringbauer 等人 2014，D-CTC），以及 2025 年在 IBM 和 Quantinuum 處理器上的實驗（arXiv:2501.16335）。([硬體實驗](ctc/hardware/README.md))
 
 **新穎性：** 初步檢查發現第 2–4 點文獻中已有（Bub & Stairs 2014、Araújo 等人 2017、Lloyd 等人 2011），本專案是獨立重現。κ–β 內插模型目前沒找到完全相同的前例；最接近的是 Allen 2014 的 T-CTC（P-CTC 和普通通道的加權混合），新穎性還沒有確認。
 
 ### 誠實聲明
 
-本專案**不主張**資訊能傳回過去，也不支持任何個人的時間旅行說法。IBM 硬體實驗是用後選擇實作迴圈規則，只能說明各規則的預測量得出來，不能證明迴圈存在，也不能判斷自然界用哪一種規則。程式與文件使用 AI 輔助（Claude）撰寫，**沒有外部審查**。歡迎指正，請開 issue。
+本專案**不主張**資訊能傳回過去，也不支持任何個人的時間旅行說法。IBM 硬體實驗是用後選擇實作迴圈規則，結果由標準量子力學決定，只能說明各規則的預測量得出來，不能證明迴圈存在，也不能判斷自然界用哪一種規則。程式與文件使用 AI 輔助（Claude）撰寫，**沒有外部審查**。歡迎指正，請開 issue。
 
 ### 怎麼參與
 
