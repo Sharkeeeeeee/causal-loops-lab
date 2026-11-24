@@ -1,43 +1,43 @@
-# 只有量子版本才有的效應：自洽歷史之間的干涉
+# An effect only the quantum version has: interference between consistent histories
 
-建立日期：2026-11-22，撰寫時使用 AI 輔助（Claude）。閉式解是本專案推導的，沒有外部審查。
+Created 2026-11-22 with AI assistance (Claude). The closed-form results were derived in this project and have not been externally reviewed.
 
 ```text
-python -B ctc/tests/test_quantum_effects.py   # 7 項測試
+python -B ctc/tests/test_quantum_effects.py   # 7 tests
 ```
 
-電路在 [circuits.py](circuits.py) 的 `interference()` 和 `phase_only_loop()`。
+The circuits are `interference()` and `phase_only_loop()` in [circuits.py](circuits.py).
 
-## 電路
+## Circuit
 
-一個量子位元 a，處在 √(1−p)|0⟩ + √p|1⟩。它跟迴圈訊息 m 做一次受控相位閘：只有 a = 1 而且 m = 1 時，乘上相位 e^{iφ}。φ = π 時就是 CZ 閘。
+A qubit a is in √(1−p)|0⟩ + √p|1⟩. It interacts with the loop message m through a controlled-phase gate: the phase e^{iφ} is applied only when a = 1 and m = 1. For φ = π this is a CZ gate.
 
-**訊息 m 本身從來沒有被改變**，所以在每個分支裡，m = 0 和 m = 1 兩條歷史在邏輯上都自洽，沒有任何悖論。兩者唯一的差別是 m = 1 那條歷史多了一個相位。
+**The message m itself is never changed**, so in every branch both histories, m = 0 and m = 1, are logically consistent. There is no paradox. The only difference between them is the extra phase on the m = 1 history.
 
-## 結果
+## Results
 
-| 規則 | P(a = 1) | a 的相干性 |
+| Rule | P(a = 1) | Coherence of a |
 |---|---|---|
-| 沒有迴圈（外部訊息未知） | p | 消失 |
-| D-CTC | p | 消失 |
-| 古典分支模型 | p（兩條歷史都自洽） | 不適用 |
-| **量子 P-CTC** | **p cos²(φ/2) / ((1 − p) + p cos²(φ/2))** | 保留 |
+| No loop (external message unknown) | p | lost |
+| D-CTC | p | lost |
+| Classical branch model | p (both histories consistent) | n/a |
+| **Quantum P-CTC** | **p cos²(φ/2) / ((1 − p) + p cos²(φ/2))** | kept |
 
-- φ = 0 時沒有相位，P-CTC 給出 p，跟其他規則一樣。
-- φ = π（CZ）時，P-CTC 給出 **0**：a = 1 的分支被完全刪除，因為 m = 0 和 m = 1 兩條歷史的振幅分別是 +1 和 −1，互相抵消。
-- φ 介於兩者之間時，世界被連續地重新加權。
+- φ = 0: no phase, and P-CTC gives p like every other rule.
+- φ = π (CZ): P-CTC gives **0**. The a = 1 branch is deleted completely because the m = 0 and m = 1 histories have amplitudes +1 and −1 and cancel.
+- In between, the world is reweighted continuously.
 
-## 三個觀察
+## Three observations
 
-1. **世界可以在沒有任何矛盾的情況下被重新加權。** 古典版本的 P-CTC 只會刪掉有邏輯矛盾的歷史。量子版本還會刪掉「振幅互相抵消」的歷史，即使它們在邏輯上完全自洽。所以在量子版本裡，H1 必須先決定「自洽」指的是**邏輯自洽**還是**振幅自洽**，兩者的預測不同。
-2. **把 a 先變成古典位元也擋不住。** 抵消發生在迴圈訊息的兩條歷史之間，不在 a 身上，所以即使 a 的輸入是一般機率（沒有疊加），P-CTC 仍然會刪掉 a = 1 的分支（測試 `test_deletion_happens_even_for_a_classical_input`）。這修正了之前的說法：「古典輸入時量子版本不會改變任何數字」只對**不帶相位**的電路成立，也就是祖父悖論、KFK、自舉這類置換電路。
-3. **只帶相位的迴圈，會讓 P-CTC 沒有定義。** 如果訊息只拿到一個相位（Z），其他什麼都不碰，那麼 Tr_loop U = 0，P-CTC 沒有定義，即使所有歷史在邏輯上都自洽。D-CTC 則完全不受影響。這就是文獻盤點中提到的 H3 角落案例。
+1. **The world can be reweighted without any contradiction.** The classical version of P-CTC only deletes histories that are logically inconsistent. The quantum version also deletes histories whose amplitudes cancel, even when they are logically consistent. So in the quantum setting H1 must first say whether "consistent" means **logically consistent** or **amplitude-consistent**. The two give different predictions.
+2. **Making a classical does not prevent it.** The cancellation happens between the two histories of the loop message, not on a. Even when a's input is an ordinary probability mixture (no superposition), P-CTC still deletes the a = 1 branch (test `test_deletion_happens_even_for_a_classical_input`). This corrects an earlier claim: "with classical inputs the quantum version changes no numbers" holds only for circuits **without phases**, i.e. permutation circuits such as the grandfather, KFK and bootstrap circuits.
+3. **A phase-only loop leaves P-CTC undefined.** If the message only picks up a phase (Z) and touches nothing else, Tr_loop U = 0 and P-CTC is undefined, even though every history is logically consistent. D-CTC is unaffected. This is the H3 corner case noted in the literature review.
 
-## 對其他程式的影響
+## Effect on other code
 
-`branches.py` 原本只檢查 U 的元素是不是整數，所以會把 CZ 的 −1 當成一般的古典移動，算出錯誤的結果。現在它要求 U 必須是只有 0 和 1 的置換矩陣，遇到相位就會報錯（測試 `test_classical_model_refuses_phase_gates`）。之前的祖父悖論、KFK、自舉電路都不帶相位，所以已有的結果不受影響。
+`branches.py` used to check only that the entries of U were integers, so it treated the −1 of a CZ as an ordinary classical move and gave wrong results. It now requires U to be a 0/1 permutation matrix and raises an error on phases (test `test_classical_model_refuses_phase_gates`). The grandfather, KFK and bootstrap circuits carry no phases, so earlier results are unaffected.
 
-## 下一步
+## Follow-ups
 
-- 量子版的 κ–β 模型，加上去相干強度當作第三個參數。完全去相干時應該退回古典模型，沒有去相干時應該重現這裡的干涉效應。
-- 無訊號測試：讓兩個遙遠的系統共享糾纏，檢查各個規則會不會讓一方影響另一方的局部統計。這決定了 H2（β > 0）能不能跟相對論相容。
+- A quantum κ–β model with decoherence strength as a third parameter: full decoherence should give back the classical model, no decoherence should reproduce the interference effect above.
+- No-signalling tests were done afterwards; see [NO_SIGNALLING.md](NO_SIGNALLING.md).

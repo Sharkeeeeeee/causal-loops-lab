@@ -1,0 +1,465 @@
+{
+ "credences_sha256": "1d7ad527ba9ee95d720109fae7fdf1614574343ceafc745babc934e11eb87c9d",
+ "brier_selected": 0.2134090909090909,
+ "properties": {
+  "exists": "every world has at least one consistent history: C|k> != 0 for every basis input k",
+  "pure": "PP output is a pure state for every basis input",
+  "entropy": "PP output never has more von Neumann entropy than the no-loop output, for every basis input",
+  "dctc_diag": "PP and D-CTC give the same computational-basis distribution, for every basis input",
+  "noloop_diag": "PP and no loop give the same computational-basis distribution, for every basis input",
+  "effect_le_pctc": "on the maximally mixed CR input, the trace distance between PP and no loop is at most the trace distance between P-CTC and no loop (vacuous where P-CTC is undefined)",
+  "unital": "PP maps the maximally mixed CR input to itself",
+  "dctc_unique_agree": "for every basis input whose D-CTC fixed point is unique, PP and D-CTC outputs are equal",
+  "support_subset": "the support of the PP output lies inside the support of the no-loop output, for every basis input",
+  "commute": "PP output commutes with the no-loop output, for every basis input"
+ },
+ "classes": {
+  "perm21": "all 40320 classical reversible circuits, CR = 2 bits, loop = 1 bit",
+  "perm12": "all 40320 classical reversible circuits, CR = 1 bit, loop = 2 bits",
+  "cliff11": "all 11520 two-qubit Clifford unitaries (up to global phase), CR = 1 qubit, loop = 1 qubit",
+  "haar11": "Haar-random two-qubit unitaries, CR = 1 qubit, loop = 1 qubit",
+  "haar21": "Haar-random three-qubit unitaries, CR = 2 qubits, loop = 1 qubit",
+  "ctrl21": "controlled form U = (V x 1) sum_k |k><k| x W_k with Haar V and W_k, CR = 2 qubits, loop = 1 qubit"
+ },
+ "results": [
+  {
+   "id": "perm21:effect_le_pctc",
+   "verdict": "REFUTED",
+   "holds": false,
+   "checked": 40320,
+   "failures": 576,
+   "seconds": 48.4,
+   "counterexample": [
+    [
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)"
+    ],
+    [
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j"
+    ]
+   ],
+   "credence": 0.5,
+   "selected": true
+  },
+  {
+   "id": "perm12:entropy",
+   "verdict": "REFUTED",
+   "holds": false,
+   "checked": 40320,
+   "failures": 4224,
+   "seconds": 56.9,
+   "counterexample": [
+    [
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j"
+    ]
+   ],
+   "credence": 0.45,
+   "selected": true
+  },
+  {
+   "id": "perm12:effect_le_pctc",
+   "verdict": "PROVED",
+   "holds": true,
+   "checked": 40320,
+   "failures": 0,
+   "seconds": 47.8,
+   "counterexample": null,
+   "credence": 0.5,
+   "selected": true
+  },
+  {
+   "id": "cliff11:pure",
+   "verdict": "REFUTED",
+   "holds": false,
+   "checked": 11520,
+   "failures": 1728,
+   "seconds": 8.9,
+   "counterexample": [
+    [
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)"
+    ],
+    [
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j"
+    ]
+   ],
+   "credence": 0.4,
+   "selected": true
+  },
+  {
+   "id": "cliff11:entropy",
+   "verdict": "PROVED",
+   "holds": true,
+   "checked": 11520,
+   "failures": 0,
+   "seconds": 10.7,
+   "counterexample": null,
+   "credence": 0.55,
+   "selected": true
+  },
+  {
+   "id": "cliff11:noloop_diag",
+   "verdict": "REFUTED",
+   "holds": false,
+   "checked": 11520,
+   "failures": 2880,
+   "seconds": 9.8,
+   "counterexample": [
+    [
+     "(0.707107+0j)",
+     "0j",
+     "(0.707107+0j)",
+     "0j"
+    ],
+    [
+     "0j",
+     "(0.707107+0j)",
+     "0j",
+     "(0.707107+0j)"
+    ],
+    [
+     "0j",
+     "(0.707107+0j)",
+     "0j",
+     "(-0.707107+0j)"
+    ],
+    [
+     "(0.707107+0j)",
+     "0j",
+     "(-0.707107+0j)",
+     "0j"
+    ]
+   ],
+   "credence": 0.4,
+   "selected": true
+  },
+  {
+   "id": "cliff11:effect_le_pctc",
+   "verdict": "PROVED",
+   "holds": true,
+   "checked": 11520,
+   "failures": 0,
+   "seconds": 7.2,
+   "counterexample": null,
+   "credence": 0.5,
+   "selected": true
+  },
+  {
+   "id": "cliff11:unital",
+   "verdict": "REFUTED",
+   "holds": false,
+   "checked": 11520,
+   "failures": 4896,
+   "seconds": 6.5,
+   "counterexample": [
+    [
+     "(1+0j)",
+     "0j",
+     "0j",
+     "0j"
+    ],
+    [
+     "0j",
+     "0j",
+     "0j",
+     "(1+0j)"
+    ],
+    [
+     "0j",
+     "0j",
+     "(1+0j)",
+     "0j"
+    ],
+    [
+     "0j",
+     "(1+0j)",
+     "0j",
+     "0j"
+    ]
+   ],
+   "credence": 0.35,
+   "selected": true
+  },
+  {
+   "id": "cliff11:commute",
+   "verdict": "PROVED",
+   "holds": true,
+   "checked": 11520,
+   "failures": 0,
+   "seconds": 8.3,
+   "counterexample": null,
+   "credence": 0.5,
+   "selected": true
+  },
+  {
+   "id": "haar11:effect_le_pctc",
+   "verdict": "NOT REFUTED",
+   "holds": true,
+   "checked": 20000,
+   "failures": 0,
+   "seconds": 8.2,
+   "counterexample": null,
+   "credence": 0.5,
+   "selected": true
+  },
+  {
+   "id": "haar21:effect_le_pctc",
+   "verdict": "REFUTED",
+   "holds": false,
+   "checked": 3000,
+   "failures": 495,
+   "seconds": 1.5,
+   "counterexample": [
+    [
+     "(-0.646738+0.082579j)",
+     "(0.013102-0.262599j)",
+     "(0.160242-0.072758j)",
+     "(0.058311-0.002301j)",
+     "(-0.196143+0.064901j)",
+     "(-0.209635+0.060925j)",
+     "(-0.298318+0.217832j)",
+     "(0.314179-0.381981j)"
+    ],
+    [
+     "(0.174697+0.169679j)",
+     "(0.186787-0.059101j)",
+     "(0.123823+0.07911j)",
+     "(0.220211-0.441609j)",
+     "(-0.171868+0.151809j)",
+     "(-0.434768-0.27553j)",
+     "(-0.314314+0.217104j)",
+     "(-0.248671+0.33454j)"
+    ],
+    [
+     "(-0.150111+0.488719j)",
+     "(0.257766-0.006622j)",
+     "(0.013899-0.046589j)",
+     "(0.393032+0.019431j)",
+     "(0.236691+0.049027j)",
+     "(0.168242+0.212944j)",
+     "(0.085417-0.171328j)",
+     "(0.39465+0.436399j)"
+    ],
+    [
+     "(-0.133933-0.138734j)",
+     "(-0.076266+0.329581j)",
+     "(-0.117069-0.418572j)",
+     "(-0.027059-0.268422j)",
+     "(0.279179+0.587782j)",
+     "(0.055648-0.321911j)",
+     "(-0.036502-0.173913j)",
+     "(0.122831-0.099331j)"
+    ],
+    [
+     "(0.057514+0.065356j)",
+     "(-0.075307-0.272284j)",
+     "(0.533186+0.007021j)",
+     "(-0.03763+0.34539j)",
+     "(0.417028+0.020844j)",
+     "(-0.036631-0.516856j)",
+     "(0.181487+0.172679j)",
+     "(0.034527+0.028067j)"
+    ],
+    [
+     "(-0.033582+0.188497j)",
+     "(-0.357381-0.061953j)",
+     "(0.268974+0.33971j)",
+     "(-0.206616-0.092046j)",
+     "(0.110284+0.138283j)",
+     "(-0.256311+0.170382j)",
+     "(-0.160923-0.660501j)",
+     "(-0.064225-0.024019j)"
+    ],
+    [
+     "(0.150992+0.016559j)",
+     "(-0.157569+0.564529j)",
+     "(0.009979+0.488355j)",
+     "(0.239006+0.114195j)",
+     "(0.008422+0.103834j)",
+     "(-0.255336-0.009862j)",
+     "(0.118016+0.256829j)",
+     "(0.361177-0.195367j)"
+    ],
+    [
+     "(-0.090704-0.376163j)",
+     "(-0.308566-0.247908j)",
+     "(-0.067301+0.202387j)",
+     "(0.488776-0.210972j)",
+     "(0.453926+0.018523j)",
+     "(0.165649+0.226026j)",
+     "(-0.132066+0.164796j)",
+     "(-0.187571-0.000759j)"
+    ]
+   ],
+   "credence": 0.5,
+   "selected": true
+  }
+ ]
+}

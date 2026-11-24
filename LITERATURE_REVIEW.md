@@ -1,175 +1,179 @@
-# 文獻盤點：H1、H2、H3 與 ctc/ 玩具結果在 P-CTC / D-CTC 文獻中的位置
+# Literature review: where H1, H2, H3 and the ctc/ toy results sit in the P-CTC / D-CTC literature
 
-建立日期：2026-11-22。撰寫時使用 AI 輔助（Claude），沒有外部審查。這是 ROADMAP 階段 0「文獻盤點」的成果，不是已發表的綜述。
+Created 2026-11-22, last updated 2026-11-24. Written with AI assistance (Claude); no external review. This is the outcome of phase 0 of the roadmap ("literature review"), not a published survey.
 
-**閱讀程度的分級**（每一條主張都應該能對回這裡）：
+**2026-11-24 update:** cells resolved by later work are marked as such ((a) quantitative comparison, (c) "completely mixed", the reading level of Brun–Harrington–Wilde); an experiment simulating P-CTCs on cloud quantum computers was added; Hartle 1994 was read in full; each gap in section 3 now has a status line. Everything else is as written on 11-22.
 
-- **[全文]**：我把 PDF 轉成文字後讀了相關段落（不是逐字通讀全文）。Lloyd 等人 PRL（1005.2219）與 PRD（1007.2615）、Ralph 的評論（1107.4675）、Allen（1401.4933）、Bennett–Leung–Smith–Smolin（0908.3023）屬於這一級。其中 PRD、Allen、BLSS 是用關鍵字定位後讀相關段落。
-- **[HTML/摘要+]**：讀了 arXiv HTML 版的前段，其餘是模型摘要（可能有誤，引用前須對照原文）。Baumeler 等人 2019（1703.00779）、Tobar–Costa（2001.02511）屬於這一級。
-- **[摘要]**：只讀了 arXiv 摘要頁或搜尋結果摘要。其餘論文都是這一級。
-- **[未驗證]**：沒有看到任何一手來源，只是記憶或二手說法。這類內容會明確標記，且不給 arXiv 編號。
+**Reading levels** (every claim should be traceable to one of these):
 
-專案自己的結論（P-CTC 與 D-CTC 的數字）來自 `ctc/README.md`，本文沒有重跑 `ctc/` 的程式。
+- **[full]**: the PDF was converted to text and the relevant passages were read (not necessarily every word). Lloyd et al. PRL (1005.2219) and PRD (1007.2615), Ralph's comment (1107.4675), Allen (1401.4933), Bennett–Leung–Smith–Smolin (0908.3023). For the PRD, Allen and BLSS, passages were located by keyword.
+- **[HTML/abstract+]**: the beginning of the arXiv HTML version was read; the rest is a model-generated summary (may be wrong; check the original before citing). Baumeler et al. 2019 (1703.00779), Tobar–Costa (2001.02511).
+- **[abstract]**: only the arXiv abstract page or a search snippet. All other papers.
+- **[unverified]**: no primary source seen; memory or second-hand. Marked explicitly, with no arXiv number given.
+
+The project's own numbers (P-CTC and D-CTC) are taken from `ctc/README.md`; this document did not rerun the code in `ctc/`.
 
 ---
 
-## 1. 對照表
+## 1. Comparison table
 
-| 項目 | 狀態 | 對應文獻與說明 |
+| Item | Status | Literature and notes |
 |---|---|---|
-| **H1** 傳回過去的資訊必定自洽（無祖父悖論） | **已知** | 古典：Novikov 自洽原則、Echeverria–Klinkhammer–Thorne 1991 的 billiard ball 分析（只看到摘要層級的二手說明，且發現的是自洽解**不唯一**，[摘要]）。量子：Deutsch 1991 用密度矩陣不動點保證自洽，Lloyd 等人 2011 用後選擇「機率振幅為零的事件不發生」直接實作 Novikov 原則 [全文]。注意兩者的「自洽」強度不同：Deutsch 只要求迴圈系統自己的密度矩陣自洽，**不保留**它與 CR 變數的關聯；P-CTC 要求連同關聯一起自洽（Lloyd 等人 PRD §I [全文]）。H1 在專案裡要指定「哪一種自洽」才有確定的內容。 |
-| **H2(1)** 迴圈的效應可觀察，且出現在未來統計 | **部分已知，且有爭議** | P-CTC 下，Lloyd 等人 PRL 明確說明矛盾事件的機率為零、其餘重新歸一化（非線性）[全文]。但 Ralph 2011（1107.4675）[全文] 主張 P-CTC 在有糾纏時允許「訊號傳到 CTC 建立之前」，Lloyd 等人的回覆（1108.0153）[摘要+ar5iv 摘要層級] 與 Bub–Stairs（1309.4751）[摘要] 都認為 Ralph 的構造不完整或有缺陷。所以「效應只出現在未來」這句話在 P-CTC 下是有爭議的，不是已定論。D-CTC 下，效應在 CR 系統上表現為非線性的不動點通道，不是單純重新加權。 |
-| **H2(2)** 差異完全由「排除不自洽歷史並重新加權」決定 | **P-CTC 下已知（形式上），一般陳述未見** | P-CTC 規則本身就是「投影後歸一化」，對古典可逆電路等於對自洽歷史條件化（Lloyd 等人 [全文]；Svetlichny 的「機率性模擬」[摘要]）。我**沒有**找到把它寫成 `P_loop ∝ P_0 × [自洽]`、並與 D-CTC 逐項對比的一般性陳述，但這個否定結論只基於我搜到的範圍。 |
-| **H3** 沒有迴圈影響時退化成一般因果 QM | **已知但平凡，有一個角落案例** | 這是兩種規則的形式直接推得的：若 U = V ⊗ W（迴圈與 CR 不耦合），則 C = V·Tr[W]，P-CTC 輸出為 VρV†，D-CTC 也一樣。**本檔自己推導、未在文獻中核對**。角落案例：若 Tr[W] = 0（例如迴圈系統單獨做 Z），P-CTC 規則沒有定義，所以 H3 在 P-CTC 下需要附加「迴圈本身自洽」的條件。process matrix 框架中的對應是「因果可分」或古典極限回到因果順序（Oreshkov–Costa–Brukner 摘要稱 classical limit 下因果順序總會出現 [摘要]）。 |
-| **(a)** 祖父悖論，失敗機率 ε：P-CTC 讓失敗變成確定，D-CTC 保持 ε | **已知** | Lloyd 等人 PRL 的 Fig. 2a 和正文就是這個電路：理想 NOT 時 P-CTC 的矛盾事件機率為零；不完美的 NOT（旋轉角偏離 π）時，非線性後選擇把偏差放大，只剩「槍失效」的自洽歷史；D-CTC 下她「總是成功」，迴圈位元變成完全混合。光子實驗（量子點單光子）檢驗了 P-CTC 的預測 [全文]。`ctc/` 的 (a) 在定性上重現了這個結果；**定量數值尚未對照該文的圖表**（ROADMAP 階段 1 的待辦）。 |
-| **(b)** KFK 型提醒：無條件寄出 = 一般訊息 | **已知（隱含）** | 無條件寄出時 U 對迴圈位元只是複製，P-CTC 與 D-CTC 一致，是一般通道。H3 的特例，沒有找到專門論述。 |
-| **(b)** KFK 型提醒：有動機才寄，P-CTC 給 q(1−r)/(1−qr)，D-CTC 給 q/(1+qr) | **明顯未見（apparently open）** | 這是祖父悖論的「帶機率動機」版本，結構與 (a) 相同，因此**定性**上已知（P-CTC 排除矛盾歷史、D-CTC 混合）。但我沒有在檢索到的文獻中找到這個「單一接收者＋動機寄件者＋兩種規則的閉式比較」。這是「沒找到」，不是「確定沒人做過」。 |
-| **(c)** 自舉悖論：Z 統計相同，P-CTC 相干（⟨X⟩=1），D-CTC 混合（⟨X⟩=0） | **部分已知，且需要對照一個敘述差異** | Lloyd 等人 PRL：P-CTC 把純態送到純態、不產生熵；D-CTC 需要另外加「最大熵」假設來解決 unproved-theorem 悖論 [全文]。這與 (c) 的方向一致。**但**同一篇 PRL 又說該電路「自動指派完全混合值」（Fig. 2b 說明文字），這是指 proof 位元與迴圈中另一個位元最大糾纏、其約化態是混合的；與 `ctc/` 把記錄寫成相干疊加並不矛盾，但需要弄清楚「被測的是哪個系統」。另外，Ralph 2011 以 unproved-theorem 為由反對 P-CTC，Lloyd 等人回覆說他漏了一步（Bob 讀書）[摘要層級]。見缺口 3。 |
+| **H1** information sent to the past is always self-consistent (no grandfather paradox) | **known** | Classical: Novikov's self-consistency principle; the billiard-ball analysis of Echeverria–Klinkhammer–Thorne 1991 (seen only through second-hand abstract-level descriptions; it found that consistent solutions are **not unique**, [abstract]). Quantum: Deutsch 1991 guarantees consistency with a density-matrix fixed point; Lloyd et al. 2011 implement the Novikov principle directly by postselection, "events with zero amplitude do not happen" [full]. The two notions of consistency differ in strength: Deutsch only requires the loop system's own density matrix to be consistent and **does not preserve** its correlations with CR variables; P-CTC requires consistency including correlations (Lloyd et al. PRD §I [full]). H1 has definite content only once "which consistency" is specified. |
+| **H2(1)** the loop's effect is observable and appears in future statistics | **partly known, and disputed** | Under P-CTC, Lloyd et al. PRL state explicitly that contradictory events get probability zero and the rest is renormalized (nonlinear) [full]. But Ralph 2011 (1107.4675) [full] argues that with entanglement P-CTC allows "signals to before the CTC was created"; the reply by Lloyd et al. (1108.0153) [abstract + ar5iv summary] and Bub–Stairs (1309.4751) [abstract] consider Ralph's construction incomplete or flawed. So "the effect appears only in the future" is disputed under P-CTC, not settled. Under D-CTC the effect on the CR system is a nonlinear fixed-point channel, not a simple reweighting. |
+| **H2(2)** the difference is fully determined by "removing inconsistent histories and renormalizing" | **known (formally) under P-CTC; no general statement seen** | The P-CTC rule is itself "project, then normalize", which for classical reversible circuits is conditioning on consistent histories (Lloyd et al. [full]; Svetlichny's "probabilistic simulation" [abstract]). I did **not** find a general statement written as `P_loop ∝ P_0 × [consistent]` with a term-by-term comparison to D-CTC, but this negative conclusion is limited to my search. (Proved for PPS as Theorem 2 in [ctc/THEOREMS.md](ctc/THEOREMS.md).) |
+| **H3** reduces to ordinary causal QM when the loop has no influence | **known but trivial, with one corner case** | Follows directly from the form of both rules: if U = V ⊗ W (loop and CR uncoupled), then C = V·Tr[W], P-CTC outputs VρV†, and so does D-CTC. **Derived here, not checked against the literature.** Corner case: if Tr[W] = 0 (for example the loop system alone undergoes Z), the P-CTC rule is undefined, so H3 under P-CTC needs an extra "the loop itself is consistent" condition. In the process-matrix framework the analogue is causal separability, or the causal order emerging in the classical limit (Oreshkov–Costa–Brukner abstract [abstract]). (Later: Theorem 3 in THEOREMS.md, with a P-CTC counterexample.) |
+| **(a)** grandfather paradox with failure probability ε: P-CTC makes failure certain, D-CTC keeps ε | **known** | This is the circuit of Fig. 2a and the text of Lloyd et al. PRL: with an ideal NOT, the contradictory event has probability zero under P-CTC; with an imperfect NOT (rotation angle off π), the nonlinear postselection amplifies the deviation and only the "gun fails" history remains; under D-CTC she "always succeeds" and the loop bit becomes completely mixed. A photonic experiment (quantum-dot single photons) tested the P-CTC prediction [full]. **Resolved (11-22):** the Fig. 4 theory curve and the numbers in the text are compared item by item in [ctc/LITERATURE_REPRODUCTION.md](ctc/LITERATURE_REPRODUCTION.md) (theory only, not the experimental data points). |
+| **(b)** KFK-type warning: an unconditional sender = an ordinary message | **known (implicitly)** | With an unconditional sender, U only copies onto the loop bit; P-CTC and D-CTC agree and give an ordinary channel. A special case of H3; no dedicated discussion found. |
+| **(b)** KFK-type warning: motivated sender, P-CTC gives q(1−r)/(1−qr), D-CTC gives q/(1+qr) | **apparently open** | This is a "probabilistic motive" version of the grandfather paradox with the same structure as (a), so it is **qualitatively** known (P-CTC removes contradictory histories, D-CTC mixes). But I did not find this "single receiver + motivated sender + closed-form comparison of both rules" in the literature I searched. "Not found", not "certainly not done". |
+| **(c)** bootstrap paradox: same Z statistics; P-CTC coherent (⟨X⟩ = 1), D-CTC mixed (⟨X⟩ = 0) | **partly known** | Lloyd et al. PRL: P-CTC sends pure states to pure states and produces no entropy; D-CTC needs an extra "maximum entropy" assumption to resolve the unproved-theorem paradox [full]. This agrees with (c). The same PRL says the circuit "automatically assigns a completely mixed value" (Fig. 2b caption). **Resolved (11-22):** this refers to the reduced state I/2 of the proof bit, which is maximally entangled with the bit leaving the loop; the overall output is the pure state (\|00⟩ + \|11⟩)/√2, so there is no contradiction (see gap 3). Ralph 2011 objects to P-CTC using the unproved theorem, and Lloyd et al. reply that he missed a step (Bob reading the book) [abstract level]. |
 
 ---
 
-## 2. 重點論文：它們建立了什麼
+## 2. Key papers and what they establish
 
-以下每段都標了閱讀程度。
+Each paragraph is marked with its reading level.
 
-**Deutsch 1991，Quantum mechanics near closed timelike lines，Phys. Rev. D 44, 3197（DOI 10.1103/PhysRevD.44.3197）[摘要/二手]。** 提出 D-CTC：迴圈系統的狀態 ρ_CTC = Tr_CR[U(ρ_CR⊗ρ_CTC)U†] 必有至少一個不動點；若不唯一，Deutsch 另外假設取最大熵者（這是 Lloyd 等人 PRD 對 Deutsch 規則的描述，[全文]）。他的規則使迴圈出口的狀態與 CR 變數不相關，所以記憶「已不再有效」。我沒有讀 Deutsch 原文，所有關於它的敘述都經由 Lloyd 等人和其他論文轉述。
+**Deutsch 1991, Quantum mechanics near closed timelike lines, Phys. Rev. D 44, 3197 (DOI 10.1103/PhysRevD.44.3197) [abstract / second-hand].** Proposes D-CTC: the loop state ρ_CTC = Tr_CR[U(ρ_CR⊗ρ_CTC)U†] always has at least one fixed point; if it is not unique, Deutsch additionally assumes the maximum-entropy one (as described by Lloyd et al. PRD, [full]). His rule makes the loop's output uncorrelated with CR variables, so memories are "no longer valid". I have not read Deutsch's original; everything about it comes through Lloyd et al. and other papers.
 
-**Bennett & Schumacher 2005 talk、Svetlichny，Time travel: Deutsch vs. teleportation，Int. J. Theor. Phys. 50, 3903（2011；DOI 10.1007/s10773-011-0973-x；arXiv 版 0902.4898，標題 Effective Quantum Time Travel）[摘要]。** 用 teleportation 加後選擇機率性地模擬帶有「往回連線」的量子電路，摘要稱機率性質「解決任何悖論」。Bennett–Schumacher 是未發表的演講（透過 Svetlichny 的引用得知，我沒有讀到演講內容，[未驗證內容]）。這是專案 P-CTC 規則的源頭。
+**Bennett & Schumacher 2005 talk; Svetlichny, Time travel: Deutsch vs. teleportation, Int. J. Theor. Phys. 50, 3903 (2011; DOI 10.1007/s10773-011-0973-x; arXiv version 0902.4898, titled Effective Quantum Time Travel) [abstract].** Uses teleportation plus postselection to simulate, probabilistically, quantum circuits with "backward wires"; the abstract says the probabilistic nature "resolves any paradox". The Bennett–Schumacher talk is unpublished (known through Svetlichny's citation; content not seen, [unverified]). This is the origin of the project's P-CTC rule.
 
-**Lloyd 等人 2011 PRL，Closed timelike curves via postselection: theory and experimental test of consistency（arXiv 1005.2219，PRL 106, 040403）[全文]。** 定義 P-CTC，與 Deutsch 物理上不等價；祖父悖論電路、不完美「槍」的非線性放大、光子實驗；P-CTC 純態進純態；unproved theorem 悖論被「無偏見電路得到所有證明的無偏混合」解決；P-CTC 的計算能力在 PP 中。對本專案：結果 (a)、(c) 的概念原型，H2 在 P-CTC 下的最直接來源。
+**Lloyd et al. 2011 PRL, Closed timelike curves via postselection: theory and experimental test of consistency (arXiv 1005.2219, PRL 106, 040403) [full].** Defines P-CTC, physically inequivalent to Deutsch; the grandfather-paradox circuit, nonlinear amplification by an imperfect "gun", a photonic experiment; P-CTC maps pure states to pure states; the unproved-theorem paradox is resolved as "an unbiased circuit gives an unbiased mixture of all proofs"; the computational power of P-CTC is in PP. For this project: the conceptual prototype of results (a) and (c), and the most direct source for H2 under P-CTC.
 
-**Lloyd 等人 2011 PRD，The quantum mechanics of time travel through post-selected teleportation（arXiv 1007.2615，PRD 84, 025007）[全文，關鍵字定位]。** PRL 的完整版：Hilbert 空間公式、與路徑積分一致、Deutsch 規則的比較。文中明說「目前無法決定 P-CTC 與 D-CTC 孰對孰錯，也許要等到量子重力理論」；並稱 P-CTC 「更少病態」（不需要最大熵規則、計算能力較弱）。非線性「重新歸一化機率」就是計算能力與放大的來源。這也是本專案「選擇規則尚未決定」立場的文獻依據。
+**Lloyd et al. 2011 PRD, The quantum mechanics of time travel through post-selected teleportation (arXiv 1007.2615, PRD 84, 025007) [full, keyword-located].** The long version of the PRL: Hilbert-space formulation, agreement with path integrals, comparison with Deutsch's rule. It says plainly that it is currently impossible to decide between P-CTC and D-CTC, perhaps not until a theory of quantum gravity, and calls P-CTC "less pathological" (no maximum-entropy rule needed, weaker computational power). The nonlinear "renormalized probabilities" are the source of both the computational power and the amplification. This is the literature basis for the project's stance that "the selection rule is not decided".
 
-**Brun, Harrington, Wilde 2009，Localized closed timelike curves can perfectly distinguish quantum states（arXiv 0811.1209，PRL 102, 210402）[摘要]。** 在 D-CTC 模型下，局域 CTC 可以完全區分非正交態，使 BB84 等 QKD 可被破解，並違反 Holevo 界。
+**Brun, Harrington, Wilde 2009, Localized closed timelike curves can perfectly distinguish quantum states (arXiv 0811.1209, PRL 102, 210402) [abstract; after 11-22: Figs. 1–2, Eq. (3) and the related text checked against the arXiv PDF, see [ctc/LITERATURE_REPRODUCTION.md](ctc/LITERATURE_REPRODUCTION.md)].** Under D-CTC, a localized CTC can perfectly distinguish non-orthogonal states, breaking BB84 and similar QKD and violating the Holevo bound.
 
-**Bennett, Leung, Smith, Smolin 2009，Can closed timelike curves or nonlinear quantum mechanics improve quantum state discrimination or help solve hard problems?（arXiv 0908.3023，PRL 103, 170502）[全文，關鍵字定位]。** 提出 linearity trap：非線性映射作用在混合態上，不等於它對各純態成分作用結果的混合，因此對「未知混合態」的辨別、以及對「標記混合」的計算要小心定義。他們建議把計算定義為對「帶標記的正交輸入混合」正確求值；在這個定義下，不清楚 CTC 是否有幫助，而且 CTC 的辨別優勢可以用直接解不動點方程來重現。與 Brun–Harrington–Wilde 構成辯論。對本專案：D-CTC 的結果取決於「輸入是未知混合」還是「標記混合」，我們的 `ctc/` 一律是前者的簡單版本，這個區別要在報告中明說。
+**Bennett, Leung, Smith, Smolin 2009, Can closed timelike curves or nonlinear quantum mechanics improve quantum state discrimination or help solve hard problems? (arXiv 0908.3023, PRL 103, 170502) [full, keyword-located].** Introduces the linearity trap: a nonlinear map acting on a mixed state is not the mixture of its action on the pure components, so "discriminating an unknown mixture" and "computing on labelled mixtures" must be defined carefully. They propose defining computation as correct evaluation on "labelled mixtures of orthogonal inputs"; under that definition it is unclear whether CTCs help, and the CTC discrimination advantage can be reproduced by solving the fixed-point equation directly. A debate with Brun–Harrington–Wilde. For this project: D-CTC results depend on whether the input is an "unknown mixture" or a "labelled mixture"; `ctc/` always uses a simple version of the former, and reports should say so.
 
-**Aaronson & Watrous 2009，Closed timelike curves make quantum and classical computing equivalent（arXiv 0808.2669，Proc. R. Soc. A 465, 631）[摘要，加上 PDF 的章節目錄]。** 在 Deutsch 模型下，古典與量子電腦配 CTC 都等於 PSPACE。至於不動點不唯一時它如何處理（是否用最大熵），我**沒有讀到內文**，標為未驗證。
+**Aaronson & Watrous 2009, Closed timelike curves make quantum and classical computing equivalent (arXiv 0808.2669, Proc. R. Soc. A 465, 631) [abstract, plus the PDF's table of contents].** Under Deutsch's model, classical and quantum computers with CTCs both equal PSPACE. How it handles non-unique fixed points (maximum entropy or not) I **did not read**; marked unverified.
 
-**Brun & Wilde 2012，Perfect state distinguishability and computational speedups with postselected closed timelike curves（arXiv 1008.0433，Found. Phys. 42, 341，DOI 10.1007/s10701-011-9601-0）[摘要，加上章節標題]。** 在 P-CTC 下，單一位元通過 CTC 就能以機率 1 做任何後選擇量測（摘要層級），並展示 P-CTC 可用來解難題。P-CTC 計算力為 PP 這一點，我在 Lloyd 等人 PRL 與 Araújo–Guérin–Baumeler（1706.09854）的摘要中看到，在 Brun–Wilde 內文中沒有親自確認。
+**Brun & Wilde 2012, Perfect state distinguishability and computational speedups with postselected closed timelike curves (arXiv 1008.0433, Found. Phys. 42, 341, DOI 10.1007/s10701-011-9601-0) [abstract, plus section titles].** Under P-CTC a single qubit through a CTC can perform any postselected measurement with probability 1 (abstract level), and P-CTCs can solve hard problems. That P-CTC computational power equals PP I saw in the abstracts of Lloyd et al. PRL and Araújo–Guérin–Baumeler (1706.09854), not in the body of Brun–Wilde.
 
-**Ralph & Myers 2010，Information flow of quantum states interacting with closed timelike curves（arXiv 1003.1987，PRA 82, 062330）[摘要]。** 追蹤資訊流，導出「等價電路」並得到唯一解，用來客觀比較不同 CTC 模型，並稱 CTC 若存在會是強大的量子資訊資源。Ralph 在評論中稱 Deutsch 的最大熵猜想「已被獨立導出」並引用此文（[全文] 1107.4675 的最後一段），但這篇的推導內容我沒有讀。Allen 2014 的摘要稱這種「等價電路模型」含有錯誤 [摘要]；Brun–Wilde 也提到它的歧義（二手）。**Ralph & Myers / Ralph 等人 event-CTC 的細節我沒有核實**：我原本想核對的「event-CTC」說法沒有在搜尋中找到明確論文，沒有證實存在，故不列入結論。
+**Ralph & Myers 2010, Information flow of quantum states interacting with closed timelike curves (arXiv 1003.1987, PRA 82, 062330) [abstract].** Traces information flow, derives an "equivalent circuit" with a unique solution to compare CTC models objectively, and says CTCs, if they existed, would be a powerful quantum information resource. In his comment Ralph says Deutsch's maximum-entropy conjecture "has been derived independently" and cites this paper (last paragraph of 1107.4675, [full]), but I have not read the derivation. Allen 2014's abstract says this "equivalent circuit model" contains an error [abstract]; Brun–Wilde also mention its ambiguity (second-hand). **Details of Ralph & Myers / Ralph et al. event-CTCs are not verified**: a paper on "event-CTCs" I meant to check was not clearly found, so it is not used in any conclusion.
 
-**Pienaar, Ralph, Myers 2013，Open timelike curves violate Heisenberg's uncertainty principle（arXiv 1206.5485，PRL 110, 060501）[摘要]、Ringbauer 等人 2014，Experimental simulation of closed timelike curves（Nat. Commun. 5, 4145；arXiv 1501.05014）[摘要]。** 前者對沒有迴圈內交互作用的「open timelike curve」做模型；後者用光子模擬 D-CTC 的單位元電路（觀察到非正交態的完全辨別）。這兩篇是 D-CTC 側的實驗與延伸，我沒有讀全文。
+**Pienaar, Ralph, Myers 2013, Open timelike curves violate Heisenberg's uncertainty principle (arXiv 1206.5485, PRL 110, 060501) [abstract]; Ringbauer et al. 2014, Experimental simulation of closed timelike curves (Nat. Commun. 5, 4145; arXiv 1501.05014) [abstract].** The former models "open timelike curves" with no interaction inside the loop; the latter simulates a single-qubit D-CTC circuit with photons (observing perfect discrimination of non-orthogonal states). These are D-CTC-side experiments and extensions; not read in full.
 
-**Ralph 2011，Problems with modelling closed timelike curves as post-selected teleportation（arXiv 1107.4675）[全文] 與 Lloyd 等人的回覆（arXiv 1108.0153）[摘要+ar5iv 摘要層級]。** Ralph 用「一臂糾纏態送過蟲洞，Bob 用相位翻轉送訊」的構造，主張 P-CTC 允許訊號傳到 CTC 建立之前，並重現 unproved-theorem 悖論。回覆說 Ralph 漏掉了 Bob「讀書」這一步（相位翻轉必須由 Alice 的書控制），補上後整個過程的振幅為零，或只剩平凡不動點。Bub–Stairs 2014（1309.4751）[摘要] 也說 Ralph 的做法有缺陷（理由是糾纏依賴參考系）。**這場爭論直接牽涉到 H2「只影響未來」是否成立**，也沒有看到定論。
+**(Added 11-24) Experimental simulation of postselected closed timelike curves for decoding scrambled quantum information (arXiv 2501.16335, 2025; search results show later versions up to 2026-04) [search results only].** According to search results, this ran a 4-qubit circuit on IBM and Quantinuum cloud processors, casting the decoding of scrambled quantum information as postselected teleportation interpreted as a P-CTC, with success probability set by an OTOC. For this project: `ctc/hardware/` is not the first P-CTC implementation on a programmable quantum computer; Lloyd et al. 2011 and Ringbauer et al. 2014 were optical, and this is the programmable-processor precedent. Content not read; check device names and numbers against the original before citing.
 
-**Allen 2014，Treating time travel quantum mechanically（arXiv 1401.4933，PRA 90, 042107）[全文，T-CTC 部分]。** 回顧 D-CTC 與 P-CTC 的優缺點，提出「transition probability」CTC（T-CTC）：對所有純態 |ψ⟩，以 p(ψ) = |⟨ψ|U|i⟩|² 的權重做混合，並以部分投影求 CR 輸出，公式約為 ρ_f = Z⁻¹ ∫dψ (…)；化簡後是「P-CTC 運動方程與一個普通量子通道的加權混合」（Eq. 33）。摘要宣稱 T-CTC 沒有悖論、不能完美辨別非正交態、不能複製或刪除任意純態；內文指出它的計算力不超過 PP，並說它不能做任意後選擇量測。我沒有讀它對祖父悖論的具體數值。這是專案「選擇規則 X」最現成的第三個候選。
+**Ralph 2011, Problems with modelling closed timelike curves as post-selected teleportation (arXiv 1107.4675) [full], and the reply by Lloyd et al. (arXiv 1108.0153) [abstract + ar5iv summary].** Ralph sends one arm of an entangled state through a wormhole, with Bob signalling by phase flips, and argues that P-CTC allows signals to before the CTC was created; he also reproduces the unproved-theorem paradox. The reply says Ralph missed the step of Bob "reading the book" (the phase flip must be controlled by Alice's book); with it, the whole process has zero amplitude or only a trivial fixed point. Bub–Stairs 2014 (1309.4751) [abstract] also consider Ralph's approach flawed (because entanglement is frame dependent). **This dispute bears directly on whether H2's "only the future is affected" holds**, and I saw no resolution.
 
-**Brun 等人與 Dunlap（多世界解讀）。** Dunlap 2015（arXiv 1510.02742）[摘要] 主張 D-CTC 需要比 Everett 更強的形上學補充（多個相同的世界副本），所以它不是「純量子」的悖論解。這與 HYPOTHESIS.md 把 D-CTC 對應 B「分支時間線」有關；我沒有找到對 P-CTC 的多世界讀法的專門論述（搜尋範圍有限）。
+**Allen 2014, Treating time travel quantum mechanically (arXiv 1401.4933, PRA 90, 042107) [full, T-CTC part].** Reviews the strengths and weaknesses of D-CTC and P-CTC and proposes "transition probability" CTCs (T-CTC): a mixture over all pure states |ψ⟩ weighted by p(ψ) = |⟨ψ|U|i⟩|², with the CR output obtained by partial projection; it simplifies to "a weighted mixture of the P-CTC equation of motion and an ordinary quantum channel" (Eq. 33). The abstract claims T-CTC has no paradoxes, cannot perfectly distinguish non-orthogonal states, and cannot clone or delete arbitrary pure states; the text says its computational power is at most PP and that it cannot perform arbitrary postselected measurements. (Later implemented as the fourth rule; see [ctc/T_CTC.md](ctc/T_CTC.md).)
 
-**Novikov / Echeverria–Klinkhammer–Thorne 1991。** 我只有 OSTI 紀錄（https://www.osti.gov/biblio/5219973）確認論文存在與標題；卷頁數**未驗證**，Novikov 原始論文**未找到一手來源**，不給編號。二手說明稱 Echeverria–Klinkhammer 發現了不只一個自洽解 [摘要層級]。對本專案：古典層次的「自洽不保證唯一」是 H1 在古典下要面對的事實，這也是 D-CTC 的不動點非唯一問題的古典前身。
+**Brun et al. and Dunlap (many-worlds readings).** Dunlap 2015 (arXiv 1510.02742) [abstract] argues that D-CTC needs a stronger metaphysical supplement than Everett (several identical copies of worlds), so it is not a "purely quantum" resolution of paradoxes. This relates to HYPOTHESIS.md pairing D-CTC with time picture B, "branching timelines"; I found no dedicated many-worlds reading of P-CTC (limited search).
 
-**Politzer（hep-th/9207076）、Hartle（gr-qc/9309012）[摘要]。** 路徑積分／推廣量子力學對非時序時空的處理：Hartle 的框架在非么正下仍保持機率規則；Lloyd 等人聲稱 P-CTC 與這些路徑積分作法一致 [全文]。
+**Novikov / Echeverria–Klinkhammer–Thorne 1991.** Only an OSTI record (https://www.osti.gov/biblio/5219973) confirms the paper's existence and title; volume and pages **unverified**; no primary source found for Novikov's original paper, so no reference number is given. Second-hand descriptions say Echeverria and Klinkhammer found more than one consistent solution [abstract level]. For this project: "consistency does not guarantee uniqueness" at the classical level is a fact H1 must face classically, and it is the classical precursor of D-CTC's non-unique fixed points.
 
-**Oreshkov–Costa–Brukner 2012，Quantum correlations with no causal order（arXiv 1105.4464，Nat. Commun. 3, 1092）[摘要]。** 只假設局部量子力學成立，建立沒有預設因果順序的 process matrix 框架，找到違反因果不等式的相關性。**Araújo–Feix–Navascués–Brukner 2017，A purification postulate for quantum mechanics with indefinite causal order（arXiv 1611.08535，Quantum 1, 10）[摘要]：** 只有可純化的 process 才算物理，並說有些已知 process 不滿足；摘要沒有說原始 OCB process 是否在內，也沒有談後選擇。
+**Politzer (hep-th/9207076) [abstract]; Hartle (gr-qc/9309012) [abstract; after 11-24: full text, compared in [ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md), third round].** Path-integral / generalized-quantum-mechanics treatments of nonchronal spacetimes: Hartle's framework keeps a probability rule under non-unitary evolution; Lloyd et al. state that P-CTC agrees with these path-integral approaches [full]. Hartle's Eq. (5.6) is the within-world rule of past-preserving selection.
 
-**Baumeler & Wolf 2014/2016。** Perfect signaling among three parties violating predefined causal order（arXiv 1312.5916）[摘要]；The space of logically consistent classical processes without causal order（我只在 ar5iv 結果中看到 1507.01714 這個編號，**未經證實**，請自行核對）；Baumeler & Wolf，Computational tameness of classical non-causal models（arXiv 1611.05641，Proc. R. Soc. A 474, 20170698）[摘要]：邏輯自洽的古典非因果電路模型精確對應 UP ∩ coUP，比其他 CTC 模型弱。
+**Oreshkov–Costa–Brukner 2012, Quantum correlations with no causal order (arXiv 1105.4464, Nat. Commun. 3, 1092) [abstract].** Assuming only that local quantum mechanics holds, builds the process-matrix framework with no predefined causal order and finds correlations violating causal inequalities. **Araújo–Feix–Navascués–Brukner 2017, A purification postulate for quantum mechanics with indefinite causal order (arXiv 1611.08535, Quantum 1, 10) [abstract]:** only purifiable processes count as physical, and some known processes fail this; the abstract does not say whether the original OCB process is among them and does not discuss postselection.
 
-**Baumeler–Costa–Ralph–Wolf–Zych 2019，Reversible time travel with freedom of choice（arXiv 1703.00779，CQG 36, 224002）[HTML/摘要+]。** 注意作者名單：Baumeler、Costa、Ralph、Wolf、Zych（不是 Woods，任務簡述有誤）。結果：在與任意局部操作相容的古典確定性動力學下，所有這類動力學可以用可逆交互作用實現；三方可以彼此互在對方的過去與未來，同時各自仍有自由局部選擇。**全篇是確定性的，沒有機率性的「重新加權未來」。** 關於量子延伸，它說量子化是否可行仍不清楚，並對 D-CTC / P-CTC 的比較留待後續論文（這是模型摘要層級的說法，需要對原文核實）。
+**Baumeler & Wolf 2014/2016.** Perfect signaling among three parties violating predefined causal order (arXiv 1312.5916) [abstract]; The space of logically consistent classical processes without causal order (I saw the number 1507.01714 only in ar5iv results, **unconfirmed**; check before citing); Baumeler & Wolf, Computational tameness of classical non-causal models (arXiv 1611.05641, Proc. R. Soc. A 474, 20170698) [abstract]: logically consistent classical non-causal circuit models correspond exactly to UP ∩ coUP, weaker than other CTC models.
 
-**Tobar & Costa 2020，Reversible dynamics with closed time-like curves and freedom of choice（arXiv 2001.02511，CQG 37, 205011）[HTML/摘要+]。** 把確定性 CTC process 的刻畫推廣到任意 N 個區域，找到無法化約為三方的四方 process。同樣是古典、確定性，沒有機率重新加權。**注意：** arXiv 頁面的備註說 2512.23599（Dourdent 等人，2025 年 12 月）的反例影響 1703.00779 的刻畫定理（可能有勘誤）；我沒有讀該反例，也不知道影響範圍，所以 ROADMAP 階段 2「重現 Baumeler–Wolf 古典非因果例子」若要依賴刻畫定理，必須先查證。
+**Baumeler–Costa–Ralph–Wolf–Zych 2019, Reversible time travel with freedom of choice (arXiv 1703.00779, CQG 36, 224002) [HTML/abstract+].** Authors: Baumeler, Costa, Ralph, Wolf, Zych. Result: for classical deterministic dynamics compatible with arbitrary local operations, all such dynamics can be realized by reversible interactions; three parties can each be in the others' past and future while keeping free local choices. **Entirely deterministic; no probabilistic "reweighting of the future".** On a quantum extension, it says whether quantization is possible remains unclear, and leaves the D-CTC / P-CTC comparison to later work (model-summary level; check the original).
 
-**Araújo–Guérin–Baumeler 2017，Quantum computation with indefinite causal structures（arXiv 1706.09854，PRA 96, 052315）[摘要]。** 摘要稱 process matrix 對應 P-CTC 的一個線性特例，因此計算力以 PP 為上界。這是 process matrix 與 P-CTC 最直接的連結，也是專案階段 2 的第一手參考。
+**Tobar & Costa 2020, Reversible dynamics with closed time-like curves and freedom of choice (arXiv 2001.02511, CQG 37, 205011) [HTML/abstract+].** Extends the characterization of deterministic CTC processes to any N regions and finds a four-party process that cannot be reduced to three parties. Also classical and deterministic, with no probabilistic reweighting. **Note:** a comment on the arXiv page says the counterexample in 2512.23599 (Dourdent et al., December 2025) affects the characterization theorem of 1703.00779 (possibly an erratum); I have not read the counterexample and do not know its scope, so any reproduction of Baumeler–Wolf examples that relies on the theorem must check this first.
 
-**Jean–Silva–Vilasini 2025，An equivalence between time-symmetry and cyclic causality in quantum theory（arXiv 2508.02463）[摘要]。** 證明「多時間態」（前後選擇）形式與 P-CTC 在操作上等價。這支持「P-CTC 可以當作後選擇的一種重述」，也暗示 P-CTC 是否為「真的迴圈」是詮釋問題。
+**Araújo–Guérin–Baumeler 2017, Quantum computation with indefinite causal structures (arXiv 1706.09854, PRA 96, 052315) [abstract; Sections I–III later read in the original, see NOVELTY_CHECK.md].** Process matrices correspond to a linear special case of P-CTC, so their computational power is bounded by PP. The most direct link between process matrices and P-CTC, and the primary reference for phase 2.
 
-**Arvidsson-Shukur 等人 2023，Nonclassical advantage in metrology established via quantum simulations of hypothetical closed timelike curves（arXiv 2207.07666，PRL 131, 150202）[摘要]。** 把 P-CTC 當作可用 teleportation 後選擇模擬的資源，展示計量學優勢。與 ROADMAP「不主張資訊回到過去」的立場一致：它只做模擬，不做時間旅行宣稱。
+**Jean–Silva–Vilasini 2025, An equivalence between time-symmetry and cyclic causality in quantum theory (arXiv 2508.02463) [abstract].** Proves that the multi-time-state (pre- and postselection) formalism and P-CTC are operationally equivalent. This supports "P-CTC can be seen as a restatement of postselection" and suggests that whether P-CTC is a "real loop" is a matter of interpretation.
 
-**其他。** Aaronson–Bavarian–Gueltrini，Computability theory of closed timelike curves（arXiv 1609.05507）[摘要層級，只在搜尋結果中提到] 指出 2008 年的工作限定多項式大小，結果是 PSPACE。
+**Arvidsson-Shukur et al. 2023, Nonclassical advantage in metrology established via quantum simulations of hypothetical closed timelike curves (arXiv 2207.07666, PRL 131, 150202) [abstract].** Treats P-CTC as a resource that can be simulated by postselected teleportation and shows a metrology advantage. Consistent with this project's stance of not claiming that information reaches the past: it simulates, and makes no time-travel claim.
 
----
-
-## 3. 可能的缺口（依優先順序）
-
-排序標準：對專案現有程式的利用程度、能否在 1–2 個月內得到可檢驗的結果、以及「apparently open」的把握程度。**所有「沒找到」都只代表我在這次檢索範圍內沒找到**。
-
-### 缺口 1：「動機寄件者」家族的閉式比較，以及一般定理 (b′)
-
-- **為何可能空白**：(a) 已知；(b) 的「有動機才寄」是 (a) 加上機率與一個接收者，我沒有找到以此為主題的論文。文獻裡的 P-CTC/D-CTC 比較大多針對計算力、狀態辨別，而不是「概率情境下未來統計差多少」。
-- **第一個結果會是什麼樣子**：一個命題：對古典可逆電路加古典隨機輸入，P-CTC 輸出分布等於把 P_0 對「存在不動點歷史」條件化（H2(2) 的精確版本）；D-CTC 輸出分布等於不動點通道。然後給出 (b) 的 q、r 全參數相圖，標出兩種規則差異最大的區域（含 P-CTC 無定義的邊界 qr=1）。附帶：與 Lloyd 的 ε 槍例子重現的數值對照（補完 ROADMAP 階段 1 的待辦）。
-- **如何使用 `ctc/`**：直接用 `circuits.py` 的 KFK 與祖父悖論電路，擴成二參數掃描，在 `tests/` 加入對閉式的核對；新增一個「對 P_0 條件化」的獨立古典計算，與 `models.py` 的 P-CTC 實作互相檢查。
-
-### 缺口 2：「自由選擇」作為 H2 的判準，連接 process matrix
-
-- **為何可能空白**：process matrix 與 Baumeler 等人的確定性框架要求「對任意局部操作都自洽」，所以不需要重新歸一化，也就**沒有 H2 那種重新加權**；而 P-CTC 的重新加權正是代價：自洽事件的條件化會改變 CR 輸入本身的分布。Araújo 等人說 process matrix 是 P-CTC 的線性特例（摘要層級）。我沒有找到把「P_loop 是否改變 CR 輸入分布」當作區分「自由選擇保存」與「後選擇」的判準的論述。
-- **第一個結果**：定義 freedom-of-choice 指標 Δ = 對 CR 輸入邊際分布的改變量（P_loop 對 P_0）。證明或數值顯示：Δ = 0 等價於 process 在所有輸入下自洽（無需歸一化）；Δ > 0 就是 P-CTC 的重新加權。在 (a)(b) 中算出 Δ，說明 H2 的效應其實**包含** CR 內部「選擇」被改寫，這與 KFK 場景中「剩下的唯一歷史是那人剛好選對」一致。
-- **如何使用 `ctc/`**：在 `models.py` 的 P-CTC 輸出之外多回報「輸入邊際」；`circuits.py` 現有三個情境直接可算。階段 2 的 process matrix 重述會用到 `cvxpy`，這需要新增依賴。
-
-### 缺口 3：區分 P-CTC 與 D-CTC 的可觀測量，並與 Lloyd/Ralph 的爭論對齊
-
-- **為何可能空白**：(c) 與 Lloyd 的敘述方向一致，但 PRL 說 proof 位元「完全混合」，`ctc/` 說記錄相干，需要統一「測的是哪個系統、基準是什麼」；Ralph 與 Lloyd 的爭論（signalling to the past、unproved theorem）停在互相回覆，我沒找到後續的決定性分析。
-- **第一個結果**：一張表：在 (c) 以及 Ralph 的糾纏構造中，對 {Z, X, 與參考系統的關聯} 這些觀測量，P-CTC、D-CTC、（缺口 5 的）T-CTC 各給什麼值；並明確指出哪些是「規則差異」、哪些是「基準選擇造成的」。`ctc/README` 已經提醒了後者。
-- **如何使用 `ctc/`**：在 `circuits.py` 加入帶參考量子位元的 (c) 與 Ralph 構造（Lloyd 回覆說需補上 Bob 讀書的受控操作），用現有 P-CTC / D-CTC 求解器算出。
-
-### 缺口 4：D-CTC 不動點選擇的敏感度
-
-- **為何可能空白**：Deutsch 的最大熵規則是附加假設（Lloyd 等人 PRD [全文]）；Ralph 稱已被獨立導出（引文 [全文]，推導未讀）；專案用「Cesàro 平均從最大混合態出發」，不保證等於最大熵。我沒有找到系統比較各種選擇規則在非唯一不動點電路上的差異。
-- **第一個結果**：找一個會讓「Cesàro 極限」與「最大熵不動點」不同的小電路（若存在），或證明在某類電路（如古典可逆）上兩者一致。這直接約束 `ctc/README` 那句「不保證一般情況都是如此」。
-- **如何使用 `ctc/`**：在 `models.py` 加入顯式的不動點集合枚舉（解 `L[τ]=τ` 的零空間）與熵最大化，與現有 Cesàro 結果比對；`tests/` 已有不動點檢查可擴充。
-
-### 缺口 5：把 T-CTC 加成第三個規則並重跑 (a)(b)(c)
-
-- **為何可能空白**：Allen 的摘要稱 T-CTC 沒有悖論（無確定的矛盾）、不能完美辨別非正交態，Eq. (33) 顯示它是 P-CTC 與普通通道的混合。但我**沒有讀到** T-CTC 對祖父悖論或 KFK 型情境的數值，也沒找到後續工作使用它。ROADMAP 階段 1 的決策點明說可以「提出新的選擇規則」，T-CTC 是現成選項，專案可以檢驗它是否在 (b) 給出介於兩者之間的值。
-- **第一個結果**：T-CTC 在 (a)(b)(c) 的數字（預期：(a) 的失敗機率介於 ε 與 1 之間，未驗證），並對 Allen 的計算做獨立檢查。
-- **如何使用 `ctc/`**：在 `models.py` 加一個 `t_ctc` 函式（對迴圈純態積分或用 Eq. 33 的閉式）；其他程式不動。注意：Allen 的積分需要小心歸一化，`tests/` 用 Eq. 33 做解析比對。
-
-### 缺口 6（風險較高、時間較長）：機率版的「自由選擇＋自洽」
-
-- **為何可能空白**：Baumeler 等人與 Tobar–Costa 都是確定性的；Baumeler 等人自己寫量子化是否可行仍不清楚（[HTML/摘要+]）。機率性、非確定性的 process 與 P-CTC 的重新加權的關係，在我讀到的文獻裡沒有出現。
-- **第一個結果**：一個小例子，顯示對古典機率 process，條件化到自洽集合後，是否仍能保持自由選擇；或給出反例。
-- **注意**：2512.23599 對刻畫定理的反例可能影響起點，須先讀。
+**Other.** Aaronson–Bavarian–Gueltrini, Computability theory of closed timelike curves (arXiv 1609.05507) [abstract level, seen only in search results]: the 2008 work was restricted to polynomial size, giving PSPACE.
 
 ---
 
-## 4. 參考文獻
+## 3. Possible gaps (in priority order)
 
-只列出我實際看到編號或 DOI 的條目。「層級」見檔首。
+Ranking: how much existing code is reused, whether a checkable result is reachable in 1–2 months, and confidence that the question is apparently open. **Every "not found" means only "not found in this search".**
 
-| 條目 | 連結 | 層級 |
+### Gap 1: closed-form comparison for the "motivated sender" family, and a general theorem (b′)
+
+- **Why it may be open:** (a) is known; the motivated sender of (b) is (a) plus probabilities and a receiver, and I found no paper on it. Most P-CTC/D-CTC comparisons in the literature concern computational power or state discrimination, not "how much future statistics differ in probabilistic scenarios".
+- **What a first result looks like:** a proposition that for classical reversible circuits with classical random inputs, the P-CTC output distribution equals P_0 conditioned on "a fixed-point history exists" (the precise version of H2(2)), while the D-CTC output equals the fixed-point channel; plus a full (q, r) phase diagram of (b) marking where the rules differ most (including the boundary qr = 1 where P-CTC is undefined).
+- **Status (11-24):** the PPS version is proved as Theorem 2 in [ctc/THEOREMS.md](ctc/THEOREMS.md); the KFK closed forms are in [ctc/BRANCHES.md](ctc/BRANCHES.md) and [ctc/PAST_PRESERVING.md](ctc/PAST_PRESERVING.md). The full phase diagram has not been drawn.
+
+### Gap 2: "freedom of choice" as a criterion for H2, connecting to process matrices
+
+- **Why it may be open:** process matrices and the deterministic framework of Baumeler et al. require consistency for every local operation, so no renormalization is needed and there is **no H2-style reweighting**; P-CTC's reweighting is exactly the price: conditioning on consistent events changes the distribution of the CR input itself. Araújo et al. say process matrices are a linear special case of P-CTC. I found no discussion using "does P_loop change the CR input distribution?" as the criterion separating "freedom of choice preserved" from "postselection".
+- **What a first result looks like:** define Δ = change of the CR input marginal (P_loop vs P_0); show that Δ = 0 is equivalent to the process being consistent for all inputs (no normalization needed), and Δ > 0 is P-CTC's reweighting.
+- **Status (11-24):** largely superseded. [ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md) showed that Δ > 0 is equivalent to signalling, and past-preserving selection keeps Δ = 0 by construction (Theorem 2(1)). The process-matrix restatement is still open (roadmap phase 2).
+
+### Gap 3: observables separating P-CTC and D-CTC, aligned with the Lloyd/Ralph dispute
+
+- **Why it may be open:** (c) agrees with Lloyd's description, but the "completely mixed" wording needed reconciling (**resolved 11-22**, see the table); the Ralph–Lloyd dispute (signalling to the past, the unproved theorem) stopped at mutual replies, and I found no decisive later analysis.
+- **What a first result looks like:** a table giving, for (c) and for Ralph's entangled construction, the values of {Z, X, correlation with a reference system} under P-CTC, D-CTC and T-CTC, marking which differences come from the rule and which from the choice of baseline.
+- **Status (11-24):** the bootstrap observables for all four rules are in [ctc/T_CTC.md](ctc/T_CTC.md); Ralph's construction has not been implemented.
+
+### Gap 4: sensitivity to the choice of D-CTC fixed point
+
+- **Why it may be open:** Deutsch's maximum-entropy rule is an extra assumption (Lloyd et al. PRD [full]); Ralph says it has been derived independently (citation [full], derivation not read); the project uses the Cesàro average from the maximally mixed state, which is not guaranteed to be the maximum-entropy one. I found no systematic comparison of selection rules on circuits with non-unique fixed points.
+- **What a first result looks like:** a small circuit where the Cesàro limit and the maximum-entropy fixed point differ (if one exists), or a proof that they agree on a class of circuits (such as classical reversible ones).
+- **Status (11-24):** not started.
+
+### Gap 5: adding T-CTC as a third rule and rerunning (a)(b)(c)
+
+- **Status (11-22): done.** T-CTC is implemented with Allen's Eqs. 24, 33, 35, 38 and 40 reproduced, and compared on every scenario; see [ctc/T_CTC.md](ctc/T_CTC.md).
+
+### Gap 6 (higher risk, longer): probabilistic "freedom of choice + consistency"
+
+- **Why it may be open:** Baumeler et al. and Tobar–Costa are deterministic; Baumeler et al. say it is unclear whether quantization is possible ([HTML/abstract+]). The relation between probabilistic, non-deterministic processes and P-CTC's reweighting does not appear in what I read.
+- **What a first result looks like:** a small example showing whether a classical probabilistic process conditioned on its consistent set can still preserve freedom of choice, or a counterexample.
+- **Note:** the counterexample in 2512.23599 to the characterization theorem may affect the starting point; read it first.
+- **Status (11-24):** not started.
+
+---
+
+## 4. References
+
+Only entries for which I actually saw an identifier or DOI. Levels as defined at the top.
+
+| Entry | Link | Level |
 |---|---|---|
-| Deutsch 1991, Phys. Rev. D 44, 3197 | https://doi.org/10.1103/PhysRevD.44.3197 | 只有書目資訊 |
-| Lloyd et al. 2011, PRL 106, 040403 (arXiv:1005.2219) | https://arxiv.org/abs/1005.2219 ; https://doi.org/10.1103/PhysRevLett.106.040403 | 全文 |
-| Lloyd et al. 2011, PRD 84, 025007 (arXiv:1007.2615) | https://arxiv.org/abs/1007.2615 ; https://doi.org/10.1103/PhysRevD.84.025007 | 全文（部分） |
-| Lloyd et al. reply (arXiv:1108.0153) | https://arxiv.org/abs/1108.0153 | 摘要＋ar5iv 轉述 |
-| Ralph comment (arXiv:1107.4675) | https://arxiv.org/abs/1107.4675 | 全文 |
-| Svetlichny, Int. J. Theor. Phys. 50, 3903 (arXiv:0902.4898) | https://doi.org/10.1007/s10773-011-0973-x ; https://arxiv.org/abs/0902.4898 | 摘要 |
-| Bennett & Schumacher 2005 talk | 無（透過 Svetlichny 的引用得知，未讀） | 未驗證內容 |
-| Brun, Harrington, Wilde 2009 (arXiv:0811.1209) | https://arxiv.org/abs/0811.1209 | 摘要 |
-| Bennett, Leung, Smith, Smolin 2009 (arXiv:0908.3023) | https://arxiv.org/abs/0908.3023 | 全文（部分） |
-| Aaronson & Watrous 2009 (arXiv:0808.2669) | https://arxiv.org/abs/0808.2669 | 摘要＋目錄 |
-| Brun & Wilde 2012 (arXiv:1008.0433) | https://arxiv.org/abs/1008.0433 ; https://doi.org/10.1007/s10701-011-9601-0 | 摘要＋標題 |
-| Ralph & Myers 2010 (arXiv:1003.1987) | https://arxiv.org/abs/1003.1987 | 摘要 |
-| Pienaar, Ralph, Myers 2013 (arXiv:1206.5485) | https://arxiv.org/abs/1206.5485 | 摘要 |
-| Ringbauer et al. 2014 (arXiv:1501.05014) | https://arxiv.org/abs/1501.05014 ; https://doi.org/10.1038/ncomms5145 | 摘要 |
-| Allen 2014 (arXiv:1401.4933) | https://arxiv.org/abs/1401.4933 | 全文（部分） |
-| Bub & Stairs 2014 (arXiv:1309.4751) | https://arxiv.org/abs/1309.4751 | 摘要 |
-| Dunlap 2015 (arXiv:1510.02742) | https://arxiv.org/abs/1510.02742 | 摘要 |
-| Echeverria, Klinkhammer, Thorne 1991 | https://www.osti.gov/biblio/5219973 | 只有書目紀錄 |
-| Politzer (hep-th/9207076); Hartle (gr-qc/9309012) | https://arxiv.org/abs/hep-th/9207076 ; https://arxiv.org/abs/gr-qc/9309012 | 摘要 |
-| Oreshkov, Costa, Brukner 2012 (arXiv:1105.4464) | https://arxiv.org/abs/1105.4464 ; https://doi.org/10.1038/ncomms2076 | 摘要 |
-| Araújo, Feix, Navascués, Brukner 2017 (arXiv:1611.08535) | https://arxiv.org/abs/1611.08535 ; https://doi.org/10.22331/q-2017-04-26-10 | 摘要 |
-| Baumeler & Wolf 2014 (arXiv:1312.5916) | https://arxiv.org/abs/1312.5916 | 摘要 |
-| Baumeler & Wolf, Computational tameness (arXiv:1611.05641) | https://arxiv.org/abs/1611.05641 | 摘要 |
-| Baumeler, Feix, Wolf (arXiv:1403.7333) | https://arxiv.org/abs/1403.7333 | 只見於搜尋結果 |
-| Baumeler et al. 2019 (arXiv:1703.00779) | https://arxiv.org/abs/1703.00779 | HTML/摘要+ |
-| Tobar & Costa 2020 (arXiv:2001.02511) | https://arxiv.org/abs/2001.02511 ; https://doi.org/10.1088/1361-6382/aba4bc | HTML/摘要+ |
-| Araújo, Guérin, Baumeler 2017 (arXiv:1706.09854) | https://arxiv.org/abs/1706.09854 | 摘要 |
-| Dourdent et al. 2025 (arXiv:2512.23599) | https://arxiv.org/abs/2512.23599 | 摘要 |
-| Jean, Silva, Vilasini 2025 (arXiv:2508.02463) | https://arxiv.org/abs/2508.02463 | 摘要 |
-| Arvidsson-Shukur et al. 2023 (arXiv:2207.07666) | https://arxiv.org/abs/2207.07666 | 摘要 |
-| Aaronson, Bavarian, Gueltrini (arXiv:1609.05507) | https://arxiv.org/abs/1609.05507 | 只見於搜尋結果 |
+| Deutsch 1991, Phys. Rev. D 44, 3197 | https://doi.org/10.1103/PhysRevD.44.3197 | bibliographic only |
+| Lloyd et al. 2011, PRL 106, 040403 (arXiv:1005.2219) | https://arxiv.org/abs/1005.2219 ; https://doi.org/10.1103/PhysRevLett.106.040403 | full |
+| Lloyd et al. 2011, PRD 84, 025007 (arXiv:1007.2615) | https://arxiv.org/abs/1007.2615 ; https://doi.org/10.1103/PhysRevD.84.025007 | full (partial) |
+| Lloyd et al. reply (arXiv:1108.0153) | https://arxiv.org/abs/1108.0153 | abstract + ar5iv summary |
+| Ralph comment (arXiv:1107.4675) | https://arxiv.org/abs/1107.4675 | full |
+| Svetlichny, Int. J. Theor. Phys. 50, 3903 (arXiv:0902.4898) | https://doi.org/10.1007/s10773-011-0973-x ; https://arxiv.org/abs/0902.4898 | abstract |
+| Bennett & Schumacher 2005 talk | none (known through Svetlichny's citation, not read) | unverified content |
+| Brun, Harrington, Wilde 2009 (arXiv:0811.1209) | https://arxiv.org/abs/0811.1209 | figures and related text (after 11-22) |
+| Bennett, Leung, Smith, Smolin 2009 (arXiv:0908.3023) | https://arxiv.org/abs/0908.3023 | full (partial) |
+| Aaronson & Watrous 2009 (arXiv:0808.2669) | https://arxiv.org/abs/0808.2669 | abstract + contents |
+| Brun & Wilde 2012 (arXiv:1008.0433) | https://arxiv.org/abs/1008.0433 ; https://doi.org/10.1007/s10701-011-9601-0 | abstract + section titles |
+| Ralph & Myers 2010 (arXiv:1003.1987) | https://arxiv.org/abs/1003.1987 | abstract |
+| Pienaar, Ralph, Myers 2013 (arXiv:1206.5485) | https://arxiv.org/abs/1206.5485 | abstract |
+| P-CTC scrambling decoding on IBM / Quantinuum (arXiv:2501.16335) | https://arxiv.org/abs/2501.16335 | search results only (added 11-24) |
+| Ringbauer et al. 2014 (arXiv:1501.05014) | https://arxiv.org/abs/1501.05014 ; https://doi.org/10.1038/ncomms5145 | abstract |
+| Allen 2014 (arXiv:1401.4933) | https://arxiv.org/abs/1401.4933 | full (partial) |
+| Bub & Stairs 2014 (arXiv:1309.4751) | https://arxiv.org/abs/1309.4751 | full (later, see NOVELTY_CHECK.md) |
+| Dunlap 2015 (arXiv:1510.02742) | https://arxiv.org/abs/1510.02742 | abstract |
+| Echeverria, Klinkhammer, Thorne 1991 | https://www.osti.gov/biblio/5219973 | bibliographic record only |
+| Politzer (hep-th/9207076); Hartle (gr-qc/9309012) | https://arxiv.org/abs/hep-th/9207076 ; https://arxiv.org/abs/gr-qc/9309012 | Politzer abstract; Hartle full (11-24) |
+| Oreshkov, Costa, Brukner 2012 (arXiv:1105.4464) | https://arxiv.org/abs/1105.4464 ; https://doi.org/10.1038/ncomms2076 | abstract |
+| Araújo, Feix, Navascués, Brukner 2017 (arXiv:1611.08535) | https://arxiv.org/abs/1611.08535 ; https://doi.org/10.22331/q-2017-04-26-10 | abstract |
+| Baumeler & Wolf 2014 (arXiv:1312.5916) | https://arxiv.org/abs/1312.5916 | abstract |
+| Baumeler & Wolf, Computational tameness (arXiv:1611.05641) | https://arxiv.org/abs/1611.05641 | abstract |
+| Baumeler, Feix, Wolf (arXiv:1403.7333) | https://arxiv.org/abs/1403.7333 | search results only |
+| Baumeler et al. 2019 (arXiv:1703.00779) | https://arxiv.org/abs/1703.00779 | HTML/abstract+ |
+| Tobar & Costa 2020 (arXiv:2001.02511) | https://arxiv.org/abs/2001.02511 ; https://doi.org/10.1088/1361-6382/aba4bc | HTML/abstract+ |
+| Araújo, Guérin, Baumeler 2017 (arXiv:1706.09854) | https://arxiv.org/abs/1706.09854 | Sections I–III (later) |
+| Dourdent et al. 2025 (arXiv:2512.23599) | https://arxiv.org/abs/2512.23599 | abstract |
+| Jean, Silva, Vilasini 2025 (arXiv:2508.02463) | https://arxiv.org/abs/2508.02463 | abstract |
+| Arvidsson-Shukur et al. 2023 (arXiv:2207.07666) | https://arxiv.org/abs/2207.07666 | abstract |
+| Aaronson, Bavarian, Gueltrini (arXiv:1609.05507) | https://arxiv.org/abs/1609.05507 | search results only |
 
 ---
 
-## 5. 限制
+## 5. Limitations
 
-- **沒有讀全文的論文占多數**。只有 5 篇做了 PDF 文字抽取並讀相關段落，其中只有 Lloyd 等人 PRL 讀得比較完整；多數條目只讀了摘要或搜尋結果摘要。凡是表中「[摘要]」標記的內容，只能代表摘要所說，不能代表論文實際證明了什麼。
-- **PDF 抓取失敗後的補救**：網頁抓取工具對 PDF 回傳壓縮串流，我改用本地 `pdftotext` 抽取。抽出的文字經過版面轉換，公式符號（如 ψ、ρ、†）有毀損，所以公式只能靠上下文，不應直接抄用。
-- **沒有讀到或沒有核實的內容**：Deutsch 1991 原文、Novikov 原始論文、Bennett–Schumacher 演講、Aaronson–Watrous 對多不動點的處理、Ralph–Myers 的最大熵推導、Brun–Harrington–Wilde 全文、Brun–Wilde 的 PP 結論本身、Ralph 與 Lloyd 回覆之外的後續討論、Oreshkov–Costa–Brukner 與 Araújo 等人的內文（包括原始 process 是否可純化）、1403.7333 與 1507.01714 的具體內容。Hawking 的 chronology protection 與 Deutsch–Lockwood 的科普文，我沒有找到一手來源，不予引用。
-- **「apparently open」不等於「沒人做過」**。判斷基於這次的有限搜尋（約 20 次搜尋、約 10 篇 PDF 的文字抽取），沒有掃過引用這些論文的所有後續工作，也沒有查會議論文與博士論文。在缺口 1–6 開工前，應該先對各缺口做一次針對性的引用追蹤。
-- **兩處自己的推導未經核對**：H3 的 Tr[W]=0 角落案例，以及缺口 2 的 Δ 指標。兩者都只是由 HYPOTHESIS.md 的公式直接推出的想法，不是文獻結果。
-- **沒有重跑 `ctc/`**，也沒有核對 `ctc/README` 的數字；表中 (a)(b)(c) 的數字都引自該 README。
-- **工作方式**：本次檢索使用網路搜尋與網頁抓取，並用了子代理協助抓取頁面；子代理的報告我只當作資料看待，其中的內容在寫入前已與我自己讀到的 PDF 文字交叉核對（Lloyd、Ralph、Allen、BLSS）；其餘（如 2508.02463、2512.23599、1108.0153 的細節）僅憑子代理轉述的摘要，未獨立核對。
-- **AI 輔助揭露**：本檔由 Claude（Sonnet 5.5）撰寫，沒有外部審查。未經人工核對原文之前，請不要把表中任何一格當成已驗證的文獻事實。
-- 本檔不主張資訊能傳回過去；所有討論都是關於數學模型的行為。
+- **Most papers were not read in full.** Only 5 had their PDF text extracted and relevant passages read when this review was written, and only Lloyd et al. PRL was read fairly completely; most entries rest on abstracts or search snippets. Anything marked "[abstract]" represents only what the abstract says, not what the paper proves.
+- **PDF extraction:** the web fetcher returned compressed streams for PDFs, so text was extracted locally with `pdftotext`. The converted text has damaged formula symbols (ψ, ρ, † and so on), so formulas were read from context and should not be copied directly.
+- **Not read or not verified:** Deutsch 1991, Novikov's original paper, the Bennett–Schumacher talk, Aaronson–Watrous on multiple fixed points, Ralph–Myers' maximum-entropy derivation, the general N-state construction of Brun–Harrington–Wilde, Brun–Wilde's PP result itself, the discussion after Ralph's comment and Lloyd's reply, the bodies of Oreshkov–Costa–Brukner and Araújo et al. (including whether the original process is purifiable), and the contents of 1403.7333 and 1507.01714. No primary source was found for Hawking's chronology protection or the Deutsch–Lockwood popular article, so they are not cited.
+- **"Apparently open" does not mean "not done".** The judgments rest on a limited search (about 20 searches, about 10 PDF text extractions), without sweeping all later work citing these papers, conference papers or theses. Each gap needs targeted citation tracking before work starts.
+- **Two derivations of our own were not checked against the literature:** the Tr[W] = 0 corner case of H3, and the Δ indicator of gap 2. Both are ideas derived directly from the formulas in HYPOTHESIS.md, not literature results.
+- **`ctc/` was not rerun** for this review, and the numbers in ctc/README were not checked; the (a)(b)(c) numbers in the table are quoted from that README.
+- **Method:** web search and page fetching, with subagents fetching pages; their reports were treated as data, and their content was cross-checked against PDF text I read myself before being written down (Lloyd, Ralph, Allen, BLSS). Other details (for example of 2508.02463, 2512.23599 and 1108.0153) rest only on subagent summaries and were not independently checked.
+- **AI assistance:** written by Claude, with no external review. Do not treat any cell as a verified literature fact until it has been checked against the original by a person.
+- This document does not claim that information can be sent to the past; all discussion concerns the behaviour of mathematical models.

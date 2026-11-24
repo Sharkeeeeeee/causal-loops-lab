@@ -1,110 +1,135 @@
-# 階段 1：CTC 玩具模型
+# ctc/: models, theorems and experiments
 
-建立日期：2026-11-22，撰寫時使用 AI 輔助（Claude）。全部都是小型精確數值計算，沒有硬體執行，也沒有外部審查。這些模型描述的是「如果存在時間迴圈，世界會怎麼運作」，**不是資訊能回到過去的證據**。這些檔案不在 `PUBLIC_MANIFEST.json` 裡。
+Created 2026-11-22, last updated 2026-11-24, with AI assistance (Claude). No external review.
+
+The models here are small exact numerical calculations. They describe how the world would behave **if** time loops existed; they are **not** evidence that information can reach the past. The IBM quantum-computer experiments ([hardware/](hardware/README.md), [born_rule/](born_rule/README.md)) implement loop rules by postselection or test the loop model's predictions against ordinary quantum mechanics.
+
+## Running the tests
 
 ```text
-python -B ctc/tests/test_models.py      # 10 項測試，對照手算的解析結果
-python -B ctc/tests/test_literature.py  # 11 項測試，重現 Lloyd 2011 和 Brun–Harrington–Wilde 2009
-python -B ctc/run_toy.py                # 產生 output/ 底下的 CSV、JSON 和圖
-python -B ctc/reproduce_literature.py   # 產生文獻重現的 JSON 和圖
-python -B ctc/tests/test_branches.py    # 8 項測試，κ–β 分支模型
-python -B ctc/run_branches.py           # 產生 κ–β 平面的 CSV 和圖
-python -B ctc/tests/test_quantum_effects.py  # 7 項測試，自洽歷史之間的量子干涉
-python -B ctc/tests/test_signalling.py  # 11 項測試，無訊號條件
-python -B ctc/run_signalling.py         # 產生無訊號測試的 JSON 和圖
-python -B ctc/tests/test_t_ctc.py       # 12 項測試，第四種規則 T-CTC（Allen 2014）
-python -B ctc/run_t_ctc.py              # 四種規則並排比較，以及 P-CTC ↔ T-CTC 線上的傳訊圖
-python -B ctc/tests/test_past_preserving.py  # 9 項測試，過去守恆篩選與有時間迴圈的雙縫實驗
-python -B ctc/run_double_slit.py        # 雙縫實驗與量子擦除的 JSON 和圖
-python -B ctc/tests/test_decoherence.py # 6 項測試，用去相干決定記錄基底
-python -B ctc/run_decoherence.py        # 記錄強度掃描的 JSON 和圖
+python -B ctc/tests/test_models.py              # 10  rules vs hand-derived results
+python -B ctc/tests/test_literature.py          # 11  Lloyd 2011 and Brun–Harrington–Wilde 2009
+python -B ctc/tests/test_branches.py            #  8  κ–β branch model
+python -B ctc/tests/test_quantum_effects.py     #  7  interference between consistent histories
+python -B ctc/tests/test_signalling.py          # 11  no-signalling
+python -B ctc/tests/test_t_ctc.py               # 12  T-CTC (Allen 2014)
+python -B ctc/tests/test_past_preserving.py     #  9  past-preserving selection, double slit
+python -B ctc/tests/test_decoherence.py         #  6  decoherence-defined record basis
+python -B ctc/tests/test_theorems.py            # 11  every theorem in THEOREMS.md on random circuits
+python -B ctc/tests/test_computational_power.py #  5  PPS equals P-CTC on definite inputs
+python -B ctc/tests/test_hartle.py              #  1  PPS vs Hartle 1994, Eqs. (5.5)–(5.6)
+python -B ctc/tests/test_hardware.py            #  8  hardware circuits and estimators (3 need qiskit)
+python -B ctc/tests/test_born_rule.py           #  6  loop model vs Born-rule tests
+python -B ctc/tests/test_born_direct.py         #  8  direct pure-vs-recorded test design
+python -B ctc/tests/test_blockchain.py          # 22  blockchain lottery protocol (offline)
 ```
 
-只有量子版本才有的效應見 [QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md)。無訊號測試的結果見 [NO_SIGNALLING.md](NO_SIGNALLING.md)。第四種規則 T-CTC 見 [T_CTC.md](T_CTC.md)，H2 的候選出路「過去守恆篩選」和雙縫實驗見 [PAST_PRESERVING.md](PAST_PRESERVING.md)，用去相干決定記錄基底見 [DECOHERENCE.md](DECOHERENCE.md)，新穎性檢查見 [NOVELTY_CHECK.md](NOVELTY_CHECK.md)。
+135 tests in total (2026-11-24). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
 
-文獻重現的結果見 [LITERATURE_REPRODUCTION.md](LITERATURE_REPRODUCTION.md)。把 P-CTC 和 D-CTC 放進同一個雙參數模型的結果見 [BRANCHES.md](BRANCHES.md)。
+## Regenerating results
 
-需要 NumPy，畫圖需要 matplotlib。這裡用 Python 3.11.0、NumPy 2.3.2、matplotlib 3.10.0 執行過。
+```text
+python -B ctc/run_toy.py                # output/ CSV, JSON and figure for the three toy scenarios
+python -B ctc/reproduce_literature.py   # literature reproduction JSON and figure
+python -B ctc/run_branches.py           # κ–β plane CSV and figure
+python -B ctc/run_signalling.py         # no-signalling JSON and map
+python -B ctc/run_t_ctc.py              # four rules side by side; signalling along the P-CTC ↔ T-CTC line
+python -B ctc/run_double_slit.py        # double slit and quantum eraser
+python -B ctc/run_decoherence.py        # record-strength sweep
+python -B ctc/hardware/run_local.py     # full hardware analysis on an ideal simulator (needs qiskit)
+python -B ctc/born_rule/compare.py      # Born-rule bounds figure
+python -B ctc/conjectures/evaluate.py   # conjecture lottery verdicts and score
+```
 
-## 檔案
+Requires NumPy; figures need matplotlib; hardware code needs qiskit (and qiskit-ibm-runtime for real devices). Run with Python 3.11.0, NumPy 2.3.2, matplotlib 3.10.0; the tests also pass on Python 3.13 with NumPy 2.5.
 
-| 檔案 | 內容 |
+## Documents
+
+| Document | Content |
 |---|---|
-| `models.py` | 四種規則：無迴圈、P-CTC（Lloyd 等人 2011）、D-CTC（Deutsch 1991）、T-CTC（Allen 2014）；另外有直接模擬後選擇 teleportation 的檢查 |
-| `circuits.py` | 三個情境：祖父悖論、KFK 型提醒、自舉悖論；另外有兩個只有量子版本才有效應的電路：受控相位干涉、只帶相位的迴圈 |
-| `literature.py` | 從論文圖中讀出的電路：Lloyd 2011 Fig. 2、Brun–Harrington–Wilde 2009 Fig. 1–2 |
-| `branches.py` | 古典的「有權重分支」模型：κ（訊息從哪裡來）和 β（自洽篩選強度），P-CTC 和 D-CTC 是其中兩個角落 |
-| `tests/test_branches.py` | 角落等於量子 P-CTC 和 D-CTC、β = 0 時不重新加權、閉式解 |
-| `tests/test_quantum_effects.py` | 自洽歷史互相干涉時 P-CTC 會刪掉分支；古典模型拒絕帶相位的電路 |
-| `signalling.py` | 加上遠方的 Bob，檢查 Alice ↔ Bob 兩個方向能不能傳訊 |
-| `tests/test_signalling.py` | 各規則的傳訊量、P-CTC 的 C†C 判準、D-CTC 兩種套用方式 |
-| `run_signalling.py` | 傳訊量總表與 κ–β 平面上的傳訊圖 |
-| `tests/test_t_ctc.py` | T-CTC 對照 Allen 2014 的公式（Eq. 24、33、35、38、40）、極限、傳訊 |
-| `run_t_ctc.py` | 四種規則並排比較，以及沿 t 參數的傳訊圖 |
-| `past_preserving.py` | 過去守恆篩選：過去的機率不變，只在每個已記錄的過去世界內做自洽篩選 |
-| `double_slit.py` | 有時間迴圈的雙縫實驗，包括跟閒置光子糾纏的量子擦除版本 |
-| `tests/test_past_preserving.py` | 不能傳訊、祖父悖論不變、KFK 閉式解、雙縫與擦除的數值、記錄基底的依賴 |
-| `run_double_slit.py` | 雙縫實驗在六種規則下的條紋 |
-| `decoherence.py` | 環境部分記錄光子路徑；去相干定義的過去守恆篩選 |
-| `tests/test_decoherence.py` | 不能傳訊、紀錄不被改寫、新鮮光子閉式解、指標基底決定擦除結果 |
-| `run_decoherence.py` | 記錄強度 s 的掃描與圖 |
-| `run_branches.py` | κ–β 平面的掃描與畫圖 |
-| `tests/test_models.py` | 么正性、不動點、與解析公式的比對 |
-| `tests/test_literature.py` | 逐條重現論文中的說法 |
-| `run_toy.py` | 參數掃描與畫圖 |
-| `reproduce_literature.py` | 文獻重現的數值與圖 |
-| `output/toy_results.csv` | 圖中所有數值，可以當表格查看 |
-| `output/bootstrap.json` | 自舉悖論的結果 |
+| [THEOREMS.md](THEOREMS.md) | H1′–H3′ under past-preserving selection: statements, proofs, checks |
+| [PAST_PRESERVING.md](PAST_PRESERVING.md) | the PPS rule; a double slit and quantum eraser with a time loop |
+| [DECOHERENCE.md](DECOHERENCE.md) | letting decoherence fix the record basis |
+| [NO_SIGNALLING.md](NO_SIGNALLING.md) | reweighting the world equals faster-than-light signalling |
+| [QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md) | interference between consistent histories |
+| [T_CTC.md](T_CTC.md) | Allen's T-CTC as a fourth rule |
+| [BRANCHES.md](BRANCHES.md) | the classical κ–β model with D-CTC and P-CTC as corners |
+| [LITERATURE_REPRODUCTION.md](LITERATURE_REPRODUCTION.md) | Lloyd 2011 and Brun–Harrington–Wilde 2009 reproduced |
+| [NOVELTY_CHECK.md](NOVELTY_CHECK.md) | what is already known, including Hartle 1994 |
+| [hardware/README.md](hardware/README.md) | IBM runs of the loop rules (postselected teleportation) |
+| [born_rule/README.md](born_rule/README.md) | microscopic loops vs Born-rule tests; direct test on IBM hardware |
+| [conjectures/README.md](conjectures/README.md) | conjecture lottery: credences fixed before exhaustive checks |
+| [blockchain/README.md](blockchain/README.md) | Bitcoin-anchored self-consistency lottery (designed, not run) |
 
-D-CTC 的不動點如果不只一個，這裡選「從最大混合態出發的 Cesàro 極限」。在這些情境中，它就是熵最大的不動點，但不保證一般情況都是如此。
+## Code
 
-## 結果
+| File | Content |
+|---|---|
+| `models.py` | four rules: no loop, P-CTC (Lloyd et al. 2011), D-CTC (Deutsch 1991), T-CTC (Allen 2014); plus a direct simulation of postselected teleportation |
+| `circuits.py` | grandfather paradox, KFK-type warning, bootstrap paradox; two quantum-only circuits (controlled-phase interference, phase-only loop) |
+| `literature.py` | circuits read from the papers' figures: Lloyd 2011 Fig. 2, Brun–Harrington–Wilde 2009 Figs. 1–2 |
+| `branches.py` | the classical weighted-branch model: κ (where the message comes from) and β (selection strength) |
+| `signalling.py` | adds a distant Bob and checks signalling in both directions |
+| `past_preserving.py` | past-preserving selection |
+| `double_slit.py` | double slit with a time loop, including the quantum-eraser version |
+| `decoherence.py` | environment partly recording the path; decoherence-defined PPS |
+| `run_*.py`, `reproduce_literature.py` | parameter sweeps and figures |
+| `hardware/` | IBM experiments: circuits, preregistration, analysis, raw data of three runs |
+| `born_rule/` | loop model, comparison with published Sorkin bounds, direct test and control on IBM hardware |
+| `conjectures/` | conjecture pool, credences, exhaustive evaluator |
+| `blockchain/` | protocol, Bitcoin header checks, OpenTimestamps and Internet Archive helpers |
+| `tests/` | all tests listed above |
+| `output/` | generated tables and figures (`toy_results.csv` holds every number in the toy figure) |
+
+When D-CTC has several fixed points, the code picks the Cesàro limit starting from the maximally mixed state. In these scenarios that is the maximum-entropy fixed point, but this is not guaranteed in general.
+
+## Toy results
 
 ![toy figure](output/toy_figure.png)
 
-### (a) 祖父悖論
-收到一個位元，打算送回它的相反值，但這個動作有 ε 的機率失敗。
+### (a) Grandfather paradox
+A bit is received and its opposite is meant to be sent back, but the action fails with probability ε.
 
-| 規則 | P(動作失敗) | 自洽是怎麼達成的 |
+| Rule | P(action fails) | How consistency is reached |
 |---|---|---|
-| 無迴圈 | ε | 不需要自洽 |
-| P-CTC | **1**，不管 ε 多小 | 只有「動作失敗」的歷史是自洽的。ε = 0 時沒有任何自洽歷史，規則沒有定義 |
-| D-CTC | ε | 迴圈中的訊息變成 50/50 的混合態，未來的統計沒有改變 |
+| No loop | ε | no consistency needed |
+| P-CTC | **1**, however small ε is | only the "action fails" history is consistent; for ε = 0 there is no consistent history and the rule is undefined |
+| D-CTC | ε | the message in the loop becomes a 50/50 mixture; future statistics are unchanged |
 
-**對假設的意義：** H2「效應出現在未來」在 P-CTC 下成立，而且效應很強；在 D-CTC 下，這個情境完全不成立。所以兩種時間觀的差別不只是哲學問題，它們會給出不同的預測。
+**Meaning for the hypotheses:** H2, "the effect appears in the future", holds strongly under P-CTC and not at all under D-CTC in this scenario. The two time pictures are not just philosophy: they make different predictions.
 
-### (b) KFK 型提醒
-有一個人，沒有提醒時會以 q = 0.3 的機率做出壞選擇。提醒有 r 的機率生效。
+### (b) KFK-type warning
+Without a warning, a person makes a bad choice with probability q = 0.3. A warning works with probability r.
 
-| 寄件者 | 規則 | P(壞結果) |
+| Sender | Rule | P(bad outcome) |
 |---|---|---|
-| 沒有訊息（基準） | — | q |
-| 無條件寄出（一定會提醒） | P-CTC 和 D-CTC 相同 | q(1 − r) |
-| 有動機才寄（壞結果發生了才寄） | P-CTC | q(1 − r) / (1 − qr) |
-| 有動機才寄 | D-CTC | q / (1 + qr) |
+| No message (baseline) | — | q |
+| Unconditional (always warns) | P-CTC and D-CTC agree | q(1 − r) |
+| Motivated (warns only if the bad outcome happened) | P-CTC | q(1 − r) / (1 − qr) |
+| Motivated | D-CTC | q / (1 + qr) |
 
-觀察：
+Observations:
 
-1. **無條件寄出**，也就是 KFK 自稱的「我來只是為了提醒」：兩種規則一致，沒有悖論，也沒有重新加權。從收到訊息的人的角度看，這跟一則普通的訊息完全一樣，所以**只看收件者這邊，無法分辨訊息是不是來自未來**。
-2. **有動機才寄**，屬於祖父悖論的一種：提醒成功就沒有理由寄出提醒。
-   - 在 P-CTC 下，r = 1 時壞結果的機率變成 0。但原因不是提醒成功了：剩下的唯一自洽歷史，是「沒有收到提醒，而這個人剛好自己選對了」。未來確實改變了，但改變它的是自洽篩選，不是訊息本身。
-   - 在 D-CTC 下，效應溫和得多：r = 1 時是 0.3 / 1.3 ≈ 0.23。
-3. 在 P-CTC 下，q = 1、r = 1 時沒有任何自洽歷史，是真正的悖論。
+1. **Unconditional sender**, i.e. "I only came to warn you": both rules agree, there is no paradox and no reweighting. From the receiver's side this is exactly an ordinary message, so **from the receiver's side alone one cannot tell whether a message came from the future**.
+2. **Motivated sender**, a kind of grandfather paradox: if the warning works there is no reason to send it.
+   - Under P-CTC, at r = 1 the bad outcome has probability 0. Not because the warning worked: the only remaining consistent history is "no warning arrives, and the person happens to choose well". The future did change, but consistency selection changed it, not the message.
+   - Under D-CTC the effect is much milder: 0.3 / 1.3 ≈ 0.23 at r = 1.
+3. Under P-CTC, q = 1 and r = 1 leave no consistent history: a true paradox.
 
-### (c) 自舉悖論
-一則沒有來源的訊息：它被記錄下來，再原封不動地送回去。
+### (c) Bootstrap paradox
+A message with no origin: it is recorded and sent back unchanged.
 
-| 規則 | P(記錄 = 1) | 記錄的 ⟨X⟩ |
+| Rule | P(record = 1) | ⟨X⟩ of the record |
 |---|---|---|
-| 無迴圈（外部輸入未知的位元） | 0.5 | 0 |
-| P-CTC | 0.5 | **1**（相干的疊加態） |
-| D-CTC | 0.5 | 0（混合態） |
+| No loop (external input an unknown bit) | 0.5 | 0 |
+| P-CTC | 0.5 | **1** (coherent superposition) |
+| D-CTC | 0.5 | 0 (mixture) |
 
-在一般的測量基底下，三種規則的統計一樣。但量 X 基底時，P-CTC 和 D-CTC 會給出不同的結果。這是一個可以區分兩種規則的觀測量。不過結果也取決於基準怎麼選：如果外部輸入是 |+⟩，無迴圈的情況也會得到 ⟨X⟩ = 1。
+In the computational basis the three rules agree, but in the X basis P-CTC and D-CTC differ, giving an observable that separates the rules. The result also depends on the baseline: with external input |+⟩, the no-loop case gives ⟨X⟩ = 1 too.
 
-## 限制
+## Limitations
 
-- 所有情境都是一到五個位元的玩具電路，而且大多是古典可逆電路配上古典輸入。
-- P-CTC 和 D-CTC 是文獻中已知的模型，結果 (a) 在概念上和 Lloyd 等人 2011 的討論一致。Lloyd 2011 和 Brun–Harrington–Wilde 2009 的具體說法已經逐條重現，見 [LITERATURE_REPRODUCTION.md](LITERATURE_REPRODUCTION.md)。
-- 在一般的量子電腦上用後選擇模擬 P-CTC，會得到同樣的數字，但那只是模擬，不是證據。
-- `p_ctc_weight` 欄位是未歸一化的 Tr[CρC†]。除以 d²（迴圈維度的平方）就是用 teleportation 實作時的後選擇成功機率，可以用 `models.p_ctc_success_probability` 計算。
+- All scenarios are toy circuits of one to six qubits, mostly classical reversible circuits with classical inputs.
+- P-CTC and D-CTC are known models, and result (a) agrees conceptually with the discussion in Lloyd et al. 2011. Specific claims of Lloyd 2011 and Brun–Harrington–Wilde 2009 are reproduced one by one in [LITERATURE_REPRODUCTION.md](LITERATURE_REPRODUCTION.md).
+- Simulating P-CTC by postselection on an ordinary quantum computer gives the same numbers, but that is a simulation, not evidence.
+- The `p_ctc_weight` column is the unnormalized Tr[CρC†]. Dividing by d² (d the loop dimension) gives the postselection success probability for a teleportation implementation, available as `models.p_ctc_success_probability`.

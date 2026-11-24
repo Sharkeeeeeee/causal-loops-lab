@@ -1,68 +1,68 @@
-# 有權重的分支：κ–β 模型（古典版本）
+# Weighted branches: the κ–β model (classical version)
 
-建立日期：2026-11-22，撰寫時使用 AI 輔助（Claude）。這是本專案自己建構的模型，不是取自文獻，也沒有外部審查。
+Created 2026-11-22 with AI assistance (Claude). This model was constructed in this project, not taken from the literature, and has not been externally reviewed.
 
 ```text
-python -B ctc/tests/test_branches.py   # 8 項測試
-python -B ctc/run_branches.py          # 產生 output/branches_map.csv 和 output/branches_map.png
+python -B ctc/tests/test_branches.py   # 8 tests
+python -B ctc/run_branches.py          # writes output/branches_map.csv and output/branches_map.png
 ```
 
-程式在 [branches.py](branches.py)。
+The code is in [branches.py](branches.py).
 
-## 模型
+## Model
 
-一個**分支**（一條歷史）由兩樣東西組成：這個世界的隨機輸入 x（先驗機率 P0(x)），以及從迴圈收到的訊息 m。動力學是決定性的：在分支 (x, m) 裡，會送回訊息 f(x, m)，並留下結果 y(x, m)。
+A **branch** (one history) consists of the world's random input x (prior P0(x)) and the message m received from the loop. The dynamics are deterministic: in branch (x, m) the message f(x, m) is sent back and the outcome y(x, m) is left behind.
 
-分支權重由兩個旋鈕決定：
+Branch weights are set by two knobs.
 
-**κ：訊息從哪裡來。** 從分支 (x, m) 送出的訊息，有 κ 的機率落在同一個世界 x，有 1 − κ 的機率落在一個從 P0 抽出的新世界。這條「跳躍鏈」的長期分布（從 P0(x) × 均勻分布出發的 Cesàro 極限）就是先驗權重 w0(x, m)。
+**κ: where the message comes from.** A message sent from branch (x, m) lands in the same world x with probability κ, and in a fresh world drawn from P0 with probability 1 − κ. The long-run distribution of this "hopping chain" (the Cesàro limit starting from P0(x) × uniform) is the prior weight w0(x, m).
 
-- κ = 0：訊息來自一個典型的世界，收到的訊息跟收件者的世界無關。
-- κ = 1：每個世界只收到自己送出的訊息。
+- κ = 0: the message comes from a typical world and is independent of the receiver's world.
+- κ = 1: each world receives only its own message.
 
-**β：宇宙有多偏好自洽的分支。** 權重 w(x, m) ∝ w0(x, m) × exp(−β × d)，d 是送出和收到的訊息之間有幾個位元不同。
+**β: how strongly the universe prefers consistent branches.** The weight is w(x, m) ∝ w0(x, m) × exp(−β d), where d is the number of bits in which the sent and received messages differ.
 
-- β = 0：不篩選。
-- β = ∞：不自洽的分支權重是零。
+- β = 0: no selection.
+- β = ∞: inconsistent branches have weight zero.
 
-圖中的縱軸用 s = 1 − e^{−β}，讓 s = 0 代表不篩選，s = 1 代表完全篩選。
+The vertical axis of the figure uses s = 1 − e^{−β}, so s = 0 means no selection and s = 1 full selection.
 
-## 四個角落
+## The four corners
 
-| 角落 | κ | β | 意義 | 檢查 |
+| Corner | κ | β | Meaning | Check |
 |---|---|---|---|---|
-| D-CTC | 0 | 0 | 訊息來自典型世界，不篩選 | 測試確認：在 `circuits.py` 的電路上，結果等於量子 D-CTC |
-| P-CTC | 1 | ∞ | 訊息回到自己的世界，只留下自洽分支 | 測試確認：在這些電路上，結果等於量子 P-CTC（只比較測量機率，不比較相干性） |
-| 各世界各自 Deutsch（新） | 1 | 0 | 每個世界只要求自己的訊息統計上自洽 | 本專案推導的閉式解 |
-| 典型但自洽（新） | 0 | ∞ | 訊息來自典型世界，但只留下自洽分支 | 本專案推導的閉式解 |
+| D-CTC | 0 | 0 | message from a typical world, no selection | tested: equals quantum D-CTC on the circuits in `circuits.py` |
+| P-CTC | 1 | ∞ | message returns to its own world, only consistent branches survive | tested: equals quantum P-CTC on these circuits (measurement probabilities only, not coherences) |
+| Per-world Deutsch (new) | 1 | 0 | each world only requires its own message to be statistically consistent | closed form derived here |
+| Typical but consistent (new) | 0 | ∞ | message from a typical world, only consistent branches survive | closed form derived here |
 
-P-CTC 角落有一個細節：一般情況下，κ = 1、β = ∞ 這個角落，會依「每個自洽訊息在該世界中的吸引範圍」給權重，而 P-CTC 對每個自洽訊息給相同權重。兩者只有在權重剛好一致時才相等。本專案的三個電路都屬於這種情況，但這不是一般定理。
+A detail at the P-CTC corner: in general the κ = 1, β = ∞ corner weights each consistent message by its basin of attraction within the world, whereas P-CTC gives every consistent message the same weight. The two agree only when those weights coincide. All three circuits in this project are such cases, but it is not a general theorem.
 
-## 結果
+## Results
 
 ![kappa-beta map](output/branches_map.png)
 
-| 情境 | D-CTC | 各世界各自 Deutsch | 典型但自洽 | P-CTC |
+| Scenario | D-CTC | Per-world Deutsch | Typical but consistent | P-CTC |
 |---|---|---|---|---|
-| 祖父悖論，ε = 0.05：P(動作失敗) | 0.050 | 0.050 | 1.000 | 1.000 |
-| KFK 有動機寄件者，q = 0.3、r = 0.6：P(壞結果) | 0.254 | 0.210 | 0.055 | 0.146 |
+| Grandfather paradox, ε = 0.05: P(action fails) | 0.050 | 0.050 | 1.000 | 1.000 |
+| KFK motivated sender, q = 0.3, r = 0.6: P(bad outcome) | 0.254 | 0.210 | 0.055 | 0.146 |
 
-閉式解（都已用測試驗證）：
+Closed forms (all verified by tests):
 
-- 祖父悖論：P(失敗) = ε / (ε + (1 − ε) e^{−β})，**跟 κ 無關**。
-- KFK，各世界各自 Deutsch：q(1 − r/2)。
-- KFK，典型但自洽：q(1 − r)π / ((1 − q)(1 − π) + q(1 − r)π)，其中 π = q / (1 + qr) 是 D-CTC 下收到提醒的機率。
+- Grandfather paradox: P(fail) = ε / (ε + (1 − ε) e^{−β}), **independent of κ**.
+- KFK, per-world Deutsch: q(1 − r/2).
+- KFK, typical but consistent: q(1 − r)π / ((1 − q)(1 − π) + q(1 − r)π), where π = q / (1 + qr) is the probability of receiving the warning under D-CTC.
 
-## 主要發現
+## Main findings
 
-1. **沒有篩選，就沒有重新加權。** 在 β = 0 的整條底邊上，不管 κ 是多少，世界本身的先驗機率 P0(x) 完全不變（測試 `test_world_prior_is_untouched_when_beta_is_zero`）。祖父悖論的失敗機率永遠是 ε。所以 **H2「迴圈的效應出現在未來的統計上」需要 β > 0**，也就是一條明確的物理假設：宇宙偏好自洽的分支。
-2. **祖父悖論只看 β，不看 κ。** 在這個電路裡，不管訊息從哪裡來，失敗機率都只由篩選強度決定。
-3. **KFK 情境兩個旋鈕都重要，而且結果不是單調的。** 最低的壞結果機率（0.055）出現在「典型但自洽」這個新角落，不是在 P-CTC。也就是說，「訊息來自別的世界，但宇宙只留下自洽的分支」，比「訊息回到自己的世界」更能壓低壞結果。
-4. **無條件寄件者在整張平面上都一樣**，都是 q(1 − r)：沒有悖論需要化解，兩個旋鈕都沒有作用。
+1. **No selection, no reweighting.** Along the whole bottom edge β = 0, for any κ, the world's prior P0(x) is unchanged (test `test_world_prior_is_untouched_when_beta_is_zero`). The grandfather paradox always fails with probability ε. So **H2, "the loop's effect shows up in future statistics", needs β > 0**: an explicit physical assumption that the universe prefers consistent branches.
+2. **The grandfather paradox depends only on β, not on κ.** In this circuit the failure probability is set by the selection strength alone, wherever the message comes from.
+3. **In the KFK scenario both knobs matter, and not monotonically.** The lowest bad-outcome probability (0.055) is at the new "typical but consistent" corner, not at P-CTC. A message from another world, combined with selection of consistent branches, suppresses the bad outcome more than a message returning to its own world.
+4. **An unconditional sender is the same everywhere on the plane**, q(1 − r): there is no paradox to resolve, so neither knob has any effect.
 
-## 限制
+## Limitations
 
-- 只有古典版本：訊息是位元，世界的隨機性是一般機率，動力學是只含 0 和 1 的置換。電路只要帶相位，`branches.py` 就會拒絕計算，因為量子 P-CTC 這時會出現古典模型看不到的干涉，見 [QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md)。量子版本需要處理相干性，因為 P-CTC 是把自洽歷史的**振幅**相加，例如自舉悖論中 P-CTC 給出的相干性（⟨X⟩ = 1），在這個模型裡看不到。
-- β 的「軟性懲罰」用 exp(−β × 不同位元數)，這只是最簡單的選擇，沒有物理推導。
-- κ 的跳躍鏈是一種詮釋「訊息從哪個世界來」的方式，不是唯一的方式。
-- 我不知道文獻裡有沒有同樣的雙參數模型。文獻盤點大多只讀了摘要，這只代表「沒找到」。
+- Classical only: messages are bits, the world's randomness is ordinary probability, and the dynamics are 0/1 permutations. `branches.py` refuses circuits with phases, because quantum P-CTC then shows interference the classical model cannot see ([QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md)). A quantum version must track coherences, since P-CTC adds the **amplitudes** of consistent histories; for example the coherence ⟨X⟩ = 1 that P-CTC gives in the bootstrap paradox is invisible here.
+- The soft penalty exp(−β × number of differing bits) is the simplest choice and has no physical derivation.
+- The hopping chain for κ is one way to interpret "which world the message comes from", not the only one.
+- We do not know whether the same two-parameter model exists in the literature. The literature review read mostly abstracts, so this only means "not found".

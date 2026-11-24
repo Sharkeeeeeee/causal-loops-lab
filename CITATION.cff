@@ -1,13 +1,13 @@
 cff-version: 1.2.0
 message: "If you use this work, please cite it as below. It is an AI-assisted research prototype without external peer review."
-title: "Causal Loops Lab: exact toy models of self-consistent closed timelike curves"
+title: "Causal Loops Lab: exact models of self-consistent closed timelike curves, with tests on quantum hardware"
 type: software
 authors:
   - given-names: Steven
     family-names: Li
 repository-code: "https://github.com/Sharkeeeeeee/causal-loops-lab"
 license: MIT
-date-released: 2026-11-22
+date-released: 2026-11-24
 keywords:
   - closed timelike curves
   - quantum foundations

@@ -1,11 +1,10 @@
 # License scope
 
-Project-authored Python files in this selected release are offered under the MIT license in LICENSE. Original reports, provenance records and project-generated simulation/data files are offered under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), to the extent rights in them are held by the project. Attribution should identify Steven Li, this repository and the relevant release or commit, and describe changes.
+- **Code:** project-authored Python files are released under the MIT license in [LICENSE](LICENSE).
+- **Documents and data:** project-authored documents, figures, simulation outputs and hardware result files are released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Attribution should name Steven Li, this repository and the release or commit used, and describe any changes.
 
-AI assistance was used. This statement does not assert that every AI-generated element carries exclusive copyright, or grant rights in material owned by another party.
+AI assistance (Claude) was used. This statement does not claim that every AI-generated element carries exclusive copyright, and it grants no rights in material owned by others.
 
-NumPy is an external dependency under its own [license](https://numpy.org/doc/stable/license.html). No NumPy source, binary, wheel or environment is redistributed here. Python is likewise supplied by the user. Names of dependency authors or cited researchers do not imply endorsement.
+External dependencies (Python, NumPy, matplotlib, Qiskit, OpenTimestamps and others) are supplied by the user under their own licenses; none is redistributed here. Results downloaded from IBM Quantum are measurement counts produced by this project's circuits. Names of cited researchers do not imply endorsement.
 
-Excluded from this release are downloaded literature PDFs, CIA source collections, third-party source snapshots (including GPL-licensed projects), private fundraising/administrative packets, local environment records and account information. Those exclusions remain under their existing terms; they are not relicensed by this repository.
-
-The release audit covers this allowlist and transformations recorded in PROVENANCE.json. It does not certify all files in the private workspace. Numerical facts, mathematical ideas, software implementation and copied source text are distinct provenance categories.
+The repository's earlier evidence package (Plan A / Plan B) was removed from the main tree on 2026-11-24. It is preserved at the git tag `archive/evidence-package-v0.34` under the license terms recorded there.

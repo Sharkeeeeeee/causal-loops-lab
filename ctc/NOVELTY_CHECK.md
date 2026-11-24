@@ -1,52 +1,89 @@
-# 新穎性檢查：無訊號測試和 κ–β 模型
+# Novelty check: no-signalling tests, the κ–β model and past-preserving selection
 
-日期：2026-11-22，撰寫時使用 AI 輔助（Claude）。範圍有限：做了兩輪網路搜尋，讀到原文的有四篇（Bub–Stairs 全文；Araújo–Guérin–Baumeler 第 I–III 節；Allen 2014 大部分；Silva 等人 2017 全文）。其他判斷只根據摘要。沒有請專家確認，所以「沒找到」不等於「沒人做過」。
+First round 2026-11-22; second round the same day; third round 2026-11-24 (past-preserving selection vs. Hartle 1994). Written with AI assistance (Claude). Scope is limited: a few rounds of web search, with five papers read in the original (Bub–Stairs in full; Araújo–Guérin–Baumeler Sections I–III; most of Allen 2014; Silva et al. 2017 in full; Hartle 1994, see the third round). Other judgments rest on abstracts. No expert has confirmed any of this, so "not found" does not mean "nobody has done it".
 
-## 結論
+## Summary
 
-| 本專案的結果 | 文獻裡有沒有 | 判斷 |
+| Result of this project | In the literature? | Judgment |
 |---|---|---|
-| P-CTC 讓 Alice 對共享糾纏的 Bob 超光速傳訊 | **有**。Bub & Stairs 2014 第 III 節明確主張用 P-CTC 可以超光速傳訊 | 不是新結果 |
-| D-CTC 是否傳訊，取決於套用在約化態還是逐分支 | **有**。Bub & Stairs 2014 第 II 節：D-CTC 的結果取決於參考系，傳訊與否取決於狀態在哪個參考系中被視為糾纏；Cavalcanti–Menicucci–Pienaar 2012 的「製備問題」；Bennett 等人 2009 的「線性陷阱」 | 不是新結果 |
-| P-CTC 不傳訊 ⇔ C†C ∝ 𝟙 | **實質上有**。Araújo–Guérin–Baumeler 2017 第 III 節：P-CTC 的映射是線性的，若且唯若後選擇機率對所有局部操作和輸入都是常數，而這正好就是 process matrix。C†C 這種寫法沒找到，但它只是單一參與者時的直接推論 | 新意很低 |
-| 古典 κ–β 雙參數模型（P-CTC 和 D-CTC 是兩個角落） | 沒找到內插兩者的連續規則家族。**但最接近的前人工作是 Allen 2014：** 他明確把 T-CTC 寫成「P-CTC 加上一個普通量子通道」的加權混合（Eq. 33），並說轉移機率理論是一類理論、積分測度沒有唯一選擇。他只給了一個點，沒有連續家族，也沒有連到 D-CTC（第二輪，原文已讀，見下） | 可能是新的，但新意比原先估計的低；論文必須引用 Allen 2014 並說明差別 |
-| 在 κ–β 家族裡，「重新加權」和「傳訊」是同一件事（命題 1） | 沒找到明確的陳述。精神上已隱含在 Baumeler–Wolf 的古典 process function 定義裡（要求對所有局部操作都有唯一、歸一化的自洽解，也就是不允許重新加權） | 新意低到中 |
+| P-CTC lets Alice signal faster than light to a Bob who shares entanglement | **Yes.** Bub & Stairs 2014, Section III, argue explicitly that P-CTCs allow superluminal signalling | not new |
+| Whether D-CTC signals depends on how the rule is applied (reduced state vs. branch by branch) | **Largely yes.** Cavalcanti–Menicucci–Pienaar 2012 (the preparation problem) and Bennett et al. 2009 (the linearity trap) show that D-CTC's predictions depend on how a mixed input is decomposed. Bub & Stairs 2014, Section II, discuss a related issue in different terms: D-CTC's outcome depends on the reference frame in which the state is regarded as entangled. None of them states the "reduced state vs. branch by branch" contrast exactly as here | not new in substance |
+| P-CTC does not signal ⇔ C†C ∝ 𝟙 | **In substance.** Araújo–Guérin–Baumeler 2017, Section III: the P-CTC map is linear if and only if the postselection probability is constant for all local operations and inputs, which is exactly the process-matrix case. They prove the linearity condition but do not discuss signalling; the C†C form is not stated but is the direct single-party consequence | very little new |
+| Classical κ–β two-parameter model (P-CTC and D-CTC as corners) | No continuous family interpolating the two was found. **Closest prior work: Allen 2014**, who writes T-CTC as a weighted mixture of P-CTC and an ordinary quantum channel (Eq. 33) and says transition-probability theories form a class with no unique integration measure. He gives one point, not a continuous family, and does not connect it to D-CTC (second round, original read) | possibly new, but less new than first estimated; any paper must cite Allen 2014 and explain the difference |
+| In the κ–β family, "reweighting" and "signalling" are the same thing (Proposition 1) | No explicit statement found. Implicit in spirit in the Baumeler–Wolf definition of classical process functions (a unique, normalized consistent solution for every local operation, i.e. no reweighting allowed) | low to moderate novelty |
+| Past-preserving selection (PPS) | **Partly.** The rule inside each recorded world is Hartle 1994, Eq. (5.6). Hartle's framework reweights the recorded past; PPS does not, and Hartle does not propose that version (third round) | the within-world rule is known; only the "do not reweight the recorded past" modification may be new |
 
-**整體判斷：** 無訊號測試的核心結論，也就是「會重新加權就會傳訊、P-CTC 會傳訊、D-CTC 的傳訊取決於解讀」，都已經是文獻中的已知結果。本專案的版本是獨立重現。真正可能是新的，只有 κ–β 這個內插模型本身，以及在它上面畫出的傳訊圖。
+**Overall:** the core no-signalling conclusions (reweighting implies signalling; P-CTC signals; D-CTC's signalling depends on interpretation) are known. This project reproduces them independently. What may be new is the κ–β interpolation with its signalling map, and the causal modification of Hartle's rule (PPS) with the theorems H1′–H3′.
 
-## 對專案的意義
+## What this means for the project
 
-1. **好消息：** 程式獨立得到了跟 Bub–Stairs、Araújo 等人一致的結論，這是對程式正確性的外部支持。
-2. **壞消息：** 「H2 跟無訊號條件互斥」大概不能當作研究筆記的主要貢獻，因為業界已經知道非線性的 P-CTC 會傳訊，也知道線性版本（process matrix）不會重新加權。
-3. **Araújo 等人的結果讓 H2 的處境更清楚：** 不傳訊的 P-CTC 正好就是 process matrix。所以「保留自洽、放棄重新加權」的那條路，文獻裡已經有一個完整的框架，也就是階段 2 的 process matrix。H2 若要改寫，應該問的是：在 process matrix 框架裡，迴圈還能留下什麼可觀察的未來效應？
+1. **Good news:** the code independently reaches conclusions consistent with Bub–Stairs and Araújo et al., which is external support for its correctness.
+2. **Bad news:** "H2 and no-signalling exclude each other" cannot be the main contribution of a research note; it is already known that nonlinear P-CTC signals and that its linear version (the process matrix) does not reweight.
+3. **Araújo et al. clarify H2's position:** non-signalling P-CTC is exactly the process matrix. So the route "keep consistency, give up reweighting" already has a complete framework in the literature (phase 2's process matrices). If H2 is rewritten, the question is: what observable future effect can a loop still leave in the process-matrix framework?
 
-## 讀過的來源
+## Sources read
 
-- J. Bub, A. Stairs, "Quantum Interactions with Closed Timelike Curves and Superluminal Signaling", [arXiv:1309.4751](https://arxiv.org/abs/1309.4751)（全文）。他們的傳訊結論建立在自己提出的一致性條件上，Bennett 等人不同意。
-- M. Araújo, P. A. Guérin, Ä. Baumeler, "Quantum computation with indefinite causal structures", Phys. Rev. A 96, 052315 (2017), [arXiv:1706.09854](https://arxiv.org/abs/1706.09854)（第 I–III 節原文；第 VI 節之後沒讀）。這篇的第 I–III 節沒有提到傳訊。
-- E. Cavalcanti, N. Menicucci, J. Pienaar, "The preparation problem in nonlinear extensions of quantum theory", [arXiv:1206.2725](https://arxiv.org/abs/1206.2725)（只讀摘要）。
-- J.-M. A. Allen, "Treating Time Travel Quantum Mechanically", Phys. Rev. A 90, 042107 (2014), [arXiv:1401.4933](https://arxiv.org/abs/1401.4933)（第二輪讀了到第 V 節的原文，只有最後約 19,000 字元沒讀）。
-- R. Silva 等人, "Connecting processes with indefinite causal order and multi-time quantum states", New J. Phys. 19, 103022 (2017), [arXiv:1701.08638](https://arxiv.org/abs/1701.08638)（全文）。
-- T. C. Ralph, "Problems with modelling closed timelike curves as post-selected teleportation", [arXiv:1107.4675](https://arxiv.org/abs/1107.4675)；S. Ghosh 等人, "Quantum Signaling to the Past Using P-CTCs", [arXiv:1708.03521](https://arxiv.org/abs/1708.03521)（只看搜尋摘要；這兩篇談的是傳訊到過去，不是類空傳訊）。
-- Baumeler–Wolf 關於古典 process function 的系列論文，以及 [arXiv:2512.23599](https://arxiv.org/abs/2512.23599)（只看搜尋摘要）。
+- J. Bub, A. Stairs, "Quantum Interactions with Closed Timelike Curves and Superluminal Signaling", [arXiv:1309.4751](https://arxiv.org/abs/1309.4751) (full text). Their signalling conclusion rests on a consistency condition they propose; Bennett et al. disagree.
+- M. Araújo, P. A. Guérin, Ä. Baumeler, "Quantum computation with indefinite causal structures", Phys. Rev. A 96, 052315 (2017), [arXiv:1706.09854](https://arxiv.org/abs/1706.09854) (Sections I–III in the original; Section VI onward not read). Sections I–III do not mention signalling.
+- E. Cavalcanti, N. Menicucci, J. Pienaar, "The preparation problem in nonlinear extensions of quantum theory", [arXiv:1206.2725](https://arxiv.org/abs/1206.2725) (abstract only).
+- J.-M. A. Allen, "Treating Time Travel Quantum Mechanically", Phys. Rev. A 90, 042107 (2014), [arXiv:1401.4933](https://arxiv.org/abs/1401.4933) (original read up to Section V; only the last ~19,000 characters not read).
+- R. Silva et al., "Connecting processes with indefinite causal order and multi-time quantum states", New J. Phys. 19, 103022 (2017), [arXiv:1701.08638](https://arxiv.org/abs/1701.08638) (full text).
+- J. B. Hartle, "Unitarity and causality in generalized quantum mechanics for nonchronal spacetimes", Phys. Rev. D 49, 6543 (1994), [arXiv:gr-qc/9309012](https://arxiv.org/abs/gr-qc/9309012) (full text; see the third round).
+- T. C. Ralph, "Problems with modelling closed timelike curves as post-selected teleportation", [arXiv:1107.4675](https://arxiv.org/abs/1107.4675); S. Ghosh et al., "Quantum Signaling to the Past Using P-CTCs", [arXiv:1708.03521](https://arxiv.org/abs/1708.03521) (search snippets only; both concern signalling to the past, not spacelike signalling).
+- The Baumeler–Wolf papers on classical process functions, and [arXiv:2512.23599](https://arxiv.org/abs/2512.23599) (search snippets only).
 
-## 第二輪（同日）
+## Second round (same day)
 
-**Allen 2014，第 IV C 節到第 V 節大部分原文已讀：**
+**Allen 2014, Section IV C to most of Section V read in the original:**
 
-- T-CTC 的定義（Eq. 24–26）：對迴圈的所有純態做 Haar 積分。閉式解（Eq. 33）是 P-CTC 項加上 d 倍的「完全隨機迴圈」通道。Allen 原話的意思是：T-CTC 是 P-CTC 和一個普通通道的加權混合，容易讓人以為它是「有雜訊的 P-CTC」。
-- 轉移機率理論是「一類理論」，因為積分測度沒有唯一的自然選擇（§IV E.6）。
-- 「加權 D-CTC」（§IV C）：在 D-CTC 有多個不動點時，給每個不動點一個權重。這是 D-CTC 內部的選擇規則，不是往 P-CTC 的內插。
-- T-CTC 的傳訊：§IV E.5 說 T-CTC 的非線性讓「糾纏偵測器」成為可能，跟 D-CTC、P-CTC 一樣。
-- 本專案已經把 T-CTC 實作成第四種規則，並重現了 Eq. 33、35、38、40，見 [T_CTC.md](T_CTC.md)。
+- Definition of T-CTC (Eqs. 24–26): a Haar integral over all pure loop states. The closed form (Eq. 33) is a P-CTC term plus d times the "fully random loop" channel. Allen notes that T-CTC is a weighted mixture of P-CTC and an ordinary channel, which makes it tempting to see it as "noisy P-CTC".
+- Transition-probability theories are "a class of theories", because the integration measure has no unique natural choice (§IV E.6).
+- "Weighted D-CTC" (§IV C): when D-CTC has several fixed points, give each a weight. This is a selection rule inside D-CTC, not an interpolation towards P-CTC.
+- Signalling: §IV E.5 says T-CTC's nonlinearity makes an "entanglement detector" possible, as for D-CTC and P-CTC.
+- This project implements T-CTC as a fourth rule and reproduces Eqs. 33, 35, 38 and 40; see [T_CTC.md](T_CTC.md).
 
-**Silva 等人 2017（[arXiv:1701.08638](https://arxiv.org/abs/1701.08638)，全文已讀）：** process matrix 對應到一類「線性的」雙時間態，也就是對所有局部操作，歸一化條件都自動成立，不需要依賴測量的重新歸一化（Eq. 19、21、29）。這跟 Araújo 等人的線性條件是同一件事，但這篇完全沒有討論 CTC 或傳訊。
+**Silva et al. 2017 (full text):** process matrices correspond to a class of "linear" two-time states, for which normalization holds automatically for every local operation, with no measurement-dependent renormalization (Eqs. 19, 21, 29). This is the same as the linearity condition of Araújo et al., but the paper does not discuss CTCs or signalling.
 
-**內插規則家族的搜尋：** 用不同關鍵字做了幾輪搜尋，沒有找到內插 D-CTC 和 P-CTC 的連續規則家族。找到的都是單一模型、D-CTC 加上去相干（用來選出唯一不動點），或 P-CTC 的推廣。
+**Search for interpolating families:** several rounds of searches with different keywords found no continuous family interpolating D-CTC and P-CTC. Results were single models, D-CTC plus decoherence (used to select a unique fixed point), or generalizations of P-CTC.
 
-**更新後的判斷：** κ–β 模型仍可能是新的，但 Allen 2014 已經走了「P-CTC 混合一個不篩選的通道」這一步，所以新意比原先估計的低。真正的差異在於：κ–β 是連續的雙參數家族、另一個角落是 D-CTC，而且有完整的傳訊圖。
+**Updated judgment:** the κ–β model may still be new, but Allen 2014 already took the step "P-CTC mixed with a non-selecting channel", so it is less new than first estimated. The real differences: κ–β is a continuous two-parameter family, its other corner is D-CTC, and it comes with a full signalling map.
 
-## 還沒查的
+## Third round (2026-11-24): past-preserving selection vs. Hartle 1994
 
-- 從 Lloyd 2011、Allen 2014 往後的完整引用追蹤（需要能看引用清單的資料庫，例如 INSPIRE 或 Semantic Scholar）。
-- 直接請熟悉 CTC 文獻的研究者確認。這是確認新穎性最可靠的方法。
+**Source:** J. B. Hartle, Phys. Rev. D 49, 6543 (1994), [arXiv:gr-qc/9309012](https://arxiv.org/abs/gr-qc/9309012). **Read in full** (arXiv v1 PDF converted to text, 41 pages, Sections I–VIII and appendix; some formula symbols were damaged in the conversion, and the formulas below were reconstructed from context). Equation numbers follow the PDF's section numbering; the arXiv HTML rendering numbers equations sequentially (for example Eq. (5.5)–(5.6) appear there as (39)–(40)). A second, independent reading on 2026-11-24 confirmed Sections I–III verbatim and Section V at summary level.
+
+### What Hartle does
+
+In a fixed background spacetime with a nonchronal region NC, he uses generalized quantum mechanics (decoherence functionals) to treat a non-unitary evolution X through NC. The central formula is Eq. (3.12):
+
+    D(β′, α′; β, α) = Tr(C_β′ X C_α′ ρ C_α† X† C_β†) / Tr(XρX†)
+
+C_α is a chain of projections before NC, C_β a chain after NC. Whole histories are normalized by one constant, Tr(XρX†).
+
+### Point-by-point comparison
+
+| Item | Hartle 1994 | Past-preserving selection (PPS) |
+|---|---|---|
+| State after NC | ρ̄ = XρX† / Tr(XρX†) (Eq. 6.7), the P-CTC formula (X corresponds to C). Hartle does not regard it as a state on a spacelike surface | each world k separately: C\|k⟩/‖C\|k⟩‖ |
+| Probabilities before NC | p(α) = N·Tr(X C_α ρ C_α† X†) (Eq. 4.1), **changed by the future NC**. Hartle calls this acausal and says comparing (4.1) with (4.2) experimentally could detect a future NC | p(k) = ⟨k\|ρ\|k⟩, **unchanged** |
+| Conditional probability given a recorded initial state | §V measurement model: when the initial alternatives α are decohered by a persistent record of an apparatus (Eq. 5.4), p(β\|α) = \|⟨β\|X\|α⟩\|² / Σ_β′ \|⟨β′\|X\|α⟩\|² (Eq. 5.6) | identical (X corresponds to C) |
+| Joint probability given a recorded initial state | p(β, α) = N·\|⟨β\|X\|α⟩\|²·⟨α\|ρ\|α⟩ (Eq. 5.5), so p(α) ∝ ⟨α\|ρ\|α⟩·‖X\|α⟩‖², the P-CTC reweighting | p(α) = ⟨α\|ρ\|α⟩ |
+| World with no consistent history (X\|α⟩ = 0) | not discussed; (5.6) is 0/0 | falls back to D-CTC |
+| Is there a "state"? | explicitly no: no ρ_eff can be defined on a spacelike surface (Section IV) | yes: PPS is an ordinary quantum channel |
+| No superluminal signalling | proved in Section VII, assuming the two regions are **initially uncorrelated** and that **their common future contains no NC** (Eqs. 7.6–7.7). Hartle remarks that correlations produced by an NC in the common future deserve study | holds for every shared state (Theorem 0, fixed record basis) |
+| Does it propose a version that does not reweight the past? | **No.** Reweighting is treated as a feature of the theory, not a defect to remove | this is the definition of PPS |
+
+### Conclusions
+
+1. **The within-world rule of PPS is not new.** It is Hartle 1994, Eq. (5.6): the conditional probability when the initial state is decohered by a persistent record. It also equals P-CTC acting on a definite input (see [PERSPECTIVES.md](../PERSPECTIVES.md), 1.5).
+2. **PPS differs from Hartle in exactly one place, by a deliberately opposite choice:** the probabilities of the recorded past. In Hartle's framework they are reweighted by ‖X\|α⟩‖² (which he calls acausal); PPS keeps them fixed. In Hartle's terms, PPS keeps the conditional probabilities of Eq. (5.6) but replaces the world weights in the joint probability by the causal version of Eq. (4.2).
+3. **This causal version does not appear in Hartle 1994.** That is one paper. Later work citing Hartle 1994 has not been checked, and the structure "each recorded world normalized separately" may appear in the decoherent-histories literature.
+4. **Relation to this project's no-signalling results.** Hartle's no-signalling proof excludes initial entanglement. The P-CTC signalling examples in [NO_SIGNALLING.md](NO_SIGNALLING.md) use initial entanglement, so there is no contradiction: the project's results fall into the case Hartle explicitly excludes and calls worth studying.
+5. **A hint for the record-basis problem.** In Hartle's framework only **decoherent** past alternatives can be assigned probabilities, and when X is non-unitary, which alternatives decohere can itself depend on the future NC (Eq. 4.7). He also notes that real decoherence mechanisms are local in time and largely unaffected by a future NC. This gives PPS a candidate record basis with support in the literature: **the past alternatives decohered by local environmental mechanisms**, in line with the suggestion in PERSPECTIVES.md 3.1 that the basis should be fixed by the interaction, not the state.
+
+**Updated judgment:** PPS cannot be claimed as a new rule as a whole. What may be new reduces to one sentence: in a Hartle-type generalized quantum mechanics, fix the probabilities of recorded past alternatives at their causal values and apply Hartle/P-CTC conditioning only inside each record; the result is a non-signalling quantum channel for which H1′–H3′ hold. Any research note using PPS **must cite Hartle 1994, Eqs. (5.5)–(5.6), and present PPS as a causal modification of Hartle's framework**, not as a new rule.
+
+## Not yet checked
+
+- Full citation tracking forward from Lloyd 2011, Allen 2014 and **Hartle 1994** (needs a database with citation lists, such as INSPIRE or Semantic Scholar). Work citing Hartle 1994 is the next step for the novelty of PPS.
+- Asking researchers familiar with the CTC literature directly. This is the most reliable way to settle novelty.

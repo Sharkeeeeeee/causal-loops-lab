@@ -1,119 +1,124 @@
-# H1–H3 的定理版本與證明（過去守恆篩選）
+# Theorem versions of H1–H3, with proofs (past-preserving selection)
 
-建立日期：2026-11-23，撰寫時使用 AI 輔助（Claude）。沒有外部審查。
+Created 2026-11-23 with AI assistance (Claude). No external review.
 
 ```text
-python -B ctc/tests/test_theorems.py    # 11 項數值檢查，每條定理都用隨機電路驗證
-python -B ctc/tests/test_hardware.py    # 真實硬體實驗的電路與估計方法檢查
+python -B ctc/tests/test_theorems.py    # 11 numerical checks; every theorem is verified on random circuits
+python -B ctc/tests/test_hardware.py    # circuit and estimator checks for the hardware experiments
 ```
 
-## 這份文件證明的是什麼
+## What this document proves
 
-證明的是條件式的敘述：**如果自洽規則是「過去守恆篩選」（以下簡稱 PP，定義見 [PAST_PRESERVING.md](PAST_PRESERVING.md)），那麼 H1–H3 在下面寫明的條件下成立。** 它不證明自然界真的有時間迴圈，也不證明自然界用的是 PP。任何模擬或硬體實驗都做不到這一點，因為後選擇永遠可以用正常的時間方向解釋。
+It proves conditional statements: **if the consistency rule is past-preserving selection (PPS, defined in [PAST_PRESERVING.md](PAST_PRESERVING.md)), then H1–H3 hold under the conditions written below.** It does not prove that nature has time loops, or that nature uses PPS. No simulation or hardware experiment can show that, because postselection can always be explained in the normal time direction.
 
-選 PP 而不選 P-CTC 的原因：在 P-CTC 下，H2 的「重新加權」等於超光速傳訊（[NO_SIGNALLING.md](NO_SIGNALLING.md)），而且 H3 有反例（見定理 3 的附註）。PP 是三個假設可以同時成立、又跟相對論相容的規則。這個選擇也有代價：三個假設都必須改寫成帶撇號的版本（H1′、H2′、H3′），差別在每條定理後面說明。
+Why PPS and not P-CTC: under P-CTC, H2's "reweighting" is faster-than-light signalling ([NO_SIGNALLING.md](NO_SIGNALLING.md)), and H3 has a counterexample (see the remark after Theorem 3). PPS is a rule under which all three hypotheses can hold together while staying compatible with relativity. The choice has a price: all three hypotheses must be rewritten as primed versions (H1′, H2′, H3′). The differences are explained after each theorem.
 
-## 設定與記號
+**Prior work.** The rule PPS applies inside each recorded world is Hartle 1994, Eq. (5.6); PPS differs from Hartle's framework by not reweighting the recorded past. See [NOVELTY_CHECK.md](NOVELTY_CHECK.md), third round.
 
-- CR 系統 A（維度 d），迴圈系統 L（維度 n），交互作用是 A⊗L 上的么正算符 U。
-- C = Tr_L U，對算符本身取部分跡。
-- 記錄基底 {|k⟩}：A 的輸入中，已經被記錄下來的過去事實。
-- PP 規則：對每個世界 k，
-  - 若 C|k⟩ ≠ 0（世界 k 有自洽歷史）：Kraus 算符 K_k = C|k⟩⟨k| / ‖C|k⟩‖；
-  - 若 C|k⟩ = 0（世界 k 沒有自洽歷史）：退回 D-CTC。令 σ_k = Tr_L[U(|k⟩⟨k|⊗τ_k)U†]，τ_k 是 D-CTC 不動點，σ_k = Σ_j λ_kj |s_kj⟩⟨s_kj|，Kraus 算符 F_kj = √λ_kj |s_kj⟩⟨k|。
-  - Φ(ρ) = Σ K ρ K†，總和涵蓋上面所有的 Kraus 算符。
-- **經典可逆電路**：U|x, m⟩ = |f(x,m), g(x,m)⟩，其中 f, g 合起來是一個雙射。歷史 (x, m) **自洽**的意思是迴圈訊息繞一圈後不變：g(x, m) = m。世界 x 的自洽訊息集合 S(x) = {m : g(x,m) = m}。N_xy = #{m ∈ S(x) : f(x,m) = y}。
-- **無迴圈基準 P_0**：同一個 U，但迴圈輸入換成均勻隨機的外部訊息（最大混合態 𝟙/n）。
+## Setting and notation
 
-**引理 1。** 對經典可逆電路，⟨y|C|x⟩ = N_xy，也就是 C|x⟩ = Σ_{m∈S(x)} |f(x,m)⟩。
+- CR system A (dimension d), loop system L (dimension n), interaction a unitary U on A⊗L.
+- C = Tr_L U, the partial trace of the operator itself.
+- Record basis {|k⟩}: the past facts in A's input that have already been recorded.
+- The PPS rule, for each world k:
+  - if C|k⟩ ≠ 0 (world k has a consistent history): Kraus operator K_k = C|k⟩⟨k| / ‖C|k⟩‖;
+  - if C|k⟩ = 0 (world k has no consistent history): fall back to D-CTC. Let σ_k = Tr_L[U(|k⟩⟨k|⊗τ_k)U†], where τ_k is the D-CTC fixed point, and σ_k = Σ_j λ_kj |s_kj⟩⟨s_kj|; Kraus operators F_kj = √λ_kj |s_kj⟩⟨k|.
+  - Φ(ρ) = Σ K ρ K†, summing over all the Kraus operators above.
+- **Classical reversible circuit:** U|x, m⟩ = |f(x,m), g(x,m)⟩, where f and g together form a bijection. A history (x, m) is **consistent** if the loop message is unchanged after one round: g(x, m) = m. The consistent messages of world x are S(x) = {m : g(x,m) = m}. N_xy = #{m ∈ S(x) : f(x,m) = y}.
+- **No-loop baseline P_0:** the same U, with the loop input replaced by a uniformly random external message (the maximally mixed state 𝟙/n).
 
-*證明。* ⟨y|C|x⟩ = Σ_m ⟨y, m|U|x, m⟩ = Σ_m [f(x,m) = y]·[g(x,m) = m] = N_xy。∎
+**Lemma 1.** For a classical reversible circuit, ⟨y|C|x⟩ = N_xy, i.e. C|x⟩ = Σ_{m∈S(x)} |f(x,m)⟩.
 
-所以「C|x⟩ = 0」恰好等於「世界 x 沒有任何自洽歷史」，PP 的兩種情況就是「有自洽歷史」和「完全沒有」。
+*Proof.* ⟨y|C|x⟩ = Σ_m ⟨y, m|U|x, m⟩ = Σ_m [f(x,m) = y]·[g(x,m) = m] = N_xy. ∎
 
-## 定理 0：PP 不能傳訊
+So "C|x⟩ = 0" is exactly "world x has no consistent history", and the two cases of PPS are "has a consistent history" and "has none".
 
-**敘述。** 對任何 U 和記錄基底，Σ K†K = 𝟙。所以 Φ 是線性、完全正、保持跡的量子通道。對任何 Alice–Bob 共享態 ρ_AB，Tr_A[(Φ⊗id)(ρ_AB)] = ρ_B（Alice → Bob 不能傳訊）；Bob 在迴圈之前做的任何操作，也不會改變 Alice 的輸出統計（Bob → Alice 不能傳訊）。
+## Theorem 0: PPS cannot signal
 
-*證明。* K_k†K_k = C 的那一項給出 |k⟩⟨k|·‖C|k⟩‖²/‖C|k⟩‖² = |k⟩⟨k|；退回項給出 Σ_j λ_kj |k⟩⟨k| = |k⟩⟨k|，因為 Tr σ_k = 1。對 k 求和得到 𝟙。保持跡的局部通道不會改變另一方的約化態；而 Φ 是線性的，所以 Bob 的操作和 Alice 的通道可以交換順序。∎
+**Statement.** For any U and any record basis, Σ K†K = 𝟙. So Φ is a linear, completely positive, trace-preserving quantum channel. For any Alice–Bob state ρ_AB, Tr_A[(Φ⊗id)(ρ_AB)] = ρ_B (no signalling Alice → Bob), and no operation Bob performs before the loop changes Alice's output statistics (no signalling Bob → Alice).
 
-*檢查：* `Theorem0_NoSignalling`，5 種維度 × 4 個隨機 U，隨機記錄基底，隨機糾纏態。
+*Proof.* For the C terms, K_k†K_k = |k⟩⟨k|·‖C|k⟩‖²/‖C|k⟩‖² = |k⟩⟨k|; the fallback terms give Σ_j λ_kj |k⟩⟨k| = |k⟩⟨k|, since Tr σ_k = 1. Summing over k gives 𝟙. A trace-preserving local channel cannot change the other party's reduced state, and since Φ is linear, Bob's operation and Alice's channel commute. ∎
 
-## 定理 1（H1′：每個世界都自洽）
+*Check:* `Theorem0_NoSignalling`: 5 dimensions × 4 random U, random record bases, random entangled states.
 
-**敘述。** 對經典可逆電路，在計算基底上記錄輸入：
+**Scope.** Theorem 0 needs a record basis that does not depend on the state. The decoherence-defined rule of [DECOHERENCE.md](DECOHERENCE.md) picks the basis from the state, which makes it nonlinear, so Theorem 0 does not cover it (see [PERSPECTIVES.md](../PERSPECTIVES.md), 3.1).
 
-1. **有自洽歷史的世界只會出現自洽歷史的結果。** 若 S(x) ≠ ∅，則 P(y | x) > 0 只有在存在某個 m ∈ S(x) 使 f(x,m) = y 時才會發生。更精確地說，P(y | x) = N_xy² / Σ_y′ N_xy′²。
-2. **沒有自洽歷史的世界，迴圈處於 Deutsch 不動點。** 若 S(x) = ∅，任何確定的訊息值都不自洽；PP 讓迴圈處於混合態 τ_x，滿足 τ_x = Tr_A[U(|x⟩⟨x|⊗τ_x)U†]。這種不動點對任何 U 都存在（Deutsch 1991）。
-3. **對所有輸入都有定義。** P-CTC 在 Tr[CρC†] = 0 時沒有定義（例如 ε = 0 的祖父悖論），PP 沒有這個缺口。
+## Theorem 1 (H1′: every world is self-consistent)
 
-*證明。* (1) 由引理 1，世界 x 的輸出是 C|x⟩/‖C|x⟩‖ = Σ_y N_xy|y⟩ / (Σ N²)^{1/2}，在計算基底測量得到 N_xy²/ΣN²。N_xy = 0 時機率是 0。(2) 這是退回規則的定義，不動點的存在性來自 CPTP 映射在有限維態空間上的不動點定理。(3) 每個世界都屬於兩種情況之一，兩種都有定義。∎
+**Statement.** For a classical reversible circuit with the input recorded in the computational basis:
 
-**跟原本 H1 的差別。** 原本的 H1 是「悖論歷史不會發生」。在 PP 下，「祖父悖論的那個世界」本身不會消失，因為它屬於已記錄的過去，PP 不准改變過去的機率。這個世界裡的自洽，是靠迴圈訊息變成混合態來達成的（Deutsch 式），而不是靠刪掉世界（P-CTC 式）。**刪掉過去的世界，正是 P-CTC 會傳訊的原因**，所以這個改寫是無訊號條件逼出來的，不是任意的選擇。
+1. **A world with a consistent history shows only outcomes of consistent histories.** If S(x) ≠ ∅, then P(y | x) > 0 only if some m ∈ S(x) has f(x,m) = y. More precisely, P(y | x) = N_xy² / Σ_y′ N_xy′².
+2. **In a world with no consistent history, the loop sits at a Deutsch fixed point.** If S(x) = ∅, no definite message value is consistent; PPS puts the loop in a mixed state τ_x with τ_x = Tr_A[U(|x⟩⟨x|⊗τ_x)U†]. Such a fixed point exists for every U (Deutsch 1991).
+3. **Defined for every input.** P-CTC is undefined when Tr[CρC†] = 0 (for example the grandfather paradox with ε = 0); PPS has no such gap.
 
-**量子情形的附註。** (1) 裡的平方 N² 代表振幅相加，而不是歷史數相加。兩條自洽歷史給出同一個結果時，它們會干涉（[QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md) 的「邏輯自洽 ≠ 振幅自洽」）。只要每條自洽歷史都留下不同的紀錄，N_xy 就只有 0 或 1，兩種計數就一致，見定理 2。
+*Proof.* (1) By Lemma 1, world x outputs C|x⟩/‖C|x⟩‖ = Σ_y N_xy|y⟩ / (Σ N²)^{1/2}, and measuring in the computational basis gives N_xy²/ΣN². If N_xy = 0 the probability is 0. (2) This is the definition of the fallback; existence of the fixed point follows from the fixed-point theorem for CPTP maps on the finite-dimensional state space. (3) Every world falls in one of the two cases, and both are defined. ∎
 
-*檢查：* `Theorem1_Consistency`，5 種維度 × 10 個隨機雙射。用獨立的歷史列舉核對 ⟨y|C|x⟩ = N_xy；不自洽的結果機率小於 10⁻⁹；悖論世界驗證 D-CTC 不動點方程式；ε = 0 的祖父悖論中 P-CTC 回傳「沒有定義」，PP 正常輸出。
+**Difference from the original H1.** The original H1 said "paradoxical histories do not happen". Under PPS the "grandfather paradox world" does not disappear, because it belongs to the recorded past, whose probabilities PPS may not change. Consistency in that world is reached by the loop message becoming mixed (Deutsch-style), not by deleting the world (P-CTC-style). **Deleting past worlds is exactly why P-CTC signals**, so this rewrite is forced by the no-signalling condition, not an arbitrary choice.
 
-## 定理 2（H2′：迴圈改變未來，不改變過去）
+**Remark on the quantum case.** The square N² in (1) means amplitudes add, not history counts. Two consistent histories with the same outcome interfere ("logical consistency ≠ amplitude consistency" in [QUANTUM_EFFECTS.md](QUANTUM_EFFECTS.md)). As long as every consistent history leaves a different record, N_xy is 0 or 1 and the two counts agree; see Theorem 2.
 
-**敘述。**
+*Check:* `Theorem1_Consistency`: 5 dimensions × 10 random bijections. ⟨y|C|x⟩ = N_xy is checked against an independent enumeration of histories; inconsistent outcomes have probability below 10⁻⁹; the D-CTC fixed-point equation is verified in paradox worlds; for the ε = 0 grandfather paradox P-CTC returns "undefined" while PPS gives a normal output.
 
-1. **過去不變。** 對任何 U 和任何在記錄基底上對角的 ρ = Σ p_k|k⟩⟨k|，世界 k 的機率在 PP 之後仍然是 p_k。
-2. **未來被改變，而且改變的方式完全由自洽決定。** 對經典可逆電路，若迴圈訊息會被記錄下來（每條自洽歷史的輸出都不同，即 N_xy ∈ {0, 1}），則對每個有自洽歷史的世界 x：
+## Theorem 2 (H2′: the loop changes the future, not the past)
 
-   P_PP(y | x) = P_0(y | x, 歷史是自洽的)
+**Statement.**
 
-   也就是：迴圈的效應，恰好是「在每個過去世界之內，排除不自洽的歷史，再重新歸一化」。
-3. **效應可以觀察到，但不能傳訊。** 只要某個 p_x > 0 的世界裡，「以自洽為條件」的分布跟沒有條件的分布不同，P_PP ≠ P_0，差異可以在實驗中量到（定理 0 保證它不能用來傳訊）。
+1. **The past is unchanged.** For any U and any ρ = Σ p_k|k⟩⟨k| diagonal in the record basis, world k still has probability p_k after PPS.
+2. **The future changes, entirely by consistency.** For a classical reversible circuit in which the loop message is recorded (every consistent history has a different output, i.e. N_xy ∈ {0, 1}), for every world x with a consistent history:
 
-*證明。* (1) 每個世界 k 的 Kraus 算符滿足 Σ K†K 在 |k⟩ 上等於 1（定理 0 的證明），所以 Tr Φ(p_k|k⟩⟨k|) = p_k。(2) 均勻隨機訊息下，P_0(y, m | x) = [f(x,m) = y]/n，所以 P_0(y | x, m ∈ S(x)) = N_xy/|S(x)|。另一方面由定理 1，N_xy ∈ {0,1} 時 P_PP(y|x) = N_xy/Σ N = N_xy/|S(x)|。兩者相等。(3) 由 (2) 直接得到。∎
+   P_PPS(y | x) = P_0(y | x, history is consistent)
 
-**跟原本 H2 的差別。** 原本的 H2 說差異來自「排除不自洽歷史並重新加權」，這一點保留了下來，但重新加權只在每個已記錄的過去世界**之內**進行，世界之間的權重不變。對跟外界有相關性的系統，迴圈效應因此只出現在條件統計裡（例如按另一方的測量結果分組，見 [PAST_PRESERVING.md](PAST_PRESERVING.md) 的雙縫實驗）。
+   That is, the loop's effect is exactly "inside each past world, remove the inconsistent histories and renormalize".
+3. **The effect is observable but cannot signal.** Whenever, in some world with p_x > 0, the distribution conditioned on consistency differs from the unconditioned one, P_PPS ≠ P_0, and the difference can be measured (Theorem 0 guarantees it cannot be used to signal).
 
-**例子（硬體實驗 2「拒絕寄件」）：** P(訊息被記錄 | a = 1) 從無迴圈的 0.5 變成 0；P(a = 1) 維持 0.5。P-CTC 則把 P(a = 1) 改成 1/3，也就是改變了過去。
+*Proof.* (1) The Kraus operators of each world k satisfy Σ K†K = 1 on |k⟩ (proof of Theorem 0), so Tr Φ(p_k|k⟩⟨k|) = p_k. (2) With a uniformly random message, P_0(y, m | x) = [f(x,m) = y]/n, so P_0(y | x, m ∈ S(x)) = N_xy/|S(x)|. By Theorem 1, when N_xy ∈ {0,1}, P_PPS(y|x) = N_xy/Σ N = N_xy/|S(x)|. The two are equal. (3) Follows directly from (2). ∎
 
-*檢查：* `Theorem2_FutureNotPast`。世界機率不變（隨機 U）；有紀錄的隨機雙射上，PP 等於用歷史列舉算出的條件分布；沒有紀錄時驗證一般的 N²/ΣN² 公式。
+**Difference from the original H2.** The original H2 said the difference comes from "removing inconsistent histories and renormalizing". That is kept, but renormalization happens only **inside** each recorded past world; the weights between worlds do not change. For systems correlated with the outside, the loop's effect therefore appears only in conditional statistics (for example sorted by another party's measurement result; see the double slit in [PAST_PRESERVING.md](PAST_PRESERVING.md)).
 
-## 定理 3（H3′：迴圈不回頭作用時，回到一般量子力學）
+**Example (hardware experiment 2, "refusal to send"):** P(message recorded | a = 1) goes from 0.5 without the loop to 0; P(a = 1) stays at 0.5. P-CTC instead changes P(a = 1) to 1/3, i.e. it changes the past.
 
-**敘述。** 假設迴圈不會作用回 CR 系統：U = (V⊗𝟙) Σ_k |k⟩⟨k| ⊗ W_k，也就是 A 在基底 {|k⟩} 上控制迴圈，迴圈從不影響 A。取記錄基底為 {|k⟩}。則：
+*Check:* `Theorem2_FutureNotPast`: world probabilities unchanged (random U); on random bijections with records, PPS equals the conditional distribution computed by enumerating histories; without records, the general N²/ΣN² formula is verified.
 
-1. 對任何在記錄基底上對角的 ρ，以及任何外部迴圈輸入 τ_0，Φ(ρ) = Tr_L[U(ρ⊗τ_0)U†]，也就是**跟沒有迴圈的一般量子力學完全相同**。W_k 的跡是否為 0 都不影響。
-2. 對任何 ρ（不一定對角），兩者在基底 {V|k⟩} 上的測量統計相同。
-3. 特例：完全沒有交互作用，U = V⊗W，取 ρ 的本徵基底為記錄基底，則 Φ(ρ) = VρV†。**包括 Tr W = 0 的情形**，這時 P-CTC 沒有定義。
+## Theorem 3 (H3′: when the loop does not act back, ordinary quantum mechanics returns)
 
-*證明。* C = Tr_L U = Σ_k Tr(W_k) V|k⟩⟨k|，所以 C|k⟩ = Tr(W_k) V|k⟩。
+**Statement.** Suppose the loop does not act back on the CR system: U = (V⊗𝟙) Σ_k |k⟩⟨k| ⊗ W_k, i.e. A controls the loop in the basis {|k⟩} and the loop never affects A. Take {|k⟩} as the record basis. Then:
 
-- 若 Tr W_k ≠ 0：K_k = e^{iθ} V|k⟩⟨k|，K_k ρ K_k† = ρ_kk V|k⟩⟨k|V†。
-- 若 Tr W_k = 0：退回 D-CTC。對任何 τ，Tr_L[U(|k⟩⟨k|⊗τ)U†] = V|k⟩⟨k|V†·Tr(W_kτW_k†) = V|k⟩⟨k|V†，所以 σ_k = V|k⟩⟨k|V†，貢獻同樣是 ρ_kk V|k⟩⟨k|V†。
+1. For any ρ diagonal in the record basis and any external loop input τ_0, Φ(ρ) = Tr_L[U(ρ⊗τ_0)U†]: **exactly ordinary quantum mechanics without a loop.** Whether the W_k have zero trace does not matter.
+2. For any ρ (not necessarily diagonal), the two give the same measurement statistics in the basis {V|k⟩}.
+3. Special case: no interaction at all, U = V⊗W, with the eigenbasis of ρ as the record basis: Φ(ρ) = VρV†, **including when Tr W = 0**, where P-CTC is undefined.
 
-所以 Φ(ρ) = V Δ(ρ) V†，Δ 是在 {|k⟩} 上去掉非對角項。無迴圈時 Tr_L[U(ρ⊗τ_0)U†] = V Σ_{k,k′} ρ_kk′ Tr(W_k τ_0 W_k′†) |k⟩⟨k′| V†，它的對角項是 ρ_kk（因為 Tr(W_kτ_0W_k†) = 1）。ρ 對角時兩者相等，這是 (1)；一般 ρ 時對角項相等，這是 (2)。(3) 是 W_k = W 對所有 k 的情形，且基底取成 ρ 的本徵基底時 Δ(ρ) = ρ。∎
+*Proof.* C = Tr_L U = Σ_k Tr(W_k) V|k⟩⟨k|, so C|k⟩ = Tr(W_k) V|k⟩.
 
-**記錄基底在這裡是自然決定的：** 它就是 A 被迴圈讀取的那個基底。迴圈本身就是 A 在這個基底上的紀錄。
+- If Tr W_k ≠ 0: K_k = e^{iθ} V|k⟩⟨k|, and K_k ρ K_k† = ρ_kk V|k⟩⟨k|V†.
+- If Tr W_k = 0: fall back to D-CTC. For any τ, Tr_L[U(|k⟩⟨k|⊗τ)U†] = V|k⟩⟨k|V†·Tr(W_kτW_k†) = V|k⟩⟨k|V†, so σ_k = V|k⟩⟨k|V† and the contribution is again ρ_kk V|k⟩⟨k|V†.
 
-**P-CTC 的反例。** 取 V = 𝟙、W_0 = 𝟙、W_1 = X（A 控制一個作用在迴圈上的 NOT），ρ = 𝟙/2。迴圈從不作用在 A 上，但 C = 2|0⟩⟨0|，P-CTC 把 a = 1 的世界整個刪掉：P(a = 1) = 0，而一般量子力學給出 0.5。再取 U = 𝟙⊗Z（迴圈只帶一個相位），C = 0，P-CTC 沒有定義。所以原本的 H3 在 P-CTC 下不成立，在 PP 下成立。
+So Φ(ρ) = V Δ(ρ) V†, where Δ removes the off-diagonal terms in {|k⟩}. Without the loop, Tr_L[U(ρ⊗τ_0)U†] = V Σ_{k,k′} ρ_kk′ Tr(W_k τ_0 W_k′†) |k⟩⟨k′| V†, whose diagonal terms are ρ_kk (since Tr(W_kτ_0W_k†) = 1). For diagonal ρ the two agree, which is (1); for general ρ the diagonals agree, which is (2). (3) is the case W_k = W for all k, with the basis chosen as the eigenbasis of ρ so that Δ(ρ) = ρ. ∎
 
-*檢查：* `Theorem3_CausalityRecovered`。5 種維度，W_k 隨機混合一般么正和零跡么正，每次都至少包含一個悖論世界；隨機 V、隨機外部輸入；以及上面的 P-CTC 反例。
+**The record basis is fixed naturally here:** it is the basis in which the loop reads A. The loop itself is a record of A in that basis.
 
-## 硬體實驗
+**P-CTC counterexample.** Take V = 𝟙, W_0 = 𝟙, W_1 = X (A controls a NOT on the loop), ρ = 𝟙/2. The loop never acts on A, yet C = 2|0⟩⟨0|, and P-CTC deletes the a = 1 world entirely: P(a = 1) = 0, while ordinary quantum mechanics gives 0.5. With U = 𝟙⊗Z (the loop only picks up a phase), C = 0 and P-CTC is undefined. So the original H3 fails under P-CTC and holds under PPS.
 
-這些例子都在 IBM 量子電腦上跑過，程式和完整結果在 [hardware/](hardware/README.md)。下表最後一欄是第三次執行（ibm_kingston，送出前登錄了預測和判準，21 項判準全部通過）的過去守恆實測值：
+*Check:* `Theorem3_CausalityRecovered`: 5 dimensions, W_k a random mix of generic and zero-trace unitaries, always including at least one paradox world; random V, random external input; plus the P-CTC counterexample above.
 
-| 實驗 | 對應定理 | 無迴圈 | P-CTC | 過去守恆 | 實測 |
+## Hardware experiments
+
+These examples were all run on IBM quantum computers; code and full results are in [hardware/](hardware/README.md). The last column is the PPS value measured in the third run (ibm_kingston, predictions and criteria fixed before submission, 21 of 21 criteria pass):
+
+| Experiment | Theorem | No loop | P-CTC | PPS | Measured |
 |---|---|---|---|---|---|
-| 祖父悖論，P(槍卡住) | 定理 1(2)(3)、定理 2(1) | 0.2 | 1 | **0.2** | 0.211 |
-| 拒絕寄件，P(a = 1)（過去） | 定理 2(1) | 0.5 | 1/3 | **0.5** | 0.503 |
-| 拒絕寄件，P(訊息被記錄 \| a = 1)（未來） | 定理 1(1)、定理 2(2) | 0.5 | 0 | **0** | 0.035 |
-| 單向控制，P(a = 1) | 定理 3、P-CTC 反例 | 0.5 | 0 | **0.5** | 0.495 |
-| 量子擦除，Bob 的 which-path 統計 | 定理 0 | 0.5 | 0.667 | **0.5** | 0.501 |
-| 量子擦除，依 Bob 分組的條紋清晰度 | PAST_PRESERVING.md | 0.707 | 0.943 | **0.943** | 0.870 |
+| Grandfather paradox, P(gun jams) | Thm 1(2)(3), Thm 2(1) | 0.2 | 1 | **0.2** | 0.211 |
+| Refusal to send, P(a = 1) (past) | Thm 2(1) | 0.5 | 1/3 | **0.5** | 0.503 |
+| Refusal to send, P(message recorded \| a = 1) (future) | Thm 1(1), Thm 2(2) | 0.5 | 0 | **0** | 0.035 |
+| One-way control, P(a = 1) | Thm 3, P-CTC counterexample | 0.5 | 0 | **0.5** | 0.495 |
+| Quantum eraser, Bob's which-path statistics | Thm 0 | 0.5 | 0.667 | **0.5** | 0.501 |
+| Quantum eraser, fringe visibility sorted by Bob | PAST_PRESERVING.md | 0.707 | 0.943 | **0.943** | 0.870 |
 
-三種規則的數字來自同一批 shots，所以硬體結果顯示的是「預測量得出來」，不是「自然界用的是過去守恆」。
+The numbers for all rules come from the same shots, so the hardware results show that the predictions are measurable, not that nature uses PPS. The values are standard quantum mechanics applied to postselected circuits.
 
-## 還沒證明的事
+## Not yet proved
 
-1. **定理 3 只涵蓋「受控」形式的 U。** 一般「迴圈不影響 A」的么正算符是否都能寫成這種形式，這裡沒有證明。
-2. **記錄基底的選擇。** 定理 3 裡記錄基底是自然決定的；但在一般情況下（例如 PAST_PRESERVING.md 的糾纏雙縫），不同的記錄基底給出不同的預測。這仍是 PP 最大的開放問題。
-3. **悖論世界退回 D-CTC 是一個接縫。** 定理 1(2) 說明了它在那些世界裡做什麼，但沒有說明為什麼自然界應該這樣做。
-4. **定理 1、2 的主要敘述只對經典可逆電路。** 一般量子 U 的對應敘述是「世界 k 的輸出等於 Bell 後選擇成功的狀態」，這是 PP 的定義本身，比較沒有內容。
+1. **Theorem 3 covers only controlled-form U.** Whether every unitary in which "the loop does not affect A" can be written this way is not proved here.
+2. **Choice of record basis.** In Theorem 3 the record basis is fixed naturally, but in general (for example the entangled double slit in PAST_PRESERVING.md) different record bases give different predictions. This is still the largest open problem of PPS.
+3. **Falling back to D-CTC in paradox worlds is a seam.** Theorem 1(2) says what it does in those worlds, not why nature should do it.
+4. **The main statements of Theorems 1 and 2 are for classical reversible circuits only.** For a general quantum U the corresponding statement is "world k outputs the state of successful Bell postselection", which is the definition of PPS and has less content.
+5. **Computational power.** On definite inputs PPS equals P-CTC, so it is at least as powerful as P-CTC (PostBQP); no upper bound is proved ([PERSPECTIVES.md](../PERSPECTIVES.md), 1.5; `tests/test_computational_power.py`).

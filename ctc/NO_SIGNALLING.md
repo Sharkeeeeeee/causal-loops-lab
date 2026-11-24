@@ -1,98 +1,97 @@
-# 無訊號測試：H2 能不能跟相對論共存？
+# No-signalling tests: can H2 coexist with relativity?
 
-建立日期：2026-11-22，撰寫時使用 AI 輔助（Claude）。命題和證明是本專案推導的，精神上很可能已經有人提過（見最後一節），新穎性還沒有確認。沒有外部審查。
+Created 2026-11-22 with AI assistance (Claude). The propositions and proofs were derived in this project; in spirit they are largely known (see the last section). No external review.
 
 ```text
-python -B ctc/tests/test_signalling.py   # 11 項測試
-python -B ctc/run_signalling.py          # 產生 output/signalling.json 和 output/signalling_map.png
+python -B ctc/tests/test_signalling.py   # 11 tests
+python -B ctc/run_signalling.py          # writes output/signalling.json and output/signalling_map.png
 ```
 
-程式在 [signalling.py](signalling.py)。
+The code is in [signalling.py](signalling.py).
 
-## 結論先講
+## Summary
 
-> **在本專案研究的所有規則裡，「迴圈重新加權了 Alice 的世界」（H2）和「Alice 能對遠方的 Bob 發送超光速訊號」是同一件事。** Bob 統計的變化量，正好等於 Alice 那邊相關變數被重新加權的量。
+> **In every rule studied here, "the loop reweights Alice's world" (H2) and "Alice can send a faster-than-light signal to a distant Bob" are the same thing.** The change in Bob's statistics equals the amount by which the correlated variable on Alice's side is reweighted.
 
-所以 H2 照目前的寫法，無法跟相對論的無訊號條件共存。要保住 H2，必須修改它的形式，可能的方向在最後一節。
+So H2 as originally stated cannot coexist with relativity's no-signalling condition. Keeping H2 requires changing its form; possible directions are in the last sections.
 
-## 測試設定
+## Test setup
 
-- **Alice** 擁有迴圈電路，可以自由決定要不要啟動迴圈。
-- **Bob** 在很遠的地方。迴圈啟動之前，他跟 Alice 的某個 CR 位元共享相關性：古典版本是 Bob 持有那個位元的完美副本；量子版本是兩者處在 √(1−p)|00⟩ + √p|11⟩ 的糾纏態。
-- 加上 Bob 之後，Alice 自己看到的任何結果都不變（測試確認）。
-- **Alice → Bob：** 比較「Alice 啟動迴圈」和「Alice 不啟動」時 Bob 的狀態，用跡距離衡量差異。不是零，就代表 Alice 可以用「啟動或不啟動」對 Bob 傳訊。
-- **Bob → Alice：** Bob 在 Alice 的迴圈運作之前，自由選擇用 Z 或 X 基底測量。檢查 Alice 的輸出會不會透露 Bob 的選擇。
+- **Alice** owns the loop circuit and can freely decide whether to switch the loop on.
+- **Bob** is far away. Before the loop runs, he shares a correlation with one of Alice's CR bits: classically, Bob holds a perfect copy of that bit; quantum mechanically, the two are in the entangled state √(1−p)|00⟩ + √p|11⟩.
+- Adding Bob changes none of Alice's own results (tested).
+- **Alice → Bob:** compare Bob's state when Alice switches the loop on and when she does not, using the trace distance. Anything nonzero means Alice can signal to Bob by her choice.
+- **Bob → Alice:** before Alice's loop runs, Bob freely chooses to measure in the Z or X basis. Check whether Alice's output reveals Bob's choice.
 
-## 結果：Alice → Bob
+## Results: Alice → Bob
 
-表中是 Bob 統計的變化量（跡距離），0 代表不能傳訊。
+The table gives the change in Bob's statistics (trace distance); 0 means no signalling.
 
-| 情境（Bob 持有的副本） | 無迴圈 | D-CTC | P-CTC | κ–β，β = 0 | κ–β，β > 0 |
+| Scenario (bit Bob holds a copy of) | No loop | D-CTC | P-CTC | κ–β, β = 0 | κ–β, β > 0 |
 |---|---|---|---|---|---|
-| 祖父悖論，ε = 0.05（「失敗」位元） | 0 | 0 | **0.95** | 0 | **> 0**（β = ∞ 時是 0.95） |
-| KFK 有動機寄件者（「壞選擇」位元） | 0 | 0 | **0.154** | 0 | **> 0**（典型但自洽角落是 0.245） |
-| KFK 無條件寄件者 | 0 | 0 | 0 | 0 | 0 |
-| 量子干涉，CZ（位元 a） | 0 | 0 | **0.5** | 不適用（帶相位） | 不適用 |
-| 自舉悖論（記錄位元） | 0 | 0 | 0 | 0 | 0 |
+| Grandfather paradox, ε = 0.05 ("fail" bit) | 0 | 0 | **0.95** | 0 | **> 0** (0.95 at β = ∞) |
+| KFK motivated sender ("bad choice" bit) | 0 | 0 | **0.154** | 0 | **> 0** (0.245 at the typical-but-consistent corner) |
+| KFK unconditional sender | 0 | 0 | 0 | 0 | 0 |
+| Quantum interference, CZ (bit a) | 0 | 0 | **0.5** | n/a (phases) | n/a |
+| Bootstrap paradox (record bit) | 0 | 0 | 0 | 0 | 0 |
 
-古典版本和量子糾纏版本給出完全相同的數字。
+The classical and quantum-entangled versions give identical numbers.
 
 ![signalling map](output/signalling_map.png)
 
-在 κ–β 平面上，只有 s = 0（β = 0）那條邊完全不能傳訊，其他地方都可以。
+On the κ–β plane only the edge s = 0 (β = 0) is completely signal-free; everywhere else signalling is possible.
 
-自舉悖論在這裡沒有傳訊，只是因為記錄位元一開始固定是 0，Bob 跟它沒有真正的相關性。把記錄位元換成 50/50 再跟 Bob 糾纏，P-CTC 就會讓 Bob 的狀態改變 0.5（測試 `test_bootstrap_signals_once_the_record_is_entangled`）。
+The bootstrap paradox shows no signalling here only because the record bit starts fixed at 0, so Bob has no real correlation with it. With the record bit made 50/50 and entangled with Bob, P-CTC changes Bob's state by 0.5 (test `test_bootstrap_signals_once_the_record_is_entangled`).
 
-## 結果：Bob → Alice
+## Results: Bob → Alice
 
-用 Brun–Harrington–Wilde 的 BB84 電路，Alice 的輸入位元跟 Bob 最大糾纏：
+Using the Brun–Harrington–Wilde BB84 circuit, with Alice's input bit maximally entangled with Bob:
 
-| 規則與套用方式 | Bob 量 Z 之後，Alice 的結果 | Bob 量 X 之後，Alice 的結果 |
+| Rule and how it is applied | Alice's result after Bob measures Z | Alice's result after Bob measures X |
 |---|---|---|
-| P-CTC，套用在整體狀態上 | 四種結果各 1/4 | 四種結果各 1/4 |
-| D-CTC，套用在 Alice 的約化態上 | 四種結果各 1/4 | 四種結果各 1/4 |
-| **D-CTC，對 Bob 的每個測量結果分別套用** | **第一個位元一定是 0** | **第一個位元一定是 1** |
+| P-CTC on the global state | each of four outcomes 1/4 | each of four outcomes 1/4 |
+| D-CTC on Alice's reduced state | each of four outcomes 1/4 | each of four outcomes 1/4 |
+| **D-CTC applied separately for each of Bob's outcomes** | **first bit always 0** | **first bit always 1** |
 
-D-CTC 如果「分支逐一套用」，Bob 可以用基底的選擇，**完美地**對 Alice 傳訊。只有堅持把 D-CTC 套用在約化密度矩陣上，也就是不把 Alice 的混合態當成「真的處在某個分支、只是不知道是哪個」，才能避免傳訊。這就是 Bennett–Leung–Smith–Smolin 2009「線性陷阱」在無訊號問題上的具體後果。
+If D-CTC is applied branch by branch, Bob can signal to Alice **perfectly** by his choice of basis. Only by insisting that D-CTC acts on the reduced density matrix, i.e. by not treating Alice's mixed state as "really in one branch, we just don't know which", is signalling avoided. This is the concrete no-signalling consequence of the "linearity trap" of Bennett, Leung, Smith and Smolin (2009).
 
-## 三個命題
+## Three propositions
 
-**命題 1（古典 κ–β 模型）。** 令 R(a) = 迴圈之後 Alice 的局部世界 a 的總權重 ÷ 它原本的先驗機率。對任何 Bob 可能跟 Alice 共享的相關性，Bob 的統計都不變，若且唯若 R(a) 對 Alice 所有的局部世界都相同。β = 0 時 R(a) = 1，所以永遠不能傳訊。
+**Proposition 1 (classical κ–β model).** Let R(a) be the total weight of Alice's local world a after the loop divided by its prior probability. For every correlation Bob might share with Alice, Bob's statistics are unchanged if and only if R(a) is the same for all of Alice's local worlds. At β = 0, R(a) = 1, so there is never any signalling.
 
-*證明概要：* 訊息的動力學只看 Alice 的變數，所以每個分支的權重比例只取決於 a。Bob 的邊際分布是 P(b) = Σ_a P0(a, b) R(a) / Σ_a P0(a) R(a)。對所有 P0 都等於 P0(b)，若且唯若 R 在 P0 的支撐集上是常數。
+*Proof sketch:* the message dynamics see only Alice's variables, so each branch's weight ratio depends only on a. Bob's marginal is P(b) = Σ_a P0(a, b) R(a) / Σ_a P0(a) R(a). This equals P0(b) for all P0 if and only if R is constant on the support of P0.
 
-**命題 2（量子 P-CTC）。** 令 C = Tr_loop U。對 Alice 和 Bob 之間任何可能的共享態，P-CTC 都不能傳訊，若且唯若 C†C 正比於單位矩陣。也就是說，C 正比於一個么正算符，這時 P-CTC 只是 Alice 那邊的一個普通局部么正操作，完全沒有重新加權。
+**Proposition 2 (quantum P-CTC).** Let C = Tr_loop U. P-CTC cannot signal for any shared state of Alice and Bob if and only if C†C is proportional to the identity, i.e. C is proportional to a unitary. P-CTC is then an ordinary local unitary on Alice's side with no reweighting at all.
 
-*證明概要：* Bob 的狀態是 Tr_A[(C†C ⊗ 𝟙) ρ_AB] / Tr[…]。如果 Bob 跟 Alice 整個 CR 系統最大糾纏，Bob 的狀態正比於 (C†C)^T，它等於 Bob 原本的 𝟙/d，若且唯若 C†C ∝ 𝟙。測試 `test_bob_state_is_transpose_of_cdagc` 確認了這個公式。
+*Proof sketch:* Bob's state is Tr_A[(C†C ⊗ 𝟙) ρ_AB] / Tr[…]. If Bob is maximally entangled with Alice's whole CR system, Bob's state is proportional to (C†C)^T, which equals his original 𝟙/d if and only if C†C ∝ 𝟙. Test `test_bob_state_is_transpose_of_cdagc` confirms the formula.
 
-**命題 3（D-CTC）。** 套用在約化態上時，D-CTC 在兩個方向都不能傳訊：迴圈只作用在 Alice 那邊，而且保持跡不變。分支逐一套用時，Bob 可以對 Alice 傳訊，BB84 電路就是完美傳訊的例子。
+**Proposition 3 (D-CTC).** Applied to the reduced state, D-CTC cannot signal in either direction: the loop acts only on Alice's side and preserves the trace. Applied branch by branch, Bob can signal to Alice; the BB84 circuit is an example of perfect signalling.
 
-## 這對 H2 意味著什麼
+## What this means for H2
 
-結合三個命題：
+Together:
 
-- 能重新加權 Alice 世界的規則（P-CTC、所有 β > 0 的 κ–β 規則），**都**允許 Alice 對 Bob 傳訊，而且傳訊量正好等於重新加權的量。
-- 不能傳訊的規則（D-CTC、β = 0），**都**不會重新加權 Alice 的世界。
+- Every rule that reweights Alice's world (P-CTC, every κ–β rule with β > 0) lets Alice signal to Bob, by exactly the amount of the reweighting.
+- Every rule that cannot signal (D-CTC, β = 0) does not reweight Alice's world.
 
-在這些模型裡，H2 和無訊號條件互相排斥。可能的出路，都還沒有研究：
+In these models H2 and no-signalling exclude each other. Possible ways out, as listed when this was written:
 
-1. **限制 H2 的範圍：** 只主張迴圈會重新加權「跟外界沒有任何事先相關性」的變數，例如在實驗室裡新產生的量子隨機數。困難在於，無法保證一個變數跟遠方的任何東西都不相關。（後續：「過去守恆篩選」實作了這條路，純態可以當作局部判準，見 [PAST_PRESERVING.md](PAST_PRESERVING.md)。）
-2. **全域規則：** 讓自洽條件同時包含 Bob 那邊，也就是規則不再是 Alice 局部的。process matrix 框架走的是這個方向，但它是線性的，本身沒有重新加權。
-3. **接受某種有限的傳訊：** 例如只允許傳訊到迴圈所在區域的因果未來。但在這裡的設定中，Bob 跟 Alice 是類空分離的，所以這仍然違反相對論。
-4. **質疑 Alice 的「自由選擇」：** 如果 Alice 要不要啟動迴圈本身也受自洽條件約束，傳訊論證就不成立。這接近超決定論，要付出很大的哲學代價。
-5. **把 H2 改寫成 D-CTC 式的效應：** 迴圈只改變訊息本身的內容，不改變世界的機率。這跟相對論相容，但等於放棄原本 H2「改變未來統計」的核心主張。
+1. **Restrict H2:** claim only that the loop reweights variables with no prior correlation with anything outside, for example a quantum random number freshly generated in the lab. The difficulty is that one cannot guarantee a variable is uncorrelated with everything far away. (Follow-up: past-preserving selection implements this route, with purity as a local criterion; see [PAST_PRESERVING.md](PAST_PRESERVING.md). It became the chosen way out, H2′, proved in [THEOREMS.md](THEOREMS.md).)
+2. **Global rule:** let the consistency condition include Bob's side as well, so the rule is no longer local to Alice. The process-matrix framework goes this way, but it is linear and has no reweighting of its own.
+3. **Accept limited signalling:** for example only into the causal future of the loop region. In this setup Bob is spacelike-separated from Alice, so this would still violate relativity.
+4. **Question Alice's free choice:** if Alice's decision to switch the loop on is itself constrained by consistency, the signalling argument fails. This is close to superdeterminism and has a high philosophical price.
+5. **Rewrite H2 as a D-CTC-like effect:** the loop changes only the content of the message, not the probabilities of the world. Compatible with relativity, but it gives up H2's core claim of changing future statistics.
 
-## 跟文獻的關係
+## Relation to the literature
 
-- Gisin（1990）證明一般的決定性非線性量子力學會允許超光速傳訊。P-CTC 的重新歸一化是非線性的，所以結果在預料之中。
-- Ralph 2011 主張 P-CTC 會讓訊號傳到迴圈建立之前，Lloyd 等人回覆了。這是另一個方向的傳訊問題，本專案還沒有重現那個構造。
-- 命題 2 的條件（C†C ∝ 𝟙），在後選擇的文獻中很可能已經以某種形式出現過。
-- 本專案可能的貢獻在於**整理方式**：在一個連續的規則家族裡，證明「重新加權」和「傳訊」是同一件事，並把這個結論直接連到「迴圈改變未來」這類主張。
-- **第四種規則 T-CTC（Allen 2014）也符合這個結論：** 它會重新加權，也能傳訊（祖父悖論 0.086、量子干涉 0.25），判準同樣是 C†C ∝ 𝟙。見 [T_CTC.md](T_CTC.md)。
-- **新穎性檢查之後的更新：** P-CTC 傳訊（Bub & Stairs 2014）、D-CTC 的傳訊取決於解讀（Bub & Stairs 2014；Cavalcanti–Menicucci–Pienaar 2012），以及命題 2 的實質內容（Araújo–Guérin–Baumeler 2017：線性 P-CTC ⇔ 後選擇機率固定 ⇔ process matrix），都已經是已知結果。見 [NOVELTY_CHECK.md](NOVELTY_CHECK.md)。
+- Gisin (1990) showed that generic deterministic nonlinear quantum mechanics allows faster-than-light signalling. P-CTC's renormalization is nonlinear, so the result is expected.
+- Ralph (2011) argued that P-CTC lets signals reach times before the loop was created, and Lloyd et al. replied. That is a different signalling question; this project has not reproduced the construction.
+- **Known results:** that P-CTC allows superluminal signalling is argued in Bub & Stairs 2014 (Section III). That D-CTC's predictions depend on how the rule is applied is discussed by Cavalcanti, Menicucci & Pienaar 2012 (the preparation problem) and Bennett et al. 2009 (the linearity trap); Bub & Stairs 2014 (Section II) frame the related issue as frame dependence of D-CTC. The substance of Proposition 2 follows from Araújo, Guérin & Baumeler 2017, who prove that the P-CTC map is linear if and only if the postselection probability is constant (which is exactly the process-matrix case); they do not discuss signalling themselves, and the C†C form is the direct single-party consequence. See [NOVELTY_CHECK.md](NOVELTY_CHECK.md).
+- What may be this project's own contribution is the **organization**: showing within a continuous family of rules that reweighting and signalling are the same thing, and connecting this directly to claims that a loop changes the future.
+- **The fourth rule, T-CTC (Allen 2014), fits the same pattern:** it reweights, and it signals (grandfather paradox 0.086, quantum interference 0.25), with the same criterion C†C ∝ 𝟙. See [T_CTC.md](T_CTC.md).
 
-## 限制
+## Limitations
 
-- 古典 κ–β 模型只涵蓋置換電路。量子版 κ–β 模型還沒有實作。
-- 只測了「Alice 啟動或不啟動迴圈」這種選擇。其他選擇（例如改變槍的角度）也會給出類似的結果，但沒有逐一列出。
-- 沒有考慮迴圈區域本身的時空結構，例如 Bob 是否在迴圈的因果未來裡。
+- The classical κ–β model covers only permutation circuits. A quantum κ–β model has not been implemented.
+- Only the choice "Alice switches the loop on or off" was tested. Other choices (for example changing the gun's angle) give similar results but are not listed one by one.
+- The spacetime structure of the loop region itself is not modelled, for example whether Bob is in the loop's causal future.

@@ -1,98 +1,100 @@
-# 過去守恆篩選，以及有時間迴圈的雙縫實驗
+# Past-preserving selection, and a double slit with a time loop
 
-建立日期：2026-11-22，撰寫時使用 AI 輔助（Claude）。規則是本專案提出的候選，新穎性沒有檢查。沒有外部審查。
+Created 2026-11-22 with AI assistance (Claude). The rule is a candidate proposed in this project. No external review. Novelty: partly known, see point 4 under "Open problems".
+
+**Naming.** The rule is abbreviated **PPS** in the documentation, to avoid a clash with the complexity class PP. The code keeps the name `past_preserving`.
 
 ```text
-python -B ctc/tests/test_past_preserving.py   # 9 項測試
-python -B ctc/run_double_slit.py              # 產生 output/double_slit.json 和 output/double_slit.png
+python -B ctc/tests/test_past_preserving.py   # 9 tests
+python -B ctc/run_double_slit.py              # writes output/double_slit.json and output/double_slit.png
 ```
 
-程式在 [past_preserving.py](past_preserving.py) 和 [double_slit.py](double_slit.py)。
+The code is in [past_preserving.py](past_preserving.py) and [double_slit.py](double_slit.py).
 
-## 結論先講
+## Summary
 
-1. **過去守恆篩選在數學上一定不能傳訊**，兩個方向都不能，不管 Alice 跟誰共享什麼狀態。
-2. **它重現了你最早的假設：** 祖父悖論的機率完全不變；KFK 的「壞傾向」機率不變，但「壞結果」從 0.30 降到 0.21。
-3. **在雙縫實驗上，它把出路 1 和出路 2 接起來了：** 光子跟 Bob 的閒置光子糾纏時，迴圈的效應只出現在按 Bob 結果分組之後的條紋裡，螢幕整體和 Bob 自己的統計都不變。這就是量子擦除的結構。
-4. **但它有一個還沒解決的問題：** 必須指定哪個基底算「已記錄的過去」。在糾纏的雙縫裡，兩個同樣合理的選擇給出不同的實驗預測。
+1. **PPS mathematically cannot signal**, in either direction, whatever state Alice shares with anyone.
+2. **It reproduces the original hypothesis:** the grandfather paradox's probabilities do not change at all; in KFK the probability of the "bad inclination" is unchanged, but the "bad outcome" drops from 0.30 to 0.21.
+3. **In the double slit it connects way out 1 and way out 2** (of [NO_SIGNALLING.md](NO_SIGNALLING.md)): when the photon is entangled with Bob's idler, the loop's effect appears only in fringes sorted by Bob's result, while the overall screen and Bob's own statistics are unchanged. This is the structure of a quantum eraser.
+4. **One open problem:** one must specify which basis counts as the "recorded past". In the entangled double slit, two equally reasonable choices give different experimental predictions.
 
-## 規則
+## The rule
 
-先選定 Alice 輸入的「記錄基底」{|k⟩}，代表已經發生、已經被記錄的事實。然後：
+First fix a "record basis" {|k⟩} for Alice's input: the facts that have already happened and been recorded. Then:
 
-- 世界 k 的機率維持 ⟨k|ρ|k⟩，**過去的機率不准變**。
-- 在世界 k 內部做 P-CTC 的自洽篩選：|k⟩ → C|k⟩/‖C|k⟩‖，C = Tr_loop U。
-- 如果世界 k 裡完全沒有自洽歷史（C|k⟩ = 0），就退回 D-CTC，讓迴圈訊息變成混合態。
+- World k keeps probability ⟨k|ρ|k⟩. **Past probabilities may not change.**
+- Inside world k apply P-CTC's consistency selection: |k⟩ → C|k⟩/‖C|k⟩‖, with C = Tr_loop U.
+- If world k has no consistent history at all (C|k⟩ = 0), fall back to D-CTC: the loop message becomes mixed.
 
-寫成算符就是 ρ → Σ_k K_k ρ K_k†，K_k = C|k⟩⟨k|/‖C|k⟩‖，而且 Σ_k K_k†K_k = 𝟙。所以它是一個**線性、保持跡的普通量子通道**：
+As operators: ρ → Σ_k K_k ρ K_k† with K_k = C|k⟩⟨k|/‖C|k⟩‖ and Σ_k K_k†K_k = 𝟙. So it is a **linear, trace-preserving, ordinary quantum channel**:
 
-- Alice → Bob：Bob 的狀態不可能改變（測試：10 組隨機么正矩陣加隨機糾纏態）。
-- Bob → Alice：Bob 事先選什麼基底測量，Alice 的輸出都一樣（同一組測試）。
+- Alice → Bob: Bob's state cannot change (tested on 10 random unitaries with random entangled states).
+- Bob → Alice: whatever basis Bob measures in beforehand, Alice's output is the same (same tests).
 
-**換句話說，它是「先在記錄基底上確定過去，再在每個過去世界裡做自洽篩選」。** 不能傳訊的原因，正是它不准重新加權過去。
+**In other words: first fix the past in the record basis, then apply consistency selection inside each past world.** It cannot signal precisely because it does not reweight the past.
 
-## 結果：原本的情境
+## Results: the original scenarios
 
-| 情境 | 觀測量 | 無迴圈 | D-CTC | P-CTC | **過去守恆** |
+| Scenario | Observable | No loop | D-CTC | P-CTC | **PPS** |
 |---|---|---|---|---|---|
-| 祖父悖論，ε = 0.05 | P(槍卡住) | 0.05 | 0.05 | 1 | **0.05**（槍正常，悖論世界的訊息變成混合態） |
-| KFK 有動機寄件者 | P(壞傾向) | 0.30 | 0.30 | 0.255 | **0.30** |
-| KFK 有動機寄件者 | P(壞結果) | 0.30 | 0.254 | 0.146 | **0.21** = q(1 − r/2) |
-| KFK 無條件寄件者 | P(壞結果) | 0.30 | 0.12 | 0.12 | **0.12** |
-| 自舉悖論 | 記錄的 ⟨X⟩ | 0 | 0 | 1 | **1** |
-| 對遠方 Bob 的傳訊量 | 所有情境 | 0 | 0 | 最高 0.95 | **0** |
+| Grandfather paradox, ε = 0.05 | P(gun jams) | 0.05 | 0.05 | 1 | **0.05** (the gun works; in the paradox world the message becomes mixed) |
+| KFK motivated sender | P(bad inclination) | 0.30 | 0.30 | 0.255 | **0.30** |
+| KFK motivated sender | P(bad outcome) | 0.30 | 0.254 | 0.146 | **0.21** = q(1 − r/2) |
+| KFK unconditional sender | P(bad outcome) | 0.30 | 0.12 | 0.12 | **0.12** |
+| Bootstrap paradox | recorded ⟨X⟩ | 0 | 0 | 1 | **1** |
+| Signalling to a distant Bob | all scenarios | 0 | 0 | up to 0.95 | **0** |
 
-這正是「祖父悖論不會被影響，影響的是因果律改變的未來」：過去的機率完全不動，未來的結果被改變。
+This is exactly "the grandfather paradox is unaffected; what changes is the future": past probabilities do not move, future outcomes do.
 
-KFK 的 0.21 是怎麼來的：「壞傾向而且提醒有效」這個世界沒有自洽歷史（提醒有效就不會寄出提醒），所以退回 D-CTC，壞結果的機率是 1/2；「壞傾向但提醒無效」的世界只有一個自洽歷史：收到提醒，但還是做了壞選擇。
+Where the 0.21 in KFK comes from: the world "bad inclination and the warning works" has no consistent history (if the warning works, no warning is sent), so it falls back to D-CTC and the bad outcome has probability 1/2. The world "bad inclination but the warning does not work" has exactly one consistent history: the warning arrives, and the bad choice is made anyway.
 
-## 結果：有時間迴圈的雙縫實驗
+## Results: a double slit with a time loop
 
-模型：路徑量子位元 |0⟩ = 左縫、|1⟩ = 右縫。螢幕位置用兩條路徑之間的相位 θ 表示。迴圈是一個來自未來的位元，等於 1 時在右邊路徑加上相位 φ。沒有時光機時沒有訊息，什麼都不會發生。
+Model: path qubit |0⟩ = left slit, |1⟩ = right slit. The screen position is represented by the phase θ between the two paths. The loop is a bit from the future that, when 1, adds a phase φ to the right path. Without a time machine there is no message and nothing happens.
 
 ![double slit](output/double_slit.png)
 
-### (a) 新鮮的光子（純態，跟誰都沒有相關性）
+### (a) A fresh photon (pure state, correlated with nothing)
 
-φ = π/2：
+φ = π/2:
 
-| 規則 | P(右縫) | 條紋清晰度 | 亮紋位移 |
+| Rule | P(right slit) | Fringe visibility | Fringe shift |
 |---|---|---|---|
-| 無時光機 | 0.5 | 1 | 0 |
+| No time machine | 0.5 | 1 | 0 |
 | D-CTC | 0.5 | 0.707 | π/4 |
 | T-CTC | 0.4 | 0.849 | π/4 |
-| P-CTC = 過去守恆 | 1/3 | 0.943 | π/4 |
+| P-CTC = PPS | 1/3 | 0.943 | π/4 |
 
-光子是純態時，自然的記錄基底包含它自己，所以過去守恆篩選就等於 P-CTC：條紋移動、右縫的機率下降。φ = π 時，P-CTC 等於把右縫關掉。
+For a pure photon the natural record basis contains the state itself, so PPS equals P-CTC: the fringes shift and the right-slit probability drops. At φ = π, P-CTC is equivalent to closing the right slit.
 
-這不會造成傳訊，因為純態保證它跟外界沒有相關性。這也給了 NO_SIGNALLING.md 出路 1（只重新加權跟外界無相關的變數）一個局部的判準：**純態**。
+This causes no signalling, because a pure state guarantees no correlation with anything else. It also gives way out 1 of NO_SIGNALLING.md (reweight only variables uncorrelated with the outside) a local criterion: **purity**.
 
-### (b) 光子跟 Bob 的閒置光子糾纏（延遲選擇量子擦除）
+### (b) The photon entangled with Bob's idler (delayed-choice quantum eraser)
 
-φ = π/2：
+φ = π/2:
 
-| 規則 | 螢幕整體的條紋 | 按 Bob 的 X = + 分組後的條紋 | Bob 自己的統計改變 |
+| Rule | Fringes on the whole screen | Fringes sorted by Bob's X = + | Change in Bob's own statistics |
 |---|---|---|---|
-| 無時光機 | 無 | 清晰度 1，不移動 | 0 |
-| D-CTC | 無 | 清晰度 0.707，移動 π/4 | 0 |
-| T-CTC | 無 | 清晰度 0.849，移動 π/4 | 0.1（傳訊） |
-| P-CTC | 無 | 清晰度 0.943，移動 π/4 | 0.167（傳訊） |
-| **過去守恆，記錄基底 X** | 無 | **清晰度 0.943，移動 π/4** | **0** |
-| 過去守恆，記錄基底 Z | 無 | 無（迴圈等於一次路徑測量） | 0 |
+| No time machine | none | visibility 1, no shift | 0 |
+| D-CTC | none | visibility 0.707, shift π/4 | 0 |
+| T-CTC | none | visibility 0.849, shift π/4 | 0.1 (signalling) |
+| P-CTC | none | visibility 0.943, shift π/4 | 0.167 (signalling) |
+| **PPS, record basis X** | none | **visibility 0.943, shift π/4** | **0** |
+| PPS, record basis Z | none | none (the loop acts as a path measurement) | 0 |
 
-**這就是上次推測的結果：** 過去守恆（記錄基底 X）讓迴圈的效應跟 P-CTC 一樣強，但效應只藏在「按 Bob 結果分組之後」的資料裡，螢幕整體和 Bob 自己的統計都不變，所以不能傳訊。出路 1 的規則，產生的正是出路 2 的觀測效應。
+PPS with record basis X makes the loop's effect as strong as P-CTC's, but the effect hides only in data sorted by Bob's result; the whole screen and Bob's own statistics are unchanged, so there is no signalling. The rule of way out 1 produces exactly the observable effect of way out 2.
 
-## 還沒解決的問題
+## Open problems
 
-1. **記錄基底由誰決定？** 在 (b) 裡，光子的約化態是 𝟙/2，Z 和 X 都是它的本徵基底，但兩者的預測完全不同：X 給出移動的條紋，Z 讓條紋消失。這就是非線性理論的「製備問題」（Cavalcanti–Menicucci–Pienaar 2012）以具體數字出現。可能的答案是「被環境不可逆記錄下來的基底」，也就是去相干，但在 Bob 測量之前，路徑其實還沒有被任何東西記錄。這是這條出路最關鍵的問題。（後續：用去相干決定基底的嘗試見 [DECOHERENCE.md](DECOHERENCE.md)。）
-2. **不能用 Bob 的選擇來決定基底。** 如果記錄基底跟著 Bob 之後的測量走，就變成逐分支套用，Bob 能對 Alice 傳訊（NO_SIGNALLING.md 已經示範過）。
-3. **悖論世界退回 D-CTC，是一個混合規則。** 它讓過去守恆篩選在悖論世界裡跟 D-CTC 相同，所以這條規則一部分是 P-CTC、一部分是 D-CTC，接縫的地方需要更好的理由。
-4. **新穎性沒有檢查。** 古典部分（每個輸入世界各自自洽）跟 Baumeler–Wolf 的 process function 精神接近；「先在固定基底上測量，再做後選擇」的結構在文獻中可能也有。
+1. **Who fixes the record basis?** In (b) the photon's reduced state is 𝟙/2, so Z and X are both eigenbases, yet they predict completely different things: X gives shifted fringes, Z removes them. This is the "preparation problem" of nonlinear theories (Cavalcanti–Menicucci–Pienaar 2012) appearing with concrete numbers. A possible answer is "the basis irreversibly recorded by the environment", i.e. decoherence, but before Bob measures, the path has not yet been recorded by anything. This is the key question for this way out. (Follow-up: an attempt to let decoherence fix the basis is in [DECOHERENCE.md](DECOHERENCE.md).)
+2. **Bob's choice cannot be what fixes the basis.** If the record basis followed Bob's later measurement, the rule would be applied branch by branch, and Bob could signal to Alice (shown in NO_SIGNALLING.md).
+3. **Falling back to D-CTC in paradox worlds is a hybrid rule.** It makes PPS equal D-CTC in paradox worlds, so the rule is partly P-CTC and partly D-CTC, and the seam needs a better justification.
+4. **Novelty: partly known (updated 2026-11-24).** The rule inside each world is Hartle 1994, Eq. (5.6): the conditional probability when the initial state is decohered by a persistent record. Hartle's framework reweights the recorded past; PPS does not. That is the only difference. Hartle 1994 does not propose the causal version, but later work citing it has not been checked. Details in [NOVELTY_CHECK.md](NOVELTY_CHECK.md), third round. The classical part (each input world self-consistent on its own) is also close in spirit to Baumeler–Wolf process functions.
 
-## 對 H2 的意義
+## What this means for H2
 
-如果採用過去守恆篩選，H2 可以改寫成：
+With PPS, H2 can be restated as:
 
-> **H2′：** 迴圈不改變任何已記錄的過去的機率。它的可觀察效應，是在每個已記錄的過去世界之內，重新分配未來的結果。對於跟外界有相關性的系統，這個效應只出現在條件相關性裡（例如按另一方的測量結果分組），所以不能傳訊。
+> **H2′:** the loop does not change the probability of any recorded past. Its observable effect is to redistribute future outcomes inside each recorded past world. For systems correlated with the outside, this effect appears only in conditional correlations (for example sorted by the other party's measurement result), so it cannot signal.
 
-這個版本跟相對論相容，也保留了「改變未來統計」的核心：KFK 的壞結果確實從 0.30 降到 0.21。代價是必須回答記錄基底由什麼決定。
+This version is compatible with relativity and keeps the core idea of "changing future statistics": the KFK bad outcome really does drop from 0.30 to 0.21. The price is that one must say what fixes the record basis.
