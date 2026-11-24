@@ -1,6 +1,8 @@
 # 文獻盤點：H1、H2、H3 與 ctc/ 玩具結果在 P-CTC / D-CTC 文獻中的位置
 
-建立日期：2026-11-22。撰寫時使用 AI 輔助（Claude），沒有外部審查。這是 ROADMAP 階段 0「文獻盤點」的成果，不是已發表的綜述。
+建立日期：2026-11-22，最後更新：2026-11-24。撰寫時使用 AI 輔助（Claude），沒有外部審查。
+
+**2026-11-24 更新：** 把已經被後續工作解決的幾格標成已解決（(a) 的定量對照、(c) 的「完全混合」、Brun–Harrington–Wilde 的閱讀程度），並補上一篇在雲端量子電腦上模擬 P-CTC 的實驗。其餘內容維持 11-22 的原樣。這是 ROADMAP 階段 0「文獻盤點」的成果，不是已發表的綜述。
 
 **閱讀程度的分級**（每一條主張都應該能對回這裡）：
 
@@ -21,10 +23,10 @@
 | **H2(1)** 迴圈的效應可觀察，且出現在未來統計 | **部分已知，且有爭議** | P-CTC 下，Lloyd 等人 PRL 明確說明矛盾事件的機率為零、其餘重新歸一化（非線性）[全文]。但 Ralph 2011（1107.4675）[全文] 主張 P-CTC 在有糾纏時允許「訊號傳到 CTC 建立之前」，Lloyd 等人的回覆（1108.0153）[摘要+ar5iv 摘要層級] 與 Bub–Stairs（1309.4751）[摘要] 都認為 Ralph 的構造不完整或有缺陷。所以「效應只出現在未來」這句話在 P-CTC 下是有爭議的，不是已定論。D-CTC 下，效應在 CR 系統上表現為非線性的不動點通道，不是單純重新加權。 |
 | **H2(2)** 差異完全由「排除不自洽歷史並重新加權」決定 | **P-CTC 下已知（形式上），一般陳述未見** | P-CTC 規則本身就是「投影後歸一化」，對古典可逆電路等於對自洽歷史條件化（Lloyd 等人 [全文]；Svetlichny 的「機率性模擬」[摘要]）。我**沒有**找到把它寫成 `P_loop ∝ P_0 × [自洽]`、並與 D-CTC 逐項對比的一般性陳述，但這個否定結論只基於我搜到的範圍。 |
 | **H3** 沒有迴圈影響時退化成一般因果 QM | **已知但平凡，有一個角落案例** | 這是兩種規則的形式直接推得的：若 U = V ⊗ W（迴圈與 CR 不耦合），則 C = V·Tr[W]，P-CTC 輸出為 VρV†，D-CTC 也一樣。**本檔自己推導、未在文獻中核對**。角落案例：若 Tr[W] = 0（例如迴圈系統單獨做 Z），P-CTC 規則沒有定義，所以 H3 在 P-CTC 下需要附加「迴圈本身自洽」的條件。process matrix 框架中的對應是「因果可分」或古典極限回到因果順序（Oreshkov–Costa–Brukner 摘要稱 classical limit 下因果順序總會出現 [摘要]）。 |
-| **(a)** 祖父悖論，失敗機率 ε：P-CTC 讓失敗變成確定，D-CTC 保持 ε | **已知** | Lloyd 等人 PRL 的 Fig. 2a 和正文就是這個電路：理想 NOT 時 P-CTC 的矛盾事件機率為零；不完美的 NOT（旋轉角偏離 π）時，非線性後選擇把偏差放大，只剩「槍失效」的自洽歷史；D-CTC 下她「總是成功」，迴圈位元變成完全混合。光子實驗（量子點單光子）檢驗了 P-CTC 的預測 [全文]。`ctc/` 的 (a) 在定性上重現了這個結果；**定量數值尚未對照該文的圖表**（ROADMAP 階段 1 的待辦）。 |
+| **(a)** 祖父悖論，失敗機率 ε：P-CTC 讓失敗變成確定，D-CTC 保持 ε | **已知** | Lloyd 等人 PRL 的 Fig. 2a 和正文就是這個電路：理想 NOT 時 P-CTC 的矛盾事件機率為零；不完美的 NOT（旋轉角偏離 π）時，非線性後選擇把偏差放大，只剩「槍失效」的自洽歷史；D-CTC 下她「總是成功」，迴圈位元變成完全混合。光子實驗（量子點單光子）檢驗了 P-CTC 的預測 [全文]。`ctc/` 的 (a) 在定性上重現了這個結果。~~定量數值尚未對照該文的圖表~~ **已解決（11-22）：** Fig. 4 的理論曲線和正文的數值已經逐項對照，見 [ctc/LITERATURE_REPRODUCTION.md](ctc/LITERATURE_REPRODUCTION.md)；只對照理論，沒有對照實驗數據點。 |
 | **(b)** KFK 型提醒：無條件寄出 = 一般訊息 | **已知（隱含）** | 無條件寄出時 U 對迴圈位元只是複製，P-CTC 與 D-CTC 一致，是一般通道。H3 的特例，沒有找到專門論述。 |
 | **(b)** KFK 型提醒：有動機才寄，P-CTC 給 q(1−r)/(1−qr)，D-CTC 給 q/(1+qr) | **明顯未見（apparently open）** | 這是祖父悖論的「帶機率動機」版本，結構與 (a) 相同，因此**定性**上已知（P-CTC 排除矛盾歷史、D-CTC 混合）。但我沒有在檢索到的文獻中找到這個「單一接收者＋動機寄件者＋兩種規則的閉式比較」。這是「沒找到」，不是「確定沒人做過」。 |
-| **(c)** 自舉悖論：Z 統計相同，P-CTC 相干（⟨X⟩=1），D-CTC 混合（⟨X⟩=0） | **部分已知，且需要對照一個敘述差異** | Lloyd 等人 PRL：P-CTC 把純態送到純態、不產生熵；D-CTC 需要另外加「最大熵」假設來解決 unproved-theorem 悖論 [全文]。這與 (c) 的方向一致。**但**同一篇 PRL 又說該電路「自動指派完全混合值」（Fig. 2b 說明文字），這是指 proof 位元與迴圈中另一個位元最大糾纏、其約化態是混合的；與 `ctc/` 把記錄寫成相干疊加並不矛盾，但需要弄清楚「被測的是哪個系統」。另外，Ralph 2011 以 unproved-theorem 為由反對 P-CTC，Lloyd 等人回覆說他漏了一步（Bob 讀書）[摘要層級]。見缺口 3。 |
+| **(c)** 自舉悖論：Z 統計相同，P-CTC 相干（⟨X⟩=1），D-CTC 混合（⟨X⟩=0） | **部分已知，且需要對照一個敘述差異** | Lloyd 等人 PRL：P-CTC 把純態送到純態、不產生熵；D-CTC 需要另外加「最大熵」假設來解決 unproved-theorem 悖論 [全文]。這與 (c) 的方向一致。**但**同一篇 PRL 又說該電路「自動指派完全混合值」（Fig. 2b 說明文字），這是指 proof 位元與迴圈中另一個位元最大糾纏、其約化態是混合的；與 `ctc/` 把記錄寫成相干疊加並不矛盾，但需要弄清楚「被測的是哪個系統」。另外，Ralph 2011 以 unproved-theorem 為由反對 P-CTC，Lloyd 等人回覆說他漏了一步（Bob 讀書）[摘要層級]。見缺口 3。**（「完全混合」的敘述差異已在 11-22 釐清，見缺口 3。）** |
 
 ---
 
@@ -40,7 +42,7 @@
 
 **Lloyd 等人 2011 PRD，The quantum mechanics of time travel through post-selected teleportation（arXiv 1007.2615，PRD 84, 025007）[全文，關鍵字定位]。** PRL 的完整版：Hilbert 空間公式、與路徑積分一致、Deutsch 規則的比較。文中明說「目前無法決定 P-CTC 與 D-CTC 孰對孰錯，也許要等到量子重力理論」；並稱 P-CTC 「更少病態」（不需要最大熵規則、計算能力較弱）。非線性「重新歸一化機率」就是計算能力與放大的來源。這也是本專案「選擇規則尚未決定」立場的文獻依據。
 
-**Brun, Harrington, Wilde 2009，Localized closed timelike curves can perfectly distinguish quantum states（arXiv 0811.1209，PRL 102, 210402）[摘要]。** 在 D-CTC 模型下，局域 CTC 可以完全區分非正交態，使 BB84 等 QKD 可被破解，並違反 Holevo 界。
+**Brun, Harrington, Wilde 2009，Localized closed timelike curves can perfectly distinguish quantum states（arXiv 0811.1209，PRL 102, 210402）[摘要；11-22 之後：Fig. 1–2、Eq. (3) 與相關正文已從 arXiv PDF 核對，見 [ctc/LITERATURE_REPRODUCTION.md](ctc/LITERATURE_REPRODUCTION.md)]。** 在 D-CTC 模型下，局域 CTC 可以完全區分非正交態，使 BB84 等 QKD 可被破解，並違反 Holevo 界。
 
 **Bennett, Leung, Smith, Smolin 2009，Can closed timelike curves or nonlinear quantum mechanics improve quantum state discrimination or help solve hard problems?（arXiv 0908.3023，PRL 103, 170502）[全文，關鍵字定位]。** 提出 linearity trap：非線性映射作用在混合態上，不等於它對各純態成分作用結果的混合，因此對「未知混合態」的辨別、以及對「標記混合」的計算要小心定義。他們建議把計算定義為對「帶標記的正交輸入混合」正確求值；在這個定義下，不清楚 CTC 是否有幫助，而且 CTC 的辨別優勢可以用直接解不動點方程來重現。與 Brun–Harrington–Wilde 構成辯論。對本專案：D-CTC 的結果取決於「輸入是未知混合」還是「標記混合」，我們的 `ctc/` 一律是前者的簡單版本，這個區別要在報告中明說。
 
@@ -51,6 +53,8 @@
 **Ralph & Myers 2010，Information flow of quantum states interacting with closed timelike curves（arXiv 1003.1987，PRA 82, 062330）[摘要]。** 追蹤資訊流，導出「等價電路」並得到唯一解，用來客觀比較不同 CTC 模型，並稱 CTC 若存在會是強大的量子資訊資源。Ralph 在評論中稱 Deutsch 的最大熵猜想「已被獨立導出」並引用此文（[全文] 1107.4675 的最後一段），但這篇的推導內容我沒有讀。Allen 2014 的摘要稱這種「等價電路模型」含有錯誤 [摘要]；Brun–Wilde 也提到它的歧義（二手）。**Ralph & Myers / Ralph 等人 event-CTC 的細節我沒有核實**：我原本想核對的「event-CTC」說法沒有在搜尋中找到明確論文，沒有證實存在，故不列入結論。
 
 **Pienaar, Ralph, Myers 2013，Open timelike curves violate Heisenberg's uncertainty principle（arXiv 1206.5485，PRL 110, 060501）[摘要]、Ringbauer 等人 2014，Experimental simulation of closed timelike curves（Nat. Commun. 5, 4145；arXiv 1501.05014）[摘要]。** 前者對沒有迴圈內交互作用的「open timelike curve」做模型；後者用光子模擬 D-CTC 的單位元電路（觀察到非正交態的完全辨別）。這兩篇是 D-CTC 側的實驗與延伸，我沒有讀全文。
+
+**（11-24 補充）Experimental simulation of postselected closed timelike curves for decoding scrambled quantum information（arXiv 2501.16335，2025；搜尋結果顯示後續版本到 2026-04）[只見於搜尋結果]。** 據搜尋結果，這篇在 IBM 和 Quantinuum 的雲端量子處理器上跑了一個 4 量子位元的電路，把「解碼被擾亂的量子資訊」寫成後選擇 teleportation，用 P-CTC 解讀，成功機率由 OTOC 決定。對本專案：`ctc/hardware/` 不是第一個在可程式量子電腦上實作 P-CTC 的工作；Lloyd 等人 2011 和 Ringbauer 等人 2014 是光學實驗，這篇是可程式量子電腦上的前例。內容未讀，裝置名稱與數字引用前要核對原文。
 
 **Ralph 2011，Problems with modelling closed timelike curves as post-selected teleportation（arXiv 1107.4675）[全文] 與 Lloyd 等人的回覆（arXiv 1108.0153）[摘要+ar5iv 摘要層級]。** Ralph 用「一臂糾纏態送過蟲洞，Bob 用相位翻轉送訊」的構造，主張 P-CTC 允許訊號傳到 CTC 建立之前，並重現 unproved-theorem 悖論。回覆說 Ralph 漏掉了 Bob「讀書」這一步（相位翻轉必須由 Alice 的書控制），補上後整個過程的振幅為零，或只剩平凡不動點。Bub–Stairs 2014（1309.4751）[摘要] 也說 Ralph 的做法有缺陷（理由是糾纏依賴參考系）。**這場爭論直接牽涉到 H2「只影響未來」是否成立**，也沒有看到定論。
 
@@ -98,7 +102,7 @@
 
 ### 缺口 3：區分 P-CTC 與 D-CTC 的可觀測量，並與 Lloyd/Ralph 的爭論對齊
 
-- **為何可能空白**：(c) 與 Lloyd 的敘述方向一致，但 PRL 說 proof 位元「完全混合」，`ctc/` 說記錄相干，需要統一「測的是哪個系統、基準是什麼」；Ralph 與 Lloyd 的爭論（signalling to the past、unproved theorem）停在互相回覆，我沒找到後續的決定性分析。
+- **為何可能空白**：(c) 與 Lloyd 的敘述方向一致，但 PRL 說 proof 位元「完全混合」，`ctc/` 說記錄相干，需要統一「測的是哪個系統、基準是什麼」（**已釐清（11-22）：** PRL 的「完全混合」是 proof 位元的約化態 I/2，因為它跟迴圈出來的位元最大糾纏；整體輸出是純態 (|00⟩ + |11⟩)/√2，兩種說法不矛盾，見 [ctc/LITERATURE_REPRODUCTION.md](ctc/LITERATURE_REPRODUCTION.md)）；Ralph 與 Lloyd 的爭論（signalling to the past、unproved theorem）停在互相回覆，我沒找到後續的決定性分析。
 - **第一個結果**：一張表：在 (c) 以及 Ralph 的糾纏構造中，對 {Z, X, 與參考系統的關聯} 這些觀測量，P-CTC、D-CTC、（缺口 5 的）T-CTC 各給什麼值；並明確指出哪些是「規則差異」、哪些是「基準選擇造成的」。`ctc/README` 已經提醒了後者。
 - **如何使用 `ctc/`**：在 `circuits.py` 加入帶參考量子位元的 (c) 與 Ralph 構造（Lloyd 回覆說需補上 Bob 讀書的受控操作），用現有 P-CTC / D-CTC 求解器算出。
 
@@ -135,12 +139,13 @@
 | Ralph comment (arXiv:1107.4675) | https://arxiv.org/abs/1107.4675 | 全文 |
 | Svetlichny, Int. J. Theor. Phys. 50, 3903 (arXiv:0902.4898) | https://doi.org/10.1007/s10773-011-0973-x ; https://arxiv.org/abs/0902.4898 | 摘要 |
 | Bennett & Schumacher 2005 talk | 無（透過 Svetlichny 的引用得知，未讀） | 未驗證內容 |
-| Brun, Harrington, Wilde 2009 (arXiv:0811.1209) | https://arxiv.org/abs/0811.1209 | 摘要 |
+| Brun, Harrington, Wilde 2009 (arXiv:0811.1209) | https://arxiv.org/abs/0811.1209 | 圖與相關正文（11-22 之後） |
 | Bennett, Leung, Smith, Smolin 2009 (arXiv:0908.3023) | https://arxiv.org/abs/0908.3023 | 全文（部分） |
 | Aaronson & Watrous 2009 (arXiv:0808.2669) | https://arxiv.org/abs/0808.2669 | 摘要＋目錄 |
 | Brun & Wilde 2012 (arXiv:1008.0433) | https://arxiv.org/abs/1008.0433 ; https://doi.org/10.1007/s10701-011-9601-0 | 摘要＋標題 |
 | Ralph & Myers 2010 (arXiv:1003.1987) | https://arxiv.org/abs/1003.1987 | 摘要 |
 | Pienaar, Ralph, Myers 2013 (arXiv:1206.5485) | https://arxiv.org/abs/1206.5485 | 摘要 |
+| P-CTC scrambling decoding on IBM / Quantinuum (arXiv:2501.16335) | https://arxiv.org/abs/2501.16335 | 只見於搜尋結果（11-24 補充） |
 | Ringbauer et al. 2014 (arXiv:1501.05014) | https://arxiv.org/abs/1501.05014 ; https://doi.org/10.1038/ncomms5145 | 摘要 |
 | Allen 2014 (arXiv:1401.4933) | https://arxiv.org/abs/1401.4933 | 全文（部分） |
 | Bub & Stairs 2014 (arXiv:1309.4751) | https://arxiv.org/abs/1309.4751 | 摘要 |
@@ -166,7 +171,7 @@
 
 - **沒有讀全文的論文占多數**。只有 5 篇做了 PDF 文字抽取並讀相關段落，其中只有 Lloyd 等人 PRL 讀得比較完整；多數條目只讀了摘要或搜尋結果摘要。凡是表中「[摘要]」標記的內容，只能代表摘要所說，不能代表論文實際證明了什麼。
 - **PDF 抓取失敗後的補救**：網頁抓取工具對 PDF 回傳壓縮串流，我改用本地 `pdftotext` 抽取。抽出的文字經過版面轉換，公式符號（如 ψ、ρ、†）有毀損，所以公式只能靠上下文，不應直接抄用。
-- **沒有讀到或沒有核實的內容**：Deutsch 1991 原文、Novikov 原始論文、Bennett–Schumacher 演講、Aaronson–Watrous 對多不動點的處理、Ralph–Myers 的最大熵推導、Brun–Harrington–Wilde 全文、Brun–Wilde 的 PP 結論本身、Ralph 與 Lloyd 回覆之外的後續討論、Oreshkov–Costa–Brukner 與 Araújo 等人的內文（包括原始 process 是否可純化）、1403.7333 與 1507.01714 的具體內容。Hawking 的 chronology protection 與 Deutsch–Lockwood 的科普文，我沒有找到一手來源，不予引用。
+- **沒有讀到或沒有核實的內容**：Deutsch 1991 原文、Novikov 原始論文、Bennett–Schumacher 演講、Aaronson–Watrous 對多不動點的處理、Ralph–Myers 的最大熵推導、Brun–Harrington–Wilde 的 N 態一般構造、Brun–Wilde 的 PP 結論本身、Ralph 與 Lloyd 回覆之外的後續討論、Oreshkov–Costa–Brukner 與 Araújo 等人的內文（包括原始 process 是否可純化）、1403.7333 與 1507.01714 的具體內容。Hawking 的 chronology protection 與 Deutsch–Lockwood 的科普文，我沒有找到一手來源，不予引用。
 - **「apparently open」不等於「沒人做過」**。判斷基於這次的有限搜尋（約 20 次搜尋、約 10 篇 PDF 的文字抽取），沒有掃過引用這些論文的所有後續工作，也沒有查會議論文與博士論文。在缺口 1–6 開工前，應該先對各缺口做一次針對性的引用追蹤。
 - **兩處自己的推導未經核對**：H3 的 Tr[W]=0 角落案例，以及缺口 2 的 Δ 指標。兩者都只是由 HYPOTHESIS.md 的公式直接推出的想法，不是文獻結果。
 - **沒有重跑 `ctc/`**，也沒有核對 `ctc/README` 的數字；表中 (a)(b)(c) 的數字都引自該 README。
