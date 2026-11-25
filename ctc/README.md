@@ -24,6 +24,7 @@ python -B ctc/tests/test_hardware.py            #  8  hardware circuits and esti
 python -B ctc/tests/test_born_rule.py           #  6  loop model vs Born-rule tests
 python -B ctc/tests/test_born_direct.py         #  8  direct pure-vs-recorded test design
 python -B ctc/tests/test_blockchain.py          # 22  blockchain lottery protocol (offline)
+python -B ctc/tests/test_invitation.py          # 43  invitation to future senders: reply checks, block scans, mock run with attackers, rule predictions
 python -B ctc/tests/test_timeless.py            # 16  loop rules in a timeless (Page–Wootters) universe, seam at the loop event
 python -B ctc/tests/test_clocks.py              #  8  local clocks (frames) and a superposed clock
 python -B ctc/tests/test_operation_linearity.py  #  5  is PPS linear in the loop's own operation? (process matrices)
@@ -32,7 +33,7 @@ python -B ctc/tests/test_wormhole.py            # 10  time dilation with light c
 python -B ctc/tests/test_lightcone.py           # 26  light cones: Theorem 5 on random 1-3D spacetimes, a black hole, the backward-signal example
 ```
 
-226 tests in total (2026-11-25). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
+269 tests in total (2026-11-25). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
 
 ## Regenerating results
 
@@ -69,6 +70,7 @@ Requires NumPy; figures need matplotlib; hardware code needs qiskit (and qiskit-
 | [born_rule/README.md](born_rule/README.md) | microscopic loops vs Born-rule tests; direct test on IBM hardware |
 | [conjectures/README.md](conjectures/README.md) | conjecture lottery: credences fixed before exhaustive checks |
 | [blockchain/README.md](blockchain/README.md) | Bitcoin-anchored self-consistency lottery (designed, not run) |
+| [invitation/README.md](invitation/README.md) | invitation to future senders: reply a block hash before the block exists (designed, not published) |
 
 ## Code
 
@@ -88,6 +90,7 @@ Requires NumPy; figures need matplotlib; hardware code needs qiskit (and qiskit-
 | `born_rule/` | loop model, comparison with published Sorkin bounds, direct test and control on IBM hardware |
 | `conjectures/` | conjecture pool, credences, exhaustive evaluator |
 | `blockchain/` | protocol, Bitcoin header checks, OpenTimestamps and Internet Archive helpers |
+| `invitation/` | reply formats, raw-transaction and merkle-proof checks, validity rules, toy model of the rule predictions |
 | `timeless/` | Page–Wootters history states, the loop as a constraint on a static state, three definitions of "the past" |
 | `tests/` | all tests listed above |
 | `output/` | generated tables and figures (`toy_results.csv` holds every number in the toy figure) |

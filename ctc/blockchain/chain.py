@@ -7,6 +7,8 @@ one. So the order of blocks rests on Bitcoin's proof of work, not on trusting an
 """
 import hashlib
 import json
+import time
+import urllib.error
 import urllib.request
 
 EXPLORERS = ('https://mempool.space/api', 'https://blockstream.info/api')
@@ -15,10 +17,32 @@ RECENT_HEIGHT = 900000          # blocks above this height must carry modern dif
 RECENT_MAX_TARGET = 1 << 182    # sanity floor: today's targets are around 2^177 (32x margin)
 
 
+RETRIES = 5                     # transient failures (timeouts, 429, 5xx) are retried with backoff
+
+
+def transient(ex):
+    """Worth retrying: timeouts, connection trouble, rate limits and server errors (not 404)."""
+    if isinstance(ex, urllib.error.HTTPError):
+        return ex.code == 429 or ex.code >= 500
+    return isinstance(ex, (urllib.error.URLError, TimeoutError, ConnectionError, OSError))
+
+
+def with_retries(call, retries=RETRIES, wait=2.0, sleep=time.sleep):
+    for attempt in range(retries + 1):
+        try:
+            return call()
+        except Exception as ex:
+            if attempt == retries or not transient(ex):
+                raise
+            sleep(wait * 2 ** attempt)
+
+
 def _get(url):
-    req = urllib.request.Request(url, headers={'User-Agent': USER_AGENT})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return r.read().decode('ascii').strip()
+    def call():
+        req = urllib.request.Request(url, headers={'User-Agent': USER_AGENT})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return r.read().decode('ascii').strip()
+    return with_retries(call)
 
 
 def tip_height():
