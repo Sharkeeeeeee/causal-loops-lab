@@ -83,6 +83,22 @@ C_α is a chain of projections before NC, C_β a chain after NC. Whole histories
 
 **Updated judgment:** PPS cannot be claimed as a new rule as a whole. What may be new reduces to one sentence: in a Hartle-type generalized quantum mechanics, fix the probabilities of recorded past alternatives at their causal values and apply Hartle/P-CTC conditioning only inside each record; the result is a non-signalling quantum channel for which H1′–H3′ hold. Any research note using PPS **must cite Hartle 1994, Eqs. (5.5)–(5.6), and present PPS as a causal modification of Hartle's framework**, not as a new rule.
 
+## Fourth round (2026-11-25): Gell-Mann–Hartle generalized records
+
+Read in full: M. Gell-Mann, J. Hartle, "Alternative decohering histories in quantum mechanics", [arXiv:1905.05859](https://arxiv.org/abs/1905.05859) (a 1990 conference paper posted in 2019).
+
+- **Strong decoherence** (C_α ρ = R_α ρ, with orthogonal "generalized records" R_α) is the same structure as Theorem 4's record sectors. A perfect readout gives it for every input state (tested).
+- **Their records are not restricted in time** (any later T), and they set wormholes aside. The restriction to records outside the loop's causal future (Theorem 5) is not in their paper; it is needed only when a loop is present.
+- **They say singling out a set needs the Hamiltonian**, but give no rule. Theorem 4's pointer basis is one concrete answer for readouts. It is close to Zurek's einselection, so it is not new as an idea.
+- **Judgment:** the record structure is known (Gell-Mann–Hartle, Zurek). What may be new is only its combination with a loop: the causal restriction, and Hartle 1994's within-world rule applied to the resulting worlds.
+- A statement attributed to these authors in an earlier search summary, that "persistence of the past is not guaranteed by quantum mechanics alone", was not found in arXiv:1905.05859, 0806.3776 or quant-ph/0609190. It is not used.
+
+## Fifth round (2026-11-25): PPS and process matrices
+
+- Araújo–Guérin–Baumeler 2017 (Sections I–III read earlier): a P-CTC is a process matrix exactly when it is linear in the parties' operations.
+- Checked here (`ctc/tests/test_operation_linearity.py`): PPS is linear in a mixture of loop operations if the mixing coin is recorded outside the loop's causal future, and not linear if it is unrecorded. So PPS is not a process matrix.
+- No search was made for earlier work on loop rules that are linear in states but not in operations. "Possibly new" here means only "not looked for".
+
 ## Not yet checked
 
 - Full citation tracking forward from Lloyd 2011, Allen 2014 and **Hartle 1994** (needs a database with citation lists, such as INSPIRE or Semantic Scholar). Work citing Hartle 1994 is the next step for the novelty of PPS.

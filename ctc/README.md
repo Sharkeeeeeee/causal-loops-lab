@@ -26,9 +26,13 @@ python -B ctc/tests/test_born_direct.py         #  8  direct pure-vs-recorded te
 python -B ctc/tests/test_blockchain.py          # 22  blockchain lottery protocol (offline)
 python -B ctc/tests/test_timeless.py            # 16  loop rules in a timeless (Page–Wootters) universe, seam at the loop event
 python -B ctc/tests/test_clocks.py              #  8  local clocks (frames) and a superposed clock
+python -B ctc/tests/test_operation_linearity.py  #  5  is PPS linear in the loop's own operation? (process matrices)
+python -B ctc/tests/test_decoherent_histories.py # 5  Theorem 4's records vs Gell-Mann-Hartle strong decoherence
+python -B ctc/tests/test_wormhole.py            # 10  time dilation with light clocks, a wormhole time machine, the loop on it
+python -B ctc/tests/test_lightcone.py           # 26  light cones: Theorem 5 on random 1-3D spacetimes, a black hole, the backward-signal example
 ```
 
-180 tests in total (2026-11-24). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
+226 tests in total (2026-11-25). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
 
 ## Regenerating results
 

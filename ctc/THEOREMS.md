@@ -179,6 +179,121 @@ Values are P(a = 1). Findings:
 
 **Still open.** Interactions that correlate A with the outside without reading any basis (4b premise); the choice between the pointer and eigenbasis rules for weak records (4c); a superposed order of two incompatible readouts (which one is "last" is then indefinite).
 
+## Theorem 5: in spacetime, PPS acts only inside the loop's causal future
+
+Added 2026-11-25. Theorem 4 needs "the outside". In spacetime, this section makes it precise as everything outside the loop's causal future, and shows that PPS then changes nothing outside that future on any slice, in any frame.
+
+**Setting.**
+
+- *Events.* A finite set of events with a causal order, each a unitary on the qubits present at it. Events with no causal relation act on different qubits. Only the order is used, so the background may be flat or curved, in any dimension.
+- *The loop.* The past mouth M makes (m, p) in |Φ⁺⟩. The future mouth F closes the loop with the constraint "(m, p) in |Φ⁺⟩", i.e. a causal edge F → M.
+- *The loop region* R = J⁺(M) ∩ J⁻(F). These are exactly the events that lie in their own causal past once the loop is closed.
+- *Inputs.* The qubits other than m and p that enter R. Every event of an input before it enters R lies outside J⁺(M): an event of J⁺(M) that precedes an event of R lies in J⁻(F), hence in R.
+- *The outside slice* σ_out is the set of all events outside J⁺(M). It is a slice, because the complement of the up-set J⁺(M) is a down-set. On it every input stands at its entry into R.
+
+**Rule.** PPS with "the outside" taken to be the complement of J⁺(M):
+
+- split every input in the pointer blocks of the interactions that read it before it entered R (Lemma 2; with several readouts, 4a);
+- apply P-CTC inside each joint block, with the D-CTC fallback, and keep each block's weight.
+
+In the timeless picture, slices that contain all of R carry the rule's state, and slices that contain none of R keep the forward history. With the loop closed no Cauchy slice passes through R, so no physical claim is made about slices that split R.
+
+**Theorem 5.** Suppose:
+
+- every interaction of an input with another qubit before R is a readout of the input (Lemma 2);
+- the readouts leave rank-one blocks, or none (the input was never read);
+- inputs do not interact with each other before R.
+
+Then on every slice σ that contains all of R or none of it, the joint state of all qubits whose latest event in σ lies outside J⁺(M) equals the state without the loop. In particular, a record in the loop's past or spacelike to it is never changed, in any frame.
+
+*Proof.*
+
+1. A slice without R carries the forward history by construction. Let σ contain R.
+2. *Inside a joint block, the inputs are in a fixed pure product state.* A read input is in its pure pointer state. A never-read input never interacted, so it is in its own fixed pure state. Inside joint block b the inputs of R are therefore in a fixed pure product state, uncorrelated with everything else.
+3. *The rule is a channel on the inputs.* Inside block b the rule runs R and postselects (m, p) on |Φ⁺⟩. After renormalization this is an operation on the qubits of R whose result depends only on that fixed state, and the block keeps its weight. So the rule is a trace-preserving channel Φ on the qubits entering R, with Theorem 0's Kraus form. The timeless construction (sector projectors at σ_out, the constraint at F, everything propagated back from the last slice by unitaries) equals inserting Φ there.
+4. *σ can be built with the outside events first.* No event outside J⁺(M) follows an event inside it, because J⁺(M) is an up-set. So the events of σ can be ordered with those outside J⁺(M) first, then Φ, then those of J⁺(M) ∩ σ. Every input's pre-entry events are in σ, because σ is a down-set containing R.
+5. *The outside qubits are untouched.* Let O be the qubits whose latest event in σ lies outside J⁺(M). No event of J⁺(M) ∩ σ touches O. Φ and those events act on other qubits, and a trace-preserving map on other systems leaves O's reduced state unchanged. ∎
+
+**What fails without the theorem's rule.**
+
+- *P-CTC* renormalizes once over all blocks. The block weights then move whenever the postselection probability depends on a read input, and the outside holds a record of that input, so its state changes. In a black hole the change crosses the horizon: P-CTC lets information out (tested).
+- *Protecting record registers only* fails when a walker read an input and kept no permanent record (tested), as in Theorem 4's first counterexample.
+- *Protecting records inside J⁺(M)* that the loop cannot change (the "influence" definition of timeless/README.md) lets a later choice change earlier statistics. Alice reads her log after the loop, then decides whether to copy her input; P(log = 1) is 1/4 or 1/3 depending on a choice made after the log was read.
+- *The causal past* contains R itself once the loop is closed, and still misses spacelike records.
+
+*Checks:* `ctc/tests/test_lightcone.py`, 26 tests:
+
+- light cones, boosts and the static state on hand-built spacetimes;
+- the five definitions of the past;
+- Theorem 5 on 18 random spacetimes in 1, 2 and 3 spatial dimensions (17–27 events, the time traveller meeting up to 11 events in R), on sampled slices, to 10⁻¹⁵;
+- a 1 + 1 black hole;
+- the backward-signal example.
+
+**On a general-relativistic time machine.** In the wormhole time machine of Morris, Thorne and Yurtsever, time dilation of one mouth creates the loop. The edge F → M is then the wormhole throat, checked from the mouths' clocks. The theorem holds there too (`ctc/tests/test_wormhole.py`). Bob's record lies outside the causal future of every loop event, counting every path through the wormhole, yet P-CTC changes it (0.5 → 1/3) and PPS does not.
+
+### Relation to Gell-Mann and Hartle's generalized records
+
+Added 2026-11-25, after reading M. Gell-Mann and J. Hartle, "Alternative decohering histories in quantum mechanics" ([arXiv:1905.05859](https://arxiv.org/abs/1905.05859); a 1990 conference paper, posted in 2019), in full.
+
+**Their setting.**
+
+- A history is a chain C_α of projections at successive times.
+- A set of histories is *strongly decoherent* if C_α ρ = R_α ρ for mutually orthogonal projections R_α.
+- They call the R_α *generalized records*: data at some later time T, fully correlated with the history.
+- Strong decoherence implies their medium and weak decoherence, so the histories get probabilities.
+- They note that the records are not unique, and that singling out a quasiclassical set needs the Hamiltonian, not only ρ. They give only tentative measures for doing so.
+- They work on a fixed background and set aside wormholes and topology change.
+
+**How it maps onto Theorems 4 and 5** (checked in `ctc/tests/test_decoherent_histories.py`, 5 tests):
+
+| Gell-Mann–Hartle | This project | Check |
+|---|---|---|
+| history "A had value k before the loop" | a PPS world k | — |
+| generalized record R_k | the outside record of k (Bob's register, in the pointer basis of the readout) | — |
+| strong decoherence C_α ρ = R_α ρ | a perfect readout V = Σ_k \|k⟩⟨k\| ⊗ V_k | holds **for every input state**, which is why PPS is a fixed channel (Theorem 4); Lemma 2 finds the same basis |
+| "singling out the set needs the Hamiltonian, not only ρ" | the record basis comes from the interaction, not from the state (Lemma 2; the state-dependent basis of DECOHERENCE.md is rejected) | — |
+| probabilities only as good as decoherence | weak records (4c) | with record overlap c, the off-diagonal element of the decoherence functional is c/4, so the world split is not decoherent unless c = 0 |
+| records at any later time T | records outside J⁺(M) only (Theorem 5) | see below |
+
+**The difference that matters.**
+
+- *Their records may lie anywhere later, including in the loop's future.* Two examples are accepted as generalized records (tested):
+  - a copy of a made after the loop;
+  - a's own final value, since the refusal loop never changes a's Z.
+- *Without a loop this is harmless.* With one, protecting such records is the "influence" or "all" definition. The first allows a backward signal (Theorem 5, the P(log) example); the second switches the loop off.
+- *What a loop adds.* The generalized records must lie outside the loop's causal future. Their framework never needed this restriction, because it excludes wormholes and closed timelike curves.
+
+**Combined statement.** PPS is Hartle's 1994 rule inside each world, where the worlds form a strongly decoherent set (Gell-Mann–Hartle) whose generalized records lie outside the loop's causal future, in the pointer basis of the interactions that wrote them.
+
+**Weak records.** The comparison bears on 4c without settling it. A weak record gives only approximate decoherence, so in their terms the world probabilities are only approximate. The pointer rule treats the split as exact at the first trace of a record, which over-claims. That tilts toward a continuous rule, but does not single out the eigenbasis rule.
+
+### Is PPS linear in the loop's own operation? (process matrices)
+
+Added 2026-11-25. Araújo, Guérin and Baumeler (PRA 96, 052315, 2017) showed that a P-CTC that does not signal is a process matrix. Process matrices are linear in every party's operation. If a coin picks operation U₁ with probability p and U₂ otherwise, the output must be p·out(U₁) + (1 − p)·out(U₂). PPS is linear in states (Theorem 0). Is it also linear in the loop's operation?
+
+**The check** (`ctc/tests/test_operation_linearity.py`, 5 tests, 6 random pairs U₁, U₂):
+
+- *Setup.* Alice's input a is read by Bob (|Φ⁺⟩, Bob records). Alice's coin c (P(c = 0) = 0.3) decides whether the loop applies U₁ or U₂ to (a, m).
+- *Coin recorded outside the loop's causal future* (Alice writes it in a notebook before the loop). Theorem 5 splits on the coin. **PPS is exactly linear**: the output equals the mixture.
+- *Coin recorded by nobody.* The coin is then a fresh input of the loop region, and it is selected like any fresh input.
+  - P(c = 0) moves from 0.3 to between 0.15 and 0.52.
+  - The output differs from the mixture by 0.018 to 0.163.
+  - **PPS is not linear** for such operations.
+- *No signalling either way.* Bob's record keeps its no-loop state; P-CTC changes it.
+- *P-CTC* is not linear even with a recorded coin (0.009 to 0.087), because it normalizes once over everything. This is Araújo et al.'s condition: P-CTC is linear only when the postselection probability is constant.
+
+**What this means.**
+
+- *PPS is not a process matrix.* Its output is not a function of the CP map of the loop's operation alone. It also depends on whether the randomness in that operation is recorded outside the loop's causal future. The CP map p·U₁(·)U₁† + (1 − p)·U₂(·)U₂† is the same in both cases above, but the predictions differ.
+- *This is the same dependence PPS already has on states.* Theorem 4 makes the result depend on whether an input was read, not only on its reduced state. Here the same holds for the operation. In both cases PPS treats a recorded variable as a fact and an unrecorded one as part of what the loop can select.
+- *For classical randomness in practice, PPS is linear.* A classical coin is decohered, i.e. read by its environment. Whenever that environment lies outside the loop's causal future, PPS is linear in the resulting mixture. Linearity fails only for randomness that nothing outside has recorded, for example a coherent quantum control.
+- *A new point or a flaw?* Both readings are possible.
+  - In favour of a new point: PPS would then be a loop rule that does not signal to any outside party, yet lies outside the process-matrix framework.
+  - Against: it gives up a principle that framework takes as basic, namely that a party's operation enters only through its CP map.
+  - Neither reading has been checked in a setting with several parties.
+
+**Open.** Non-readout interactions (as in 4b). Weak records (4c) in spacetime. A continuum of events. Exact vacuum spacetimes with closed timelike curves (the wormhole needs exotic matter), and quantum back-reaction at the chronology horizon.
+
 ## Hardware experiments
 
 These examples were all run on IBM quantum computers; code and full results are in [hardware/](hardware/README.md). The last column is the PPS value measured in the third run (ibm_kingston, predictions and criteria fixed before submission, 21 of 21 criteria pass):

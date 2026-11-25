@@ -82,6 +82,48 @@ Each paragraph is marked with its reading level.
 
 **Other.** Aaronson–Bavarian–Gueltrini, Computability theory of closed timelike curves (arXiv 1609.05507) [abstract level, seen only in search results]: the 2008 work was restricted to polynomial size, giving PSPACE.
 
+### Added 2026-11-25: discrete and emergent spacetime, Wolfram model
+
+These bear on the light-cone and wormhole models in [ctc/timeless/README.md](ctc/timeless/README.md) and on Theorem 5 ([ctc/THEOREMS.md](ctc/THEOREMS.md)). Theorem 5 is a statement about any finite causal order, which is why discrete and emergent spacetime programmes are relevant.
+
+**Wolfram 2020, A class of models with the potential to represent fundamental physics, arXiv:2004.08210, Complex Systems 29(2), 107–536 [Sections 8.1, 8.3 (translation table), 8.6, 8.11–8.14 read on wolframphysics.org, 2026-11-25, plus passages of 5.19, 6.9 and a keyword search of Sections 5, 6 and 8; Sections 2–4 and the rest not read].**
+
+- *The model.* Hypergraph rewriting. Space emerges from the hypergraph and spacetime from the causal graph of update events. The analogue of a light cone is the set of events reachable in that graph; events that cannot reach each other are spacelike.
+- *Relativity.* If the rule is causally invariant, every foliation (update order) gives the same causal graph. The paper argues that the Lorentz transformation is then the unique straight-line relabelling that preserves the causal order, so special relativity "can be derived" from the model (8.6).
+- *Its own caveat.* Section 8.1 calls the correspondence with physics "merely an indication—and sometimes a speculative one".
+
+*Closed timelike curves (8.11, 6.9, 8.3).*
+- They correspond to **loops in the causal graph, "only possible in some rules"**. They "do not represent any real form of 'time travel'", only exactly repeated states.
+- Loops make a progressive foliation impossible; 6.9 likens this to a failure of strong hyperbolicity.
+- Wormholes and effective faster-than-light travel are "not specifically excluded". Where general relativity is the limit, they occur only where it allows them.
+- *Weights with loops (5.19).* Path counting in a weighted multiway graph becomes ill-defined with loops; the paper suggests the convention of counting paths only up to the first encounter with a state. **That convention is the slot where a loop's consistency rule (D-CTC, P-CTC, PPS) would go; the paper leaves it as a convention.**
+
+*Quantum mechanics (8.12–8.14).*
+- The model is deterministic. All histories sit in one multiway graph, described as an objective reality. Probabilities are said to come from "the locality of our experience".
+- An observer is a foliation of the multiway graph (a "quantum observation frame"). A measurement is a foliation that "freezes time" on a generational state.
+- Causal invariance makes branches reconverge. An observer can also conflate branches by "adding lemmas" (completions).
+- Decoherence is the forced spreading of the frozen region.
+- Amplitudes: magnitudes come from path counts. Phases come from the "turning" of paths in branchial space, taken to be proportional to energy times time, which gives e^{iHt} and e^{iS}.
+- **No probability rule is given.** The words "probability" and "Born" do not occur in 8.13–8.14. There are no quantitative predictions, and the paper has drawn strong criticism (for example Aaronson: too flexible to be tested).
+
+*Relation to this project.*
+- The interface would be the causal graph. Theorem 5 uses only the causal order, so it would carry over.
+- Their observer-chosen frame and our records play similar roles: both decide what counts as definite. But their frames are a description chosen by the observer, while our records are physical interactions (Theorem 4).
+
+**Gorard, answer in the Wolfram Physics Project FAQ, "Spacetime / Relativity" (2020) [search snippet].**
+- It states that closed timelike curves are forbidden by causal invariance, and that one would appear as a cycle in the multiway evolution graph.
+- This is **in tension with the 2020 paper itself**, which says loops in the causal graph occur with some rules (see above). A 2020 working notebook on foliations still lists "can a causal graph have closed timelike curves?" as open.
+- Relation: whether loops at the bottom layer are impossible (FAQ) or possible but only as repeated states (paper) is unsettled in the programme's own sources. In either reading, a time loop of our kind (information sent to an earlier event) would have to be emergent. Its consistency rule would then come from the weighting convention for multiway paths, which no paper found here derives.
+
+**Wüthrich 2019, Time travelling in emergent spacetime, arXiv:1907.11167 (in Madarász and Székely (eds.), Hajnal Andréka and István Németi on Unity of Science, Springer 2021) [abstract].** Argues that a fundamental theory may forbid closed timelike curves while the spacetime emerging from it still allows them, and discusses causal set theory among the candidates. Philosophy of physics; no calculation. Relation: this is the layered scenario in which the wormhole model of ctc/timeless/wormhole.py would be an effective description.
+
+**Dündar, Arsiwalla, Elshatlawy 2025, Quantum gates from Wolfram model multiway rewriting systems, arXiv:2512.20587 [abstract].** Multiway systems of cyclic character strings with a neighbourhood constraint ("Leibnizian strings"). Their S-matrices give explicit qubit and qudit gates, including CNOT, Hadamard and π/8, which form a universal set. Relation: every circuit in this project uses gates from such a set, so in principle its causal graphs could be generated by rewriting. Not checked here.
+
+**Gorard 2020, Algorithmic causal sets and the Wolfram model, arXiv:2011.12174 [abstract].** Treats hypergraph rewriting as a dynamics for causal sets, and argues that causal invariance gives conformal invariance of the induced causal order. Relation: it confirms that the causal order is the common language of these programmes and of Theorem 5.
+
+**Gell-Mann and Hartle 2019, Alternative decohering histories in quantum mechanics, arXiv:1905.05859 [full].** Strong decoherence through generalized records. Compared with Theorem 4 in [ctc/THEOREMS.md](ctc/THEOREMS.md): it has the same record structure, without the restriction to the outside of the loop's causal future.
+
+
 ---
 
 ## 3. Possible gaps (in priority order)
@@ -163,6 +205,13 @@ Only entries for which I actually saw an identifier or DOI. Levels as defined at
 | Jean, Silva, Vilasini 2025 (arXiv:2508.02463) | https://arxiv.org/abs/2508.02463 | abstract |
 | Arvidsson-Shukur et al. 2023 (arXiv:2207.07666) | https://arxiv.org/abs/2207.07666 | abstract |
 | Aaronson, Bavarian, Gueltrini (arXiv:1609.05507) | https://arxiv.org/abs/1609.05507 | search results only |
+| Wolfram 2020 (arXiv:2004.08210), Complex Systems 29(2) 107–536 | https://arxiv.org/abs/2004.08210 ; https://wolframphysics.org/technical-introduction/ | Sections 8.1, 8.3, 8.6, 8.11–8.14; passages of 5.19, 6.9 (2026-11-25) |
+| Gorard, Wolfram Physics FAQ: Spacetime / Relativity | https://wolframphysics.org/questions/spacetime-relativity | search snippet |
+| Wüthrich 2019 (arXiv:1907.11167) | https://arxiv.org/abs/1907.11167 | abstract |
+| Dündar, Arsiwalla, Elshatlawy 2025 (arXiv:2512.20587) | https://arxiv.org/abs/2512.20587 | abstract |
+| Gorard 2020, Algorithmic causal sets (arXiv:2011.12174) | https://arxiv.org/abs/2011.12174 | abstract |
+| Gell-Mann & Hartle 2019 (arXiv:1905.05859) | https://arxiv.org/abs/1905.05859 | full (2026-11-25) |
+| Morris, Thorne, Yurtsever 1988, PRL 61, 1446 | https://doi.org/10.1103/PhysRevLett.61.1446 | bibliographic only |
 
 ---
 

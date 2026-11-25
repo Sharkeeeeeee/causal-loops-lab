@@ -59,8 +59,8 @@ What has to be proved to move a conclusion one layer outward:
 
 **Middle → outer**
 1. infinite dimensions: continuous variables, photons; D-CTC fixed points need not exist in infinite dimensions;
-2. **relativistic covariance.** PPS needs to know which facts "have been recorded", i.e. it needs a time order. In relativity, spacelike-separated events have no absolute order, so the "recorded past" must be defined by light cones for the result to be frame independent. But in a region with time loops, the light-cone past may cover the whole region, and the definition may not be usable at all. The project's documents do not yet mention this;
-3. connecting to general-relativistic solutions with closed timelike curves, and to Hawking's chronology-protection conjecture.
+2. **relativistic covariance.** PPS needs to know which facts "have been recorded", i.e. it needs a time order. In relativity, spacelike-separated events have no absolute order, so the "recorded past" must be defined by light cones for the result to be frame independent. But in a region with time loops, the light-cone past may cover the whole region, and the definition may not be usable at all. The project's documents do not yet mention this; (2026-11-25: addressed in a light-cone lattice, [ctc/timeless/README.md](ctc/timeless/README.md): with the loop closed the causal past does contain the loop event, but the causal future does not change, and "outside the loop's causal future, with Theorem 4's record basis" works without a frame: Theorem 5 in [ctc/THEOREMS.md](ctc/THEOREMS.md));
+3. connecting to general-relativistic solutions with closed timelike curves, and to Hawking's chronology-protection conjecture. (2026-11-25: partly done, [ctc/timeless/README.md](ctc/timeless/README.md): the loop rules run on a Morris–Thorne–Yurtsever wormhole time machine made by time dilation; chronology protection itself is not tested.)
 
 ### 1.4 A second axis: rules
 
@@ -97,7 +97,7 @@ This is part of T4 in phase 3 of the roadmap; nobody had computed the computatio
 
 - **Thermodynamics and no-cloning** (the other half of T4, middle layer): can PPS clone unknown quantum states or violate the second law?
 - **The bootstrap paradox under PPS** (inner layer): where does the information come from? `ctc/output/bootstrap.json` covers only D-CTC and P-CTC; adding PPS is easy. By the argument of 1.5, with a definite input the result equals P-CTC's.
-- **Interfaces with other frameworks:** Baumeler–Wolf classical process functions (inner), process matrices (middle), Gell-Mann–Hartle decoherent histories (middle to outer, see 3.3).
+- **Interfaces with other frameworks:** Baumeler–Wolf classical process functions (inner), process matrices (middle), Gell-Mann–Hartle decoherent histories (middle to outer, see 3.3; 2026-11-25: Theorem 4's records are their generalized records restricted to the outside of the loop's causal future, see [ctc/THEOREMS.md](ctc/THEOREMS.md)).
 
 ## 2. Observations on the hardware experiments
 

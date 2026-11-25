@@ -5,9 +5,11 @@ Created 2026-11-24 with AI assistance (Claude). No external review. Novelty not 
 ```text
 python -B ctc/tests/test_timeless.py   # 16 tests: one clock, two orderings, the seam
 python -B ctc/tests/test_clocks.py     #  8 tests: local clocks, superposed clock
+python -B ctc/tests/test_lightcone.py  # 26 tests: light cones, boosts, the loop's future cone; random 1-3D spacetimes, a black hole
+python -B ctc/tests/test_wormhole.py   # 10 tests: time dilation with light clocks, a wormhole time machine, the loop on it
 ```
 
-Code: [paw.py](paw.py) (one clock), [clocks.py](clocks.py) (local clocks and a superposed clock).
+Code: [paw.py](paw.py) (one clock), [clocks.py](clocks.py) (local clocks and a superposed clock), [lightcone.py](lightcone.py) (a light-cone lattice), [wormhole.py](wormhole.py) (a time loop made by time dilation).
 
 ## The question
 
@@ -34,7 +36,7 @@ The six hardware circuits of [../hardware/](../hardware/README.md) are used unch
 | grandfather | P(jam = 1) | 0.2 | 1 | 0.2 | **1** | **0.2** |
 | refusal | P(a = 1) | 0.5 | 0.333 | 0.5 | **0.333** | **0.5** |
 
-In one_way the record is the copy a distant partner holds, so the loop-first column is signalling. A definition of the past that depends on which clock you use is not physical.
+In one_way the record is the copy a distant partner holds, so the loop-first column is signalling. (Qualified 2026-11-25: in spacetime a copy of a made after the loop lies in the loop's future cone, so this reading needs a partner correlated outside the cone, as in the local-clock and light-cone models below.) A definition of the past that depends on which clock you use is not physical.
 
 **3. "Past = every record" also fails.** In the refusal experiment the log is a record written by the loop interaction itself. Protecting it freezes P(log | a = 1) at the no-loop 0.5: the loop does nothing at all.
 
@@ -43,6 +45,8 @@ In one_way the record is the copy a distant partner holds, so the loop-first col
 - needs no clock and gives identical predictions under both clocks (tested for all six experiments);
 - protects a recorded fact at every clock reading after it is prepared, **including readings before the record is written**: under the loop-first clock, P(a = 1) stays at its prior at readings 1 and 2, before anything has recorded it;
 - is a causal notion, not a temporal one: it is the analogue of "outside the loop's causal future", which is what relativity would require.
+
+(Corrected 2026-11-25: in spacetime the two differ. The influence definition also protects records made after the loop that the loop cannot change, and that lets a later choice change earlier statistics. The light-cone section below replaces it with "outside the loop's causal future" plus Theorem 4's basis, which is Theorem 5.)
 
 **5. P-CTC rewrites the history at clock readings before the loop.** In refusal with the record-first clock, P(a = 1) is already 1/3 at reading 1, before the record is written and before the loop interaction. In the timeless picture this is literal: the constraint acts on the whole history at once.
 
@@ -89,6 +93,138 @@ So when the order is a recorded fact the two definitions agree, and when it is n
 
 To make this work, influence is decided sector by sector: a record can be past inside one sector of other protected records (order recorded as "record first") and not in another.
 
+## A light-cone lattice (added 2026-11-25)
+
+The local clocks above have no space. [lightcone.py](lightcone.py) puts the same question into a 1 + 1 dimensional spacetime.
+
+**The model.**
+
+- Every qubit has a worldline that moves at most one site per step, and every event is a contact interaction: all its qubits sit at one site at that moment. Nothing else is assumed. The causal order of events is the order along shared worldlines, and locality alone turns it into a light cone: every causal relation satisfies |Δx| ≤ Δt, and events with no causal relation act on different qubits (tested).
+- The timeless state is a many-fingered-time history: one state for every cut (every spacelike slice through the events), the same whichever frame builds it, with one Feynman–Kitaev constraint per event (tested).
+- A frame is a Lorentz boost, t′ = t − βx with |β| < 1. Every boost respects every causal relation, and boosts with β = −0.6 and β = +0.6 disagree on whether Bob's record or Alice's loop comes first (tested).
+
+**The spacetime.**
+
+- A source at x = 2 sends one half of |Φ⁺⟩ (a) to Alice at x = 4 and the other (b) to Bob at x = 0.
+- Bob copies b into rec_b at t = 2.
+- Alice's loop:
+  - the time-travelling qubit m emerges with its partner p at the past mouth M (t = 0);
+  - m meets a, and a log qubit, at the loop event L (t = 3);
+  - the constraint "(m, p) in |Φ⁺⟩" closes the loop at the future mouth F (t = 5).
+- Alice copies a after the loop (rec_late, t = 4), and optionally before it (rec_a, t = 2.5).
+- Bob's record is spacelike to both M and L.
+
+**Closing the loop.** With the loop closed (an edge F → M), M, L and F lie in their own causal past (tested). This is the worry in [PERSPECTIVES.md](../../PERSPECTIVES.md) 1.3, item 2: inside a time loop the causal past stops being a usable notion. The causal future does not have this problem. The loop's future J⁺(M) is the same set of events with the loop open or closed (tested).
+
+**Five definitions of the past.** The loop is refusal (it writes the log; a is only a control). Bob's record has P(rec_b = 1) = 0.5 without a loop and 1/3 under P-CTC.
+
+| "The past of the loop" | Records protected | Bob's P(rec_b = 1) | Verdict |
+|---|---|---|---|
+| Before the simultaneity slice through L, frame β = −0.6 | rec_b | 0.5 | depends on the frame |
+| The same, frame β = +0.6 | none | **1/3** | signalling |
+| Causal past J⁻(L), loop open | none | **1/3** | misses spacelike records: signalling |
+| Causal past J⁻(L), loop closed | the log (written at L, which is now in its own past) | **0.25** | protects the loop's own output, still misses Bob: signalling |
+| **Outside the causal future J⁺(M)** | rec_b (and rec_a) | **0.5** | no frame, no signalling |
+| Not influenced by the loop (result 4) | rec_b, rec_late (and rec_a) | **0.5** | no frame, no signalling to Bob; but see below |
+| **Theorem 4 with "outside" = outside J⁺(M)** (Theorem 5) | a, split in Z (the source's CNOT read it) | **0.5** | no frame, no signalling; needs no record registers |
+
+The same pattern holds when the loop writes onto a (swap_write; P-CTC then gives Bob 0).
+
+**The loop stays inside its future cone (tested on every slice, for every spacetime here).**
+
+- *Without any rule:* no loop input changes the joint state of everything outside J⁺(M). This is ordinary causality on the lattice.
+- *Under PPS (any of the last three definitions, seam at L):* on every slice the joint state of everything outside J⁺(M) is exactly the no-loop one. The rule acts only inside the loop's future light cone.
+- *Under P-CTC:* outside qubits do change. On a slice where Bob has not yet recorded, P-CTC moves Bob's qubit b to 1/3, which reads as signalling. On a slice where he has, it moves his record rec_b to 1/3, which reads as rewriting the past. The words depend on the slice; in both cases the change is outside the loop's future cone.
+- *The seam:* under every rule the initial condition holds, and the transport is unbroken at every event except L.
+
+**"Not influenced" versus "outside the future cone".** The conjecture behind this step was that the two definitions coincide. They do not quite:
+
+- *One direction always holds.* Every record the loop can influence lies in J⁺(M) (locality), so everything outside the cone is protected by both definitions.
+- *The converse fails* for records inside the cone that the loop cannot affect. rec_late is a copy of a made after the loop, and refusal uses a only as a control. "Not influenced" protects rec_late; "outside the cone" does not.
+- *When does the difference matter?*
+  - If the loop acts on the recorded input (swap_write), the two definitions pick the same records (tested).
+  - If a record outside the cone already fixes the input (Bob's copy), the extra sector changes nothing: both give the same final state (tested).
+  - The difference shows up only when the sole record is inside the cone.
+- *Where it shows up, the two rules disagree.* Alice prepares a herself and copies it once, before or after her loop. For refusal the copy commutes with the loop, so the two spacetimes have the same overall unitary for every loop input (tested). "Outside the cone" gives P(a = 1) = 0.5 with the copy before and 1/3 with the copy after. "Not influenced" gives 0.5 for both.
+- *"Not influenced" lets a later choice change earlier statistics (tested).* Alice reads her log right after the loop, and only afterwards decides whether to copy a. Under "not influenced", copying protects a, so P(log = 1) is 1/4 if she will copy and 1/3 if she will not. The log is read before the choice is made, so her choice signals into her own past. This happens in the ordinary region after the loop, not through the loop. Under "outside the cone" (and Theorem 5) the log reads 1/3 either way.
+
+**Conclusion (corrected 2026-11-25, same day).** The first version of this section preferred "not influenced", arguing that the light-cone rule "depends on how the circuit is drawn". That was wrong:
+
+- A copy made before the loop and one made after it are different events in spacetime. A rule that treats them differently is not depending on the drawing; it is depending on whether the record lies in the loop's past or in its future.
+- "Not influenced" does the opposite, and it pays for it with the backward signal above.
+- What survives:
+  - "The past of the loop" is everything outside its causal future J⁺(M), and nothing inside it.
+  - Inside that region, the record basis comes from the interactions that read the loop's inputs. This is Theorem 4 with "the outside" made precise, stated as Theorem 5 in [THEOREMS.md](../THEOREMS.md).
+- This answers PERSPECTIVES.md 1.3, item 2, in the lattice:
+  - use the complement of the causal future, which closing the loop does not change;
+  - do not use the causal past, which closing the loop makes contain the loop itself.
+- It also qualifies results 2 and 4 above (one clock). There, "loop first" puts the record of a after the loop on a's own worldline, and in spacetime that record is inside the loop's future cone:
+  - its change under the clock definition is not signalling to a distant partner; that reading needs a partner correlated outside the cone, as Bob is here;
+  - protecting it, as the influence definition does, is what leads to the backward signal.
+  The one-clock conclusion that clock order cannot define the past still stands, through the local-clock and light-cone models.
+
+### Beyond 1 + 1 dimensions, a few events and a flat background
+
+The same code ([lightcone.py](lightcone.py)) also runs on general spacetimes.
+
+- **Random spacetimes in 1, 2 and 3 spatial dimensions (18 of them, 17–27 events each).**
+  - Five walkers move at most one grid step per unit time and interact when they meet, through controlled gates (readouts) with random direction and random target unitaries.
+  - The loop mouth sits at the origin. The time traveller m meets whichever walkers visit it, through CNOT, controlled unitaries in either direction, swap_write, or a generic two-qubit unitary. The loop region R = J⁺(M) ∩ J⁻(F) can therefore contain many events, including interactions between walkers on their way back to m.
+  - Tested in all 18:
+    - every causal relation lies inside the light cone;
+    - boosts in random directions respect causality;
+    - closing the loop makes exactly R and F chronology violating;
+    - no loop input changes anything outside J⁺(M).
+  - **Theorem 5 holds in all 18**, on randomly sampled slices containing all of R or none of it: under PPS with Theorem 4's split, the joint state of everything outside J⁺(M) is the no-loop one, to 10⁻¹⁵.
+  - P-CTC changes it in at least 80% of the spacetimes where a loop input was read.
+  - Protecting record registers alone fails in some spacetimes. A walker that read an input and kept no permanent record is still part of the outside.
+- **A black hole (1 + 1, river form).** Space flows inward at 1.5 times the speed of light inside a horizon, so light cones tilt and nothing inside can stand still or get out (tested from the local cones).
+  - Alice's loop falls in; Bob stays outside.
+  - P-CTC changes Bob's record from 0.5 to 1/3, so information leaves the black hole.
+  - PPS (outside the cone, or Theorem 5's split) keeps 0.5, and changes nothing outside J⁺(M) on any slice.
+- **Why this covers curved and discrete backgrounds in general.** Every surviving definition and Theorem 5 use only the causal order of events, so any background enters only through which events can influence which. The random spacetimes and the black hole are different causal orders on which the same statement is tested. Theorem 5 is proved for any finite causal order. What is not covered is a continuum limit (infinitely many events), quantum fields, and a time loop that is a solution of general relativity rather than an added edge F → M.
+
+### A time loop made by time dilation (added 2026-11-25)
+
+So far the time loop was an edge F → M put in by hand. [wormhole.py](wormhole.py) builds it instead from the wormhole time machine of Morris, Thorne and Yurtsever (1988), a known construction in general relativity, and the loop's edge becomes the wormhole itself.
+
+**Time dilation, simulated.** A transverse light clock (two mirrors, one photon) is carried along a path. The only rule used is that the photon moves at speed 1 in the lab while keeping up with its mirrors.
+
+- Every photon segment is checked to be lightlike (tested).
+- A clock moving at speed v ticks √(1 − v²) times as fast as one at rest, for v = 0.3, 0.6, 0.8, 0.95 (within 1%, tested).
+- Over a twin-paradox trip (out and back at 0.8 for 10 time units), the clock at home ticks 199 times and the travelling clock 159 times (one tick = 0.1). The travelling clock ends 4.0 behind, as the proper-time integral says (tested).
+
+**The time machine.**
+
+- *The mouths.* A short wormhole has two mouths. A stays at x = 0; B starts at x = 1 and makes exactly that trip.
+- *The throat.* It joins the two mouths at equal proper time: enter B when B's clock reads τ, come out of A when A's clock reads τ. After the trip B's clock is 4 behind, so the wormhole sends you 4 units into the past.
+- *The chronology horizon.* Once that shift exceeds the time light needs to go from A to B, closed causal curves exist.
+  - The first closed curve appears at lab time 7.5 on mouth B and 4.5 on mouth A, the same surface seen through the throat.
+  - The scan matches the closed form t = (d₀ + vT)/(1 − √(1 − v²) + v) for v = 0.5, 0.8, 0.95 (tested).
+  - Points on A are chronology violating exactly after 4.5 (tested).
+- *Dilation is what makes it.* Without enough dilation (v = 0 or 0.3, where the final shift 0.46 is less than the distance 1) no closed curve ever forms (tested). Its causal structure, including every path through the wormhole any number of times, is computed exactly.
+
+**The loop on it.**
+
+- *The time traveller.* m comes out of mouth A at M = (t 7, x 0), meets Alice's input and log at L = (10, 0.5), and goes into mouth B at F = (11, 1), where B's clock reads 7. So F → M is the wormhole, checked from the clocks to 10⁻¹⁵, and m really travels 4 units into the past (tested).
+- *Bob.* A source at (6, −3) shares |Φ⁺⟩ between a and Bob; Bob copies his half at (9.5, −6).
+- *Causal structure.*
+  - Every causal relation of the circuit, the loop edge included, is a causal relation of the wormhole spacetime.
+  - The loop's causal future is the same set of events in both.
+  - The circuit's chronology-violating events {M, L, F} are exactly the events with a closed causal curve through them (tested).
+- *Bob's record lies outside the causal future of every loop event, even counting every path through the wormhole (tested).*
+  - P-CTC still changes it, from 0.5 to 1/3, so in this spacetime P-CTC acts on an event that no causal curve connects to the loop.
+  - PPS keeps 0.5, with either the record definition or Theorem 5's split, and changes nothing outside the loop's future on any slice (tested). The only seam is the loop event.
+
+**What this does and does not show.**
+
+- *It is a real general-relativistic mechanism for a time loop, in the idealization of its original paper:*
+  - flat spacetime outside the mouths;
+  - a point-like throat;
+  - a wormhole that needs exotic matter (it violates the null energy condition) to stay open.
+- *Theorem 5 needed only the causal order.* This spacetime supplies one in which the loop is the wormhole, and the theorem holds on it.
+- *Not tested:* Hawking's chronology-protection conjecture. Quantum fields pile up at the chronology horizon and may destroy the machine (Kim and Thorne 1991; Hawking 1992). Exact vacuum solutions with closed timelike curves, such as Misner space or the Gödel universe, are not modelled either.
+
 ## Is this "event-driven"?
 
 In a sense, yes. In this picture there is no clock that drives anything. What exists are events (a record being written, a loop interaction) and relations between them: which records the loop can influence. "The past of the loop" is defined by those relations, not by a time coordinate. This is close in spirit to causal-set and relational approaches, where the causal order of events is basic and time is derived from it. The difference from an event-driven program is that here nothing "fires" in sequence: all events sit together in one static state, and the order is a structure inside it.
@@ -97,12 +233,12 @@ In a sense, yes. In this picture there is no clock that drives anything. What ex
 
 "Time does not really exist; past, present and future are definitions" is consistent with PPS, with one correction. Labels taken from a clock cannot define the past: the clock is a convention, and a rule built on it changes its predictions when the clock changes. What PPS needs instead is a causal relation: a fact belongs to the past of the loop if it is recorded and the loop cannot influence it. With that definition PPS works in a static universe, gives the same predictions as before, and does not depend on the choice of clock.
 
-This also gives a toy-model answer to the open problem in [PERSPECTIVES.md](../../PERSPECTIVES.md) 1.3 (how to define "the recorded past" in relativity): use influence, not time order. It does not solve the record-basis problem of PERSPECTIVES.md 3.1; sectors are still taken in a chosen basis.
+This also gives a toy-model answer to the open problem in [PERSPECTIVES.md](../../PERSPECTIVES.md) 1.3 (how to define "the recorded past" in relativity): use influence, not time order. The light-cone models above sharpen this: the past is everything outside the loop's causal future, with the record basis from Theorem 4 (Theorem 5); protecting uninfluenced records inside the future cone allows a backward signal. It does not solve the record-basis problem of PERSPECTIVES.md 3.1; sectors are still taken in a chosen basis.
 
 ## Limitations
 
 - Finite, discrete clocks (Feynman–Kitaev history states), not continuous Page–Wootters clocks with a Hamiltonian constraint; the clocks are ideal (orthogonal readings, no finite resolution).
-- Local clocks give relativity of simultaneity in a toy form only: no spacetime, no time dilation, one step per clock.
+- Spacetimes are finite and discrete (up to 27 events, 7 qubits), with fixed backgrounds (flat in 1–3 spatial dimensions, one 1 + 1 black hole); no continuum limit, no quantum fields, no metric dynamics. In the light-cone models the time loop is an edge F → M put in by hand. The wormhole model derives it from time dilation (Morris–Thorne–Yurtsever), but in that construction's idealization: 1 + 1 dimensions, a point-like throat, exotic matter assumed, no quantum back-reaction (chronology protection untested). Theorem 5 assumes every interaction that touches a loop input before the loop is a readout (Theorem 4's scope); non-readout interactions remain open.
 - The superposed clock is a single quantum switch of two operations, with c assumed not to be held by anyone else. If an outside system recorded c in some basis, which basis counts is the record-basis problem again (PERSPECTIVES.md 3.1).
 - The influence criterion uses the no-loop dynamics with four loop inputs (|0⟩, |1⟩, |+⟩, |+i⟩); for these circuits that is exact, but it is not a general definition of causal influence in a timeless universe.
 - The predictions are identical to the circuit model by construction (result 1). The new content is conceptual: which definitions of "past" survive. Nothing here can be tested on hardware beyond what [../hardware/](../hardware/README.md) already did.
@@ -113,3 +249,6 @@ This also gives a toy-model answer to the open problem in [PERSPECTIVES.md](../.
 - V. Giovannetti, S. Lloyd, L. Maccone, "Quantum time", Phys. Rev. D 92, 045033 (2015), [arXiv:1504.04215](https://arxiv.org/abs/1504.04215) [abstract]: a consistent modern formulation of Page–Wootters.
 - E. Alonso-Serrano, S. Schuster, M. Visser, "Emergent Time and Time Travel in Quantum Physics", Universe 10, 73 (2024), [arXiv:2312.05202](https://arxiv.org/abs/2312.05202) [search snippet]: the closest work found. It makes the emergent time parameter periodic (a cyclic universe) and argues periodicity alone is not enough for meaningful time travel. It does not treat a local loop with D-CTC/P-CTC-type rules or record-defined pasts.
 - One web search (2026-11-24) found no paper combining Page–Wootters with past-preserving or record-based loop rules. That is "not found", not "not done".
+- M. S. Morris, K. S. Thorne, U. Yurtsever, "Wormholes, time machines, and the weak energy condition", Phys. Rev. Lett. 61, 1446 (1988) [not read here]: the wormhole time machine used in wormhole.py.
+- Discrete and emergent spacetime (the Wolfram model, whose 2020 paper allows loops in the causal graph for some rules but reads them as repeated states rather than time travel; Gorard's FAQ answer that causal invariance forbids closed timelike curves; Wüthrich 2019 on time travel in emergent spacetime, quantum gates from multiway rewriting 2025): see [LITERATURE_REVIEW.md](../../LITERATURE_REVIEW.md), section 2, "Added 2026-11-25".
+- S.-W. Kim, K. S. Thorne, Phys. Rev. D 43, 3929 (1991), and S. W. Hawking, "Chronology protection conjecture", Phys. Rev. D 46, 603 (1992) [not read here]: quantum instability at the chronology horizon.
