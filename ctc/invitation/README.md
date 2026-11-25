@@ -219,9 +219,9 @@ Remaining gaps:
 | `INVITATION.md` | draft of the public invitation (English and Traditional Chinese); not published |
 | `../tests/test_invitation.py` | 43 offline tests (including the mock run) on real headers, two real transactions (the coinbase of block 977066, the genesis coinbase) and the raw blocks 0–2 |
 
-## Publishing (not done; needs the owner's decision)
+## Publishing (in preparation; each public step needs the owner's go-ahead)
 
-1. Fix the text of `INVITATION.md`: remove the draft line, and name the git commit of the rules.
+1. ~~Fix the text of `INVITATION.md`: remove the draft line, and name the git commit of the rules.~~ Done 2026-11-25: rules fixed at commit `d5370da5c54dcacfeda797b509f9004f02cd5b21`. From the moment it is stamped, `INVITATION.md` must never change by a single byte (the repository's `.gitattributes` already turns off line-ending conversion, so the bytes on GitHub equal the stamped bytes on every platform).
 2. Stamp it with OpenTimestamps and push it to the repository, so that its existence date is anchored. Once the stamp is confirmed, upgrade the proof, push the `.ots` file next to the invitation (senders read P from it), and record P in this README.
 3. Ask the Internet Archive to capture it, and optionally post it elsewhere.
 4. Once block P + 150 has 6 confirmations, run `reply.py --scan P P+144 --invitation-height P` (the dated window result). After that, check from time to time, recording each check with its date: transaction replies by scanning for `434c4c4601`, text replies wherever they are reported.

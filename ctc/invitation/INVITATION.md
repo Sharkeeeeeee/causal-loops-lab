@@ -1,6 +1,6 @@
 # An invitation to anyone who can send information into the past
 
-**DRAFT, not published.** Protocol `cll-future-reply-v1`. Rules and checker: [README.md](README.md), [reply.py](reply.py).
+Protocol `cll-future-reply-v1`. The rules are fixed at git commit `d5370da5c54dcacfeda797b509f9004f02cd5b21` of github.com/Sharkeeeeeee/causal-loops-lab (`ctc/invitation/README.md` and `ctc/invitation/reply.py` at that commit). This file is timestamped by `INVITATION.md.ots` in the same folder; the Bitcoin block that proof attests is the block P mentioned below. This file is never edited after timestamping.
 
 ---
 
@@ -8,7 +8,7 @@
 
 If you can send information to an earlier time, please send us the hash of any Bitcoin block **before that block is mined**.
 
-Nobody can know a block hash in advance. A message that is anchored in the Bitcoin blockchain at least 6 blocks before the block whose hash it contains could only have come from the future. One such message is enough.
+Nobody can know a block hash in advance. A message that is anchored in the Bitcoin blockchain at least 6 blocks before the block whose hash it contains, in the same chain, could only have come from the future. One such message is enough.
 
 **How to reply (either way works):**
 
@@ -31,7 +31,7 @@ We know that a time machine may not be able to reach times before it was built. 
 
 如果你能把資訊送回過去，請把**任何一個比特幣區塊的雜湊值**，在那個區塊被挖出來**之前**送給我們。
 
-沒有人能事先知道區塊的雜湊值。一則訊息只要被記錄在比特幣區塊鏈上，而且比它所寫的那個區塊早至少 6 個區塊，就只可能來自未來。只要一則就夠了。
+沒有人能事先知道區塊的雜湊值。一則訊息只要被記錄在比特幣區塊鏈上，而且在同一條鏈上比它所寫的那個區塊早至少 6 個區塊，就只可能來自未來。只要一則就夠了。
 
 **回覆方式（任選一種）：**
 
