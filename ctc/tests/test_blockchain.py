@@ -234,6 +234,35 @@ except ImportError:
 
 
 @unittest.skipUnless(HAVE_OTS, 'opentimestamps not installed')
+class ArchiveDownloads(unittest.TestCase):
+    def test_gzip_encoded_capture_is_decoded(self):
+        """The Internet Archive replays captures with their original Content-Encoding (found 2026-11-25)."""
+        import gzip
+        import urllib.request
+        import witness
+
+        class Response:
+            def __init__(self, body, encoding):
+                self.body, self.headers = body, {'Content-Encoding': encoding} if encoding else {}
+
+            def read(self):
+                return self.body
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+        original = urllib.request.urlopen
+        try:
+            for body, enc in ((gzip.compress(b'commitment'), 'gzip'), (b'commitment', None)):
+                urllib.request.urlopen = lambda req, timeout=None, b=body, e=enc: Response(b, e)
+                self.assertEqual(witness._get('https://example.org/x'), b'commitment')
+        finally:
+            urllib.request.urlopen = original
+
+
 class OpenTimestamps(unittest.TestCase):
     def test_parse_synthetic_proof(self):
         """Build a proof by hand (file digest -> append -> sha256 -> Bitcoin attestation) and parse it."""

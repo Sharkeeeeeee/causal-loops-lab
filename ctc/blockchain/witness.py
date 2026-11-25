@@ -10,6 +10,7 @@ Usage (from the repository root), after pushing public/commitment.txt to the wit
   python -B ctc/blockchain/witness.py
 """
 from datetime import datetime, timezone
+import gzip
 import json
 from pathlib import Path
 import sys
@@ -23,9 +24,18 @@ USER_AGENT = 'causal-loops-lab-verifier/1'
 
 
 def _get(url, timeout=60):
+    """Body of a URL, decoded if the server sent it gzip-compressed.
+
+    The Internet Archive replays a capture with its original Content-Encoding, so the raw
+    bytes of a gzip-served page are compressed; comparing them unopened with the file would
+    fail (found 2026-11-25 on the invitation's first capture).
+    """
     req = urllib.request.Request(url, headers={'User-Agent': USER_AGENT})
     with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read()
+        body = r.read()
+        if (r.headers.get('Content-Encoding') or '').lower() == 'gzip':
+            body = gzip.decompress(body)
+        return body
 
 
 def request_capture(url):

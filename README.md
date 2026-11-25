@@ -2,7 +2,7 @@
 
 **Exact toy models of information sent around a closed timelike curve (CTC), what self-consistency would do to the future, and experimental tests on IBM quantum hardware.**
 
-[![tests](https://img.shields.io/badge/tests-269%20passing-2a78d6)](ctc/README.md)
+[![tests](https://img.shields.io/badge/tests-270%20passing-2a78d6)](ctc/README.md)
 [![IBM hardware](https://img.shields.io/badge/IBM%20hardware-predictions%20measurable%2C%2021%2F21%20checks-2a78d6)](ctc/hardware/README.md)
 [![Born-rule test](https://img.shields.io/badge/loop%20search-no%20effect%2C%20%7CS%7C%20%3C%201.2e--3-2a78d6)](ctc/born_rule/README.md)
 [![python](https://img.shields.io/badge/python-3.11%2B-2a78d6)](ctc/README.md)
@@ -73,7 +73,7 @@ python -B ctc/tests/test_signalling.py
 python -B ctc/run_signalling.py           # regenerates the no-signalling map
 ```
 
-[ctc/README.md](ctc/README.md) lists all 24 test files (269 tests) and every script. Every model is a small exact calculation (1–6 qubits); results are checked against closed-form formulas and against the published numbers in Lloyd et al. 2011, Brun, Harrington & Wilde 2009, Allen 2014 and Hartle 1994.
+[ctc/README.md](ctc/README.md) lists all 24 test files (270 tests) and every script. Every model is a small exact calculation (1–6 qubits); results are checked against closed-form formulas and against the published numbers in Lloyd et al. 2011, Brun, Harrington & Wilde 2009, Allen 2014 and Hartle 1994.
 
 The hardware experiments need `qiskit` (and `qiskit-ibm-runtime` plus your own IBM Quantum account for real devices):
 
