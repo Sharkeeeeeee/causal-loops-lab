@@ -218,12 +218,13 @@ Remaining gaps:
 | `reply.py` | reply formats, transaction and block parsing, merkle proofs, descent check, validity rules, the preferred-window label, block scanning, a command-line checker (`--text`, `--txid`, `--scan`, `--show-payload`, `--no-descent`, `--invitation-height`) |
 | `predictions.py` | the toy model behind the predictions table |
 | `simulate.py` | the mock run on a synthetic chain with attackers |
+| `followup.py` | the steps after publishing (`status`, `upgrade`: complete the proof and record P, `scan`: judge the window); results go to `STATUS.json` and `window_result.json` |
 | `INVITATION.md` | draft of the public invitation (English and Traditional Chinese); not published |
-| `../tests/test_invitation.py` | 43 offline tests (including the mock run) on real headers, two real transactions (the coinbase of block 977066, the genesis coinbase) and the raw blocks 0–2 |
+| `../tests/test_invitation.py` | 46 offline tests (including the mock run and the follow-up phases) on real headers, two real transactions (the coinbase of block 977066, the genesis coinbase) and the raw blocks 0–2 |
 
 ## Publishing
 
 1. ~~Fix the text of `INVITATION.md`: remove the draft line, and name the git commit of the rules.~~ Done 2026-11-25: rules fixed at commit `d5370da5c54dcacfeda797b509f9004f02cd5b21`. From the moment it is stamped, `INVITATION.md` must never change by a single byte (the repository's `.gitattributes` already turns off line-ending conversion, so the bytes on GitHub equal the stamped bytes on every platform).
 2. ~~Stamp it with OpenTimestamps and push it to the repository.~~ Done 2026-11-25. The `ots` command does not start on Windows (python-bitcoinlib looks for an OpenSSL DLL), so `ctc/blockchain/ots_support.py` now stamps and upgrades through the `opentimestamps` library directly, the way `ots stamp` and `ots upgrade` do (nonce, the same four calendars, at least two answers). **Still to do:** once the stamp is in a block, upgrade `INVITATION.md.ots`, push it (senders read P from it), and record P here.
 3. ~~Ask the Internet Archive to capture it.~~ Done: first captures of the raw GitHub URLs at 2026-11-25 13:42:28 UTC (`INVITATION.md`, bytes identical to the stamped file once the archive's gzip encoding is removed) and 13:43:28 UTC (`INVITATION.md.ots`, the pending proof). Optionally post it elsewhere.
-4. Once block P + 150 has 6 confirmations, run `reply.py --scan P P+144 --invitation-height P` (the dated window result). After that, check from time to time, recording each check with its date: transaction replies by scanning for `434c4c4601`, text replies wherever they are reported.
+4. Once block P + 150 has 6 confirmations, run `reply.py --scan P P+144 --invitation-height P` (the dated window result). Steps 2 (P) and 4 run automatically: a local scheduled task runs `followup.py` every two hours, records P and then the window verdict in `STATUS.json`, and commits and pushes only those records. After that, check from time to time, recording each check with its date: transaction replies by scanning for `434c4c4601`, text replies wherever they are reported.

@@ -24,7 +24,7 @@ python -B ctc/tests/test_hardware.py            #  8  hardware circuits and esti
 python -B ctc/tests/test_born_rule.py           #  6  loop model vs Born-rule tests
 python -B ctc/tests/test_born_direct.py         #  8  direct pure-vs-recorded test design
 python -B ctc/tests/test_blockchain.py          # 23  blockchain lottery protocol (offline)
-python -B ctc/tests/test_invitation.py          # 43  invitation to future senders: reply checks, block scans, mock run with attackers, rule predictions
+python -B ctc/tests/test_invitation.py          # 46  invitation to future senders: reply checks, block scans, mock run with attackers, rule predictions
 python -B ctc/tests/test_timeless.py            # 16  loop rules in a timeless (Page–Wootters) universe, seam at the loop event
 python -B ctc/tests/test_clocks.py              #  8  local clocks (frames) and a superposed clock
 python -B ctc/tests/test_operation_linearity.py  #  5  is PPS linear in the loop's own operation? (process matrices)
@@ -33,7 +33,7 @@ python -B ctc/tests/test_wormhole.py            # 10  time dilation with light c
 python -B ctc/tests/test_lightcone.py           # 26  light cones: Theorem 5 on random 1-3D spacetimes, a black hole, the backward-signal example
 ```
 
-270 tests in total (2026-11-25). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
+273 tests in total (2026-11-25). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
 
 ## Regenerating results
 

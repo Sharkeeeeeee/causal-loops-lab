@@ -76,7 +76,7 @@ Done:
 - [x] **choose a way out for H2:** PPS chosen; H2 rewritten as H2′ (reweighting only inside each recorded past world) and proved as a theorem ([ctc/THEOREMS.md](ctc/THEOREMS.md)). Other candidates (global non-local rules, D-CTC-like effects on the message only) are not pursued; see [ctc/NO_SIGNALLING.md](ctc/NO_SIGNALLING.md)
 - [x] **decision point:** only rules that do not reweight the world are compatible with relativity. Decision: keep no-signalling, rewrite H2 as H2′, adopt PPS (it still reweights the future inside each past world, but weights between worlds do not change)
 - [x] novelty checks, rounds 1–3 ([ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md)): P-CTC signalling and D-CTC's interpretation dependence are known (Bub–Stairs 2014 and others); the C†C criterion is essentially Araújo–Guérin–Baumeler 2017's linearity condition; Allen 2014 is the closest prior work to the κ–β model; PPS's within-world rule is Hartle 1994 Eq. (5.6)
-- [x] 270 tests, all passing (2026-11-25; 3 gate-level hardware tests are skipped without qiskit)
+- [x] 273 tests, all passing (2026-11-25; 3 gate-level hardware tests are skipped without qiskit)
 
 Next, in priority order:
 - [x] **make the record basis state independent:** done as Theorem 4 (2026-11-24): the pointer basis of the interaction fixes the basis, the rule is linear, Theorem 0 applies

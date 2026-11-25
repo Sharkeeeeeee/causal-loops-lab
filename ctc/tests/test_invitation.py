@@ -406,6 +406,61 @@ class SimulatedRun(unittest.TestCase):
         self.assertTrue(self.res['_window_early']['verdict'].startswith('open'))
 
 
+class FollowUp(unittest.TestCase):
+    """followup.py runs unattended after publishing: each phase, and its refusal to go on if the
+    invitation changed, is checked with the network replaced by fixtures."""
+
+    def setUp(self):
+        import followup
+        self.f = followup
+        self.tmp = tempfile.TemporaryDirectory()
+        self.saved = (followup.STATUS, followup.WINDOW_RESULT, followup.chain.tip_height, followup.chain.fetch_header,
+                      followup.ots_support.upgrade, followup.ots_support.first_verified_block, followup.reply.scan_range)
+        followup.STATUS = Path(self.tmp.name) / 'STATUS.json'
+        followup.WINDOW_RESULT = Path(self.tmp.name) / 'window_result.json'
+        followup.chain.fetch_header = fetch
+
+    def tearDown(self):
+        f = self.f
+        (f.STATUS, f.WINDOW_RESULT, f.chain.tip_height, f.chain.fetch_header, f.ots_support.upgrade,
+         f.ots_support.first_verified_block, f.reply.scan_range) = self.saved
+        self.tmp.cleanup()
+
+    def test_phases(self):
+        f = self.f
+        f.chain.tip_height = lambda: 977062
+        f.ots_support.upgrade = lambda path: False
+        self.assertEqual(f.status()['next'], 'upgrade')
+        self.assertIn('not in a block', f.upgrade()['note'])
+        f.ots_support.upgrade = lambda path: True
+        f.ots_support.first_verified_block = lambda a, b, c: 977060
+        s = f.upgrade()
+        self.assertEqual((s['P'], s['P_block_hash'], s['window_closes_at']), (977060, HEADERS[977060][0], 977215))
+        self.assertTrue(f.status()['next'].startswith('wait until block 977215'))
+        self.assertIn('too early', f.scan()['note'])
+        f.chain.tip_height = lambda: 977215
+        self.assertEqual(f.status()['next'], 'scan')
+        f.reply.scan_range = lambda *a, **k: {'scanned_from': 977060, 'scanned_to': 977204, 'lookup': 'x', 'replies': []}
+        s = f.scan()
+        self.assertTrue(s['window_verdict'].startswith('closed: no valid'))
+        self.assertEqual(f.status()['next'], 'done')
+
+    def test_refuses_if_the_invitation_changed(self):
+        f = self.f
+        original = f.STAMPED_SHA256
+        try:
+            f.STAMPED_SHA256 = '00' * 32
+            with self.assertRaises(SystemExit):
+                f.status()
+        finally:
+            f.STAMPED_SHA256 = original
+
+    def test_the_published_invitation_has_the_stamped_hash(self):
+        import hashlib
+        self.assertEqual(hashlib.sha256((HERE.parent / 'invitation' / 'INVITATION.md').read_bytes()).hexdigest(),
+                         self.f.STAMPED_SHA256)
+
+
 def check_text_reply(anchor, fetch_fn=fetch):
     with tempfile.TemporaryDirectory() as d:
         p = Path(d) / 'reply.txt'
