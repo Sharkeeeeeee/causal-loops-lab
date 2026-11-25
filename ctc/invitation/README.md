@@ -2,7 +2,7 @@
 
 Created 2026-11-25 with AI assistance (Claude). No external review. Protocol `cll-future-reply-v1`.
 
-**Status: designed and tested offline (`ctc/tests/test_invitation.py`, 43 tests); reviewed twice, run end to end on a synthetic chain with attackers, and dry-run on 145 real mainnet blocks (see "Mock run", "Live dry run" and "Review" below). The invitation has not been published.** Publishing it (timestamp, push, archive capture) is a public, irreversible step and waits for the repository owner's decision.
+**Status: published 2026-11-25.** `INVITATION.md` (SHA-256 `3394e6f0cdcf6fde53694bfadf11f044c0c797ee454e9dc91dd54f276e47ce82`) was stamped with OpenTimestamps on 2026-11-25 (all four default calendars answered) and pushed to this repository. The stamp is waiting to be confirmed in a Bitcoin block; that block will be P. Rules fixed at commit `d5370da`. Tested offline (`ctc/tests/test_invitation.py`, 43 tests), reviewed twice, run end to end on a synthetic chain with attackers, and dry-run on 145 real mainnet blocks (see "Mock run", "Live dry run" and "Review" below).
 
 ## In one sentence
 
@@ -219,9 +219,9 @@ Remaining gaps:
 | `INVITATION.md` | draft of the public invitation (English and Traditional Chinese); not published |
 | `../tests/test_invitation.py` | 43 offline tests (including the mock run) on real headers, two real transactions (the coinbase of block 977066, the genesis coinbase) and the raw blocks 0–2 |
 
-## Publishing (in preparation; each public step needs the owner's go-ahead)
+## Publishing
 
 1. ~~Fix the text of `INVITATION.md`: remove the draft line, and name the git commit of the rules.~~ Done 2026-11-25: rules fixed at commit `d5370da5c54dcacfeda797b509f9004f02cd5b21`. From the moment it is stamped, `INVITATION.md` must never change by a single byte (the repository's `.gitattributes` already turns off line-ending conversion, so the bytes on GitHub equal the stamped bytes on every platform).
-2. Stamp it with OpenTimestamps and push it to the repository, so that its existence date is anchored. Once the stamp is confirmed, upgrade the proof, push the `.ots` file next to the invitation (senders read P from it), and record P in this README.
-3. Ask the Internet Archive to capture it, and optionally post it elsewhere.
+2. ~~Stamp it with OpenTimestamps and push it to the repository.~~ Done 2026-11-25. The `ots` command does not start on Windows (python-bitcoinlib looks for an OpenSSL DLL), so `ctc/blockchain/ots_support.py` now stamps and upgrades through the `opentimestamps` library directly, the way `ots stamp` and `ots upgrade` do (nonce, the same four calendars, at least two answers). **Still to do:** once the stamp is in a block, upgrade `INVITATION.md.ots`, push it (senders read P from it), and record P here.
+3. Ask the Internet Archive to capture it, and optionally post it elsewhere. (Requested 2026-11-25 for the raw GitHub URLs of `INVITATION.md` and `INVITATION.md.ots`.)
 4. Once block P + 150 has 6 confirmations, run `reply.py --scan P P+144 --invitation-height P` (the dated window result). After that, check from time to time, recording each check with its date: transaction replies by scanning for `434c4c4601`, text replies wherever they are reported.
