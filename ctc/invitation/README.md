@@ -2,7 +2,7 @@
 
 Created 2026-11-25 with AI assistance (Claude). No external review. Protocol `cll-future-reply-v1`.
 
-**Status: published 2026-11-25.** `INVITATION.md` (SHA-256 `3394e6f0cdcf6fde53694bfadf11f044c0c797ee454e9dc91dd54f276e47ce82`) was stamped with OpenTimestamps on 2026-11-25 (all four default calendars answered) and pushed to this repository. The stamp is waiting to be confirmed in a Bitcoin block; that block will be P. Rules fixed at commit `d5370da`. Tested offline (`ctc/tests/test_invitation.py`, 43 tests), reviewed twice, run end to end on a synthetic chain with attackers, and dry-run on 145 real mainnet blocks (see "Mock run", "Live dry run" and "Review" below).
+**Status: published 2026-11-25.** `INVITATION.md` (SHA-256 `3394e6f0cdcf6fde53694bfadf11f044c0c797ee454e9dc91dd54f276e47ce82`) was stamped with OpenTimestamps on 2026-11-25 (all four default calendars answered) and pushed to this repository. The stamp was confirmed in block P = 977531 (hash 00000000000000000000ca5441b76e50df821290d0d2e427263c2fab7f59a21b, block time 2026-11-25T15:44:40+00:00); the preferred window is blocks 977531..977675, closing at block 977686. See STATUS.json. Rules fixed at commit `d5370da`. Tested offline (`ctc/tests/test_invitation.py`, 43 tests), reviewed twice, run end to end on a synthetic chain with attackers, and dry-run on 145 real mainnet blocks (see "Mock run", "Live dry run" and "Review" below).
 
 ## In one sentence
 
