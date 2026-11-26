@@ -1,0 +1,13 @@
+{
+ "scanned_from": 977531,
+ "scanned_to": 977675,
+ "lookup": "verified headers 977531..977681 only; claims outside them are pending",
+ "replies": [],
+ "window_summary": {
+  "verdict": "closed: no valid transaction reply anchored in the window",
+  "P": 977531,
+  "closes_at": 977686,
+  "tip": 977695,
+  "replies_anchored_in_window": {}
+ }
+}

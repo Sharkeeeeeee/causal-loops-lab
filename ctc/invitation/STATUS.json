@@ -5,5 +5,9 @@
  "invitation_sha256": "3394e6f0cdcf6fde53694bfadf11f044c0c797ee454e9dc91dd54f276e47ce82",
  "P_recorded_at": "2026-11-25T16:58:34+00:00",
  "window": "anchored in 977531..977675, naming a block no later than 977681",
- "window_closes_at": 977686
+ "window_closes_at": 977686,
+ "window_verdict": "closed: no valid transaction reply anchored in the window",
+ "window_replies": {},
+ "window_scanned_at": "2026-11-26T16:36:12+00:00",
+ "window_scanned_tip": 977695
 }
