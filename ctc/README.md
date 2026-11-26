@@ -27,13 +27,20 @@ python -B ctc/tests/test_blockchain.py          # 23  blockchain lottery protoco
 python -B ctc/tests/test_invitation.py          # 46  invitation to future senders: reply checks, block scans, mock run with attackers, rule predictions
 python -B ctc/tests/test_timeless.py            # 16  loop rules in a timeless (Page–Wootters) universe, seam at the loop event
 python -B ctc/tests/test_clocks.py              #  8  local clocks (frames) and a superposed clock
+python -B ctc/tests/test_field_loop.py          #  7  a field mode on a time loop: chronology-protection divergence under P-CTC, PPS, D-CTC
+python -B ctc/tests/test_worlds.py              # 15  Theorem 7: worlds from the input's reduced state (weak records, non-readout interactions)
+python -B ctc/tests/test_quantum_h1h2.py        #  4  Theorems 1Q, 2Q: Theorems 1 and 2 for any quantum U
+python -B ctc/tests/test_theorem3_general.py    #  9  Lemmas 3.1-3.2: Theorem 3 for every U that does not act back
+python -B ctc/tests/test_fallback.py            #  8  Theorem 8: the paradox-world fallback from a noisy loop; PP vs PSPACE
+python -B ctc/tests/test_mixed_rule.py          #  6  Theorem 9: jumps of single-basis rules; the mixed world rule
+python -B ctc/tests/test_uniqueness.py          # 11  Theorem 6: is PPS the only rule? (counterexample to the first conjecture; solution space)
 python -B ctc/tests/test_operation_linearity.py  #  5  is PPS linear in the loop's own operation? (process matrices)
 python -B ctc/tests/test_decoherent_histories.py # 5  Theorem 4's records vs Gell-Mann-Hartle strong decoherence
 python -B ctc/tests/test_wormhole.py            # 10  time dilation with light clocks, a wormhole time machine, the loop on it
 python -B ctc/tests/test_lightcone.py           # 26  light cones: Theorem 5 on random 1-3D spacetimes, a black hole, the backward-signal example
 ```
 
-273 tests in total (2026-11-25). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
+333 tests in total (2026-11-27). Without qiskit, 3 gate-level hardware tests are skipped; without `opentimestamps-client`, 1 blockchain proof-parsing test is skipped.
 
 ## Regenerating results
 
@@ -58,6 +65,7 @@ Requires NumPy; figures need matplotlib; hardware code needs qiskit (and qiskit-
 |---|---|
 | [THEOREMS.md](THEOREMS.md) | H1′–H3′ under past-preserving selection, and Theorem 4 (where the record basis comes from): statements, proofs, checks |
 | [PAST_PRESERVING.md](PAST_PRESERVING.md) | the PPS rule; a double slit and quantum eraser with a time loop |
+| [FIELD_LOOP.md](FIELD_LOOP.md) | a field mode on a time loop: the chronology-protection divergence under P-CTC, PPS and D-CTC (toy) |
 | [DECOHERENCE.md](DECOHERENCE.md) | letting decoherence fix the record basis |
 | [timeless/README.md](timeless/README.md) | PPS in a timeless (Page–Wootters) universe: the past must be defined by influence, not clock order |
 | [NO_SIGNALLING.md](NO_SIGNALLING.md) | reweighting the world equals faster-than-light signalling |
@@ -82,7 +90,9 @@ Requires NumPy; figures need matplotlib; hardware code needs qiskit (and qiskit-
 | `branches.py` | the classical weighted-branch model: κ (where the message comes from) and β (selection strength) |
 | `signalling.py` | adds a distant Bob and checks signalling in both directions |
 | `past_preserving.py` | past-preserving selection |
-| `records.py` | the record basis read off an interaction (pointer basis), for Theorem 4 |
+| `records.py` | the record basis read off an interaction (pointer basis), for Theorem 4; worlds from the reduced state, for Theorem 7 |
+| `fallback.py` | worlds with no consistent history: the noisy-loop limit (open loop), Theorem 8 |
+| `mixed_rule.py` | the mixed world rule (1 − c)·pointer + c·state for weak records, Theorem 9 |
 | `double_slit.py` | double slit with a time loop, including the quantum-eraser version |
 | `decoherence.py` | environment partly recording the path; decoherence-defined PPS |
 | `run_*.py`, `reproduce_literature.py` | parameter sweeps and figures |

@@ -82,6 +82,10 @@ Each paragraph is marked with its reading level.
 
 **Other.** Aaronson–Bavarian–Gueltrini, Computability theory of closed timelike curves (arXiv 1609.05507) [abstract level, seen only in search results]: the 2008 work was restricted to polynomial size, giving PSPACE.
 
+### Added 2026-11-26: forward citations of Hartle 1994
+
+Sixth round of [ctc/NOVELTY_CHECK.md](ctc/NOVELTY_CHECK.md): all 100 papers citing Hartle 1994 screened, 209 citing Lloyd 2011 or Allen 2014 screened by keyword, seven read in full. Closest prior work to PPS: **Anderson 1995** (makes Hartle's rule causal by keeping only the unitary part of the evolution through the CTC region, which removes the consistency selection) and **Kent 2002** (nonlinear evolution that depends only on outcomes recorded in the past light cone cannot signal; PPS needs the larger region outside J⁺(M) because it renormalizes). Rosenberg 1997 quantifies the acausality of Hartle's rule; Shepelin et al. 2021 (S-CTC) uses worlds of recorded outcomes inside the loop but avoids signalling only by averaging two loop topologies.
+
 ### Added 2026-11-25: discrete and emergent spacetime, Wolfram model
 
 These bear on the light-cone and wormhole models in [ctc/timeless/README.md](ctc/timeless/README.md) and on Theorem 5 ([ctc/THEOREMS.md](ctc/THEOREMS.md)). Theorem 5 is a statement about any finite causal order, which is why discrete and emergent spacetime programmes are relevant.
@@ -212,6 +216,14 @@ Only entries for which I actually saw an identifier or DOI. Levels as defined at
 | Gorard 2020, Algorithmic causal sets (arXiv:2011.12174) | https://arxiv.org/abs/2011.12174 | abstract |
 | Gell-Mann & Hartle 2019 (arXiv:1905.05859) | https://arxiv.org/abs/1905.05859 | full (2026-11-25) |
 | Morris, Thorne, Yurtsever 1988, PRL 61, 1446 | https://doi.org/10.1103/PhysRevLett.61.1446 | bibliographic only |
+| Anderson 1995, Unitarity restoration with CTCs (gr-qc/9405058) | https://arxiv.org/abs/gr-qc/9405058 | full (2026-11-26) |
+| Rosenberg 1997, Testing causality violation with CTCs (hep-th/9707103) | https://arxiv.org/abs/hep-th/9707103 | full (2026-11-26) |
+| Kent 2002, Nonlinearity without superluminality (quant-ph/0204106) | https://arxiv.org/abs/quant-ph/0204106 | full (2026-11-26) |
+| Hartle 1997, Quantum pasts and the utility of history (gr-qc/9712001) | https://arxiv.org/abs/gr-qc/9712001 | full (2026-11-26) |
+| Shepelin et al. 2021, Multiworld motives by CTCs, J. Phys. Conf. Ser. 2081, 012029 | https://doi.org/10.1088/1742-6596/2081/1/012029 | full (2026-11-26) |
+| Lee 2011, A finite state model for time travel (arXiv:1101.1927) | https://arxiv.org/abs/1101.1927 | full (2026-11-26) |
+| Paganini 2020, No events on closed causal curves (arXiv:2005.05748) | https://arxiv.org/abs/2005.05748 | full (2026-11-26) |
+| Bishop, Costa, Ralph 2024 (arXiv:2407.14577) | https://arxiv.org/abs/2407.14577 | partly (2026-11-26) |
 
 ---
 

@@ -146,10 +146,11 @@ def world_vectors(blocks, psi=None):
     return worlds
 
 
-def world_kraus(U, d_cr, d_loop, worlds):
-    """PPS Kraus operators for orthonormal world vectors: P-CTC inside each world (D-CTC fallback),
+def world_kraus(U, d_cr, d_loop, worlds, fallback='open'):
+    """PPS Kraus operators for orthonormal world vectors: P-CTC inside each world (open-loop fallback),
     and the identity on whatever the worlds do not span (unread, and empty under the premise)."""
-    from models import d_ctc, partial_trace_operator_loop
+    from models import partial_trace_operator_loop
+    from past_preserving import fallback_kraus
     C = partial_trace_operator_loop(U, d_cr, d_loop)
     kraus, span = [], np.zeros((d_cr, d_cr), complex)
     for v in worlds:
@@ -158,9 +159,7 @@ def world_kraus(U, d_cr, d_loop, worlds):
         if np.linalg.norm(w) > TOL:
             kraus.append(np.outer(w / np.linalg.norm(w), v.conj()))
             continue
-        sigma = d_ctc(U, np.outer(v, v.conj()), d_cr, d_loop)[0]
-        lam, vecs = np.linalg.eigh((sigma + sigma.conj().T) / 2)
-        kraus += [np.sqrt(x) * np.outer(s, v.conj()) for x, s in zip(lam, vecs.T) if x > 1e-12]
+        kraus += fallback_kraus(U, d_cr, d_loop, v, fallback)
     rest = np.eye(d_cr) - span
     if np.linalg.norm(rest) > 1e-9:
         kraus.append(rest)
@@ -174,3 +173,66 @@ def eigenbasis_rule(rho_a, fallback):
     if np.min(np.diff(lam)) < 1e-9:
         return fallback
     return vecs
+
+
+def _bases_of_subspace(vectors, n_bases, rng):
+    """n_bases orthonormal bases of the subspace spanned by the orthonormal `vectors`, spread evenly
+    (Fibonacci points on the Bloch sphere for a 2-dimensional subspace, Haar-random otherwise).
+    The average of their projectors is exactly the projector on the subspace."""
+    m = len(vectors)
+    S = np.column_stack(vectors)
+    out = []
+    for j in range(n_bases):
+        if m == 2:
+            z = 1 - (2 * j + 1) / n_bases
+            phi = j * np.pi * (3 - np.sqrt(5))
+            a, b = np.sqrt((1 + z) / 2), np.sqrt((1 - z) / 2) * np.exp(1j * phi)
+            W = np.array([[a, -np.conj(b)], [b, np.conj(a)]])
+        else:
+            z = rng.normal(size=(m, m)) + 1j * rng.normal(size=(m, m))
+            W, r = np.linalg.qr(z)
+            W = W * (np.diag(r) / abs(np.diag(r)))
+        out.append([S @ W[:, i] for i in range(m)])
+    return out
+
+
+def state_world_kraus(U, d_cr, d_loop, rho_a, n_bases=600, tol=1e-7, seed=11, fallback='open'):
+    """The state-based world rule (THEOREMS.md, Theorem 7).
+
+    The worlds are the eigenvectors of the input's reduced state rho_a, each with its weight; inside
+    each world the loop acts by P-CTC (open-loop fallback, Theorem 8), as in Theorem 6. Where the spectrum is
+    degenerate no basis is singled out by the state, so the rule averages over all bases of that
+    eigenspace (each world of each basis with weight 1/n_bases). Zero eigenvalues carry no weight;
+    the identity is used there so that the map stays trace preserving.
+    """
+    from models import partial_trace_operator_loop
+    from past_preserving import fallback_kraus
+    C = partial_trace_operator_loop(U, d_cr, d_loop)
+    lam, vecs = np.linalg.eigh((rho_a + rho_a.conj().T) / 2)
+    groups, i = [], 0
+    while i < d_cr:
+        j = i + 1
+        while j < d_cr and abs(lam[j] - lam[i]) < tol:
+            j += 1
+        groups.append((lam[i], [vecs[:, k] for k in range(i, j)]))
+        i = j
+    rng = np.random.default_rng(seed)
+
+    def world(v, weight):
+        w = C @ v
+        if np.linalg.norm(w) > TOL:
+            return [np.sqrt(weight) * np.outer(w / np.linalg.norm(w), v.conj())]
+        return fallback_kraus(U, d_cr, d_loop, v, fallback, weight)
+
+    kraus = []
+    for value, vs in groups:
+        if value < tol:
+            P = sum(np.outer(v, v.conj()) for v in vs)
+            kraus.append(P)                      # carries no weight; keeps the map trace preserving
+        elif len(vs) == 1:
+            kraus += world(vs[0], 1.0)
+        else:
+            for basis in _bases_of_subspace(vs, n_bases, rng):
+                for v in basis:
+                    kraus += world(v, 1.0 / n_bases)
+    return kraus

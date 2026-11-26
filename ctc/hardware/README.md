@@ -43,7 +43,7 @@ Each circuit has at most 6 qubits:
 |---|---|
 | No loop (unknown external message) | ignore the Bell outcome; m alone is maximally mixed |
 | P-CTC | keep only shots with Bell outcome 00 |
-| PPS | weight of each world from all shots; within a world keep only 00 shots. Worlds with no consistent history fall back to D-CTC; for these circuits the D-CTC fixed point is maximally mixed, so this equals ignoring the Bell outcome (verified exactly by `fallback_matches_no_loop`) |
+| PPS | weight of each world from all shots; within a world keep only 00 shots. Worlds with no consistent history fall back to D-CTC; for these circuits the D-CTC fixed point is maximally mixed, so this equals ignoring the Bell outcome, which is also the open-loop fallback adopted later (THEOREMS.md, Theorem 8) (verified exactly by `fallback_matches_no_loop`) |
 
 ## Experiments
 

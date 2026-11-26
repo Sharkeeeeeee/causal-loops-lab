@@ -80,7 +80,7 @@ This is part of T4 in phase 3 of the roadmap; nobody had computed the computatio
 
 **Argument.** By the definition in THEOREMS.md, when the input is a definite record |k⟩ and C|k⟩ ≠ 0, PPS outputs C|k⟩/‖C|k⟩‖, exactly like P-CTC. (The docstring of `ctc/past_preserving.py` also notes that for a pure input with a record basis containing it, PPS is P-CTC.) A computation starts from a definite classical input, so whatever P-CTC can do on classical inputs, PPS can too. P-CTC's computational power is known to equal PostBQP (Lloyd et al. 2011), and PostBQP equals the complexity class PP (Aaronson 2005).
 
-**Conclusion.** PPS has computational power **at least** PostBQP. No upper bound is proved. PPS cannot signal, but its computational power is just as unusually strong: in principle it could solve NP-complete problems in a single call. Aaronson and others treat such power as evidence that a rule is unlikely to be physical, so this should be listed as one of PPS's costs.
+**Conclusion.** PPS has computational power **at least** PostBQP. *Update 2026-11-27:* with one loop and a recorded input it is **exactly** PP, using the open-loop fallback of Theorem 8; with the earlier D-CTC fallback it would be PSPACE (THEOREMS.md, Theorem 8(3)). PPS cannot signal, but its computational power is just as unusually strong: in principle it could solve NP-complete problems in a single call. Aaronson and others treat such power as evidence that a rule is unlikely to be physical, so this should be listed as one of PPS's costs.
 
 **Why "protecting the past" does not stop it.** PPS only protects the record at the input. The superposition the computation needs is created by U after the record; PPS does not constrain that part.
 
@@ -89,7 +89,7 @@ This is part of T4 in phase 3 of the roadmap; nobody had computed the computatio
 - pure input with a record basis containing it: PPS equals P-CTC;
 - mixed input: the two differ (P-CTC reweights worlds, PPS does not);
 - search problem: 6 qubits and one loop qubit. Input |000000⟩ is the only recorded past; U applies Hadamards, then flips the loop qubit when "x is not a solution". PPS and P-CTC both output a solution with probability 1; without the loop the success rate is (number of solutions) / 64;
-- no solution: P-CTC is undefined; PPS falls back to D-CTC and still gives an output.
+- no solution: P-CTC is undefined; PPS falls back (to the open loop since Theorem 8, first to D-CTC) and still gives an output.
 
 **Name clash.** The project used "PP" for past-preserving selection, which clashes with the complexity class PP, and `LITERATURE_REVIEW.md` cites "the computational power of P-CTC is in PP". The documentation now uses **PPS**.
 
@@ -159,6 +159,8 @@ At present PPS is "one rule under which the three hypotheses hold together". A s
 > On finite-dimensional systems, the only rules satisfying (a) linear, completely positive and trace preserving (so no signalling), (b) unchanged probabilities in the record basis, (c) only consistent outcomes in worlds that have a consistent history, and (d) ordinary quantum mechanics when the loop does not act back, are PPS (possibly up to the fallback in paradox worlds).
 
 This would also sharpen the "seam" problem in THEOREMS.md: if the only freedom is the fallback in paradox worlds, then "why fall back to D-CTC" becomes a question that can be discussed on its own.
+
+**Answered 2026-11-26 (THEOREMS.md, Theorem 6).** As stated the conjecture is false: a "history counting" rule (probabilities N instead of N²) satisfies (a)–(d) and differs from PPS. Adding the superposition principle inside a world (the output is L(U)ψ normalized, with L linear in U), compatibility with ordinary evolution before and after the loop, and invariance under relabelling the loop's states forces L(U) ∝ Tr_L U, i.e. PPS. The paradox-world fallback is then the only freedom, as hoped.
 
 ### 3.3 Novelty: full-text comparison with Hartle 1994 (done 2026-11-24)
 

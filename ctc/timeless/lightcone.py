@@ -364,6 +364,55 @@ class Lattice:
             split.append(f)
         return split
 
+    def theorem7_split(self, n_bases=60, seed=7):
+        """Worlds from the state alone (THEOREMS.md, Theorem 7): the eigenvectors of the inputs' joint reduced
+        state on the outside cut, applied there. In a degenerate eigenspace every basis of it is used, each world
+        with weight 1/n_bases (Fibonacci-spread bases for a 2-dimensional eigenspace, Haar-random otherwise), so
+        the sectors still sum to the projector on the eigenspace."""
+        names = list(self.inputs())
+        idx = [self.ix(q) for q in names]
+        fut = [k for k in self.dyn if k in self.future(self.M)]
+        v = self.final
+        for k in reversed(fut):
+            v = self.apply_event(k, v, inverse=True)
+        lam, vecs = np.linalg.eigh(reduced(v, self.n, idx))
+        rng = np.random.default_rng(seed)
+        ops, i, d = [], 0, len(lam)
+        while i < d:
+            j = i + 1
+            while j < d and abs(lam[j] - lam[i]) < 1e-7:
+                j += 1
+            S = vecs[:, i:j]
+            if lam[i] > 1e-12:
+                m = j - i
+                if m == 1:
+                    ops.append(np.outer(S[:, 0], S[:, 0].conj()))
+                else:
+                    for b in range(n_bases):
+                        if m == 2:
+                            z = 1 - (2 * b + 1) / n_bases
+                            phi = b * np.pi * (3 - np.sqrt(5))
+                            x, y = np.sqrt((1 + z) / 2), np.sqrt((1 - z) / 2) * np.exp(1j * phi)
+                            W = np.array([[x, -np.conj(y)], [y, np.conj(x)]])
+                        else:
+                            q, r = np.linalg.qr(rng.normal(size=(m, m)) + 1j * rng.normal(size=(m, m)))
+                            W = q * (np.diag(r) / abs(np.diag(r)))
+                        for c in range(m):
+                            w = S @ W[:, c]
+                            ops.append(np.outer(w, w.conj()) / np.sqrt(n_bases))
+            i = j
+        split = Split()
+        for P in ops:
+            def f(v, P=P):
+                for k in reversed(fut):
+                    v = self.apply_event(k, v, inverse=True)
+                v = apply(P, idx, self.n, v)
+                for k in fut:
+                    v = self.apply_event(k, v)
+                return v
+            split.append(f)
+        return split
+
     # ---------------------------------------------------------------- rules (computed at the last cut)
     def project(self, v, regs_values):
         for reg, val in regs_values:
@@ -431,6 +480,8 @@ class Lattice:
             return [r for r in recs if not self.influenced(r)]
         if definition == 'theorem4':
             return self.theorem4_split()
+        if definition == 'theorem7':
+            return self.theorem7_split()
         if definition == 'all':
             return list(recs)
         raise ValueError(definition)

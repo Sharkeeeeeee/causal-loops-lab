@@ -24,7 +24,7 @@ First fix a "record basis" {|k⟩} for Alice's input: the facts that have alread
 
 - World k keeps probability ⟨k|ρ|k⟩. **Past probabilities may not change.**
 - Inside world k apply P-CTC's consistency selection: |k⟩ → C|k⟩/‖C|k⟩‖, with C = Tr_loop U.
-- If world k has no consistent history at all (C|k⟩ = 0), fall back to D-CTC: the loop message becomes mixed.
+- If world k has no consistent history at all (C|k⟩ = 0), fall back: the loop message becomes mixed. Since 2026-11-27 the fallback is the open loop (the loop cut and fed a random message), derived in THEOREMS.md Theorem 8; it was first the D-CTC fixed point. In every example below the two agree.
 
 As operators: ρ → Σ_k K_k ρ K_k† with K_k = C|k⟩⟨k|/‖C|k⟩‖ and Σ_k K_k†K_k = 𝟙. So it is a **linear, trace-preserving, ordinary quantum channel**:
 
@@ -46,7 +46,7 @@ As operators: ρ → Σ_k K_k ρ K_k† with K_k = C|k⟩⟨k|/‖C|k⟩‖ and 
 
 This is exactly "the grandfather paradox is unaffected; what changes is the future": past probabilities do not move, future outcomes do.
 
-Where the 0.21 in KFK comes from: the world "bad inclination and the warning works" has no consistent history (if the warning works, no warning is sent), so it falls back to D-CTC and the bad outcome has probability 1/2. The world "bad inclination but the warning does not work" has exactly one consistent history: the warning arrives, and the bad choice is made anyway.
+Where the 0.21 in KFK comes from: the world "bad inclination and the warning works" has no consistent history (if the warning works, no warning is sent), so it falls back (open loop or D-CTC, which agree here) and the bad outcome has probability 1/2. The world "bad inclination but the warning does not work" has exactly one consistent history: the warning arrives, and the bad choice is made anyway.
 
 ## Results: a double slit with a time loop
 
