@@ -1,0 +1,33 @@
+id	kind	statement	used_by	source	source_check	notes
+EXT-hartle1994	external	Within-world conditional probability for CTC histories	DEF-PPS	Hartle 1994, Eq. (5.6)	read_in_full	Novelty check, PERSPECTIVES 3.3.
+EXT-deutsch	external	Every U has a D-CTC fixed point	T1	Deutsch 1991	not_compared	Only for the 'dctc' fallback.
+EXT-fixedpoint	external	A CPTP map on a finite-dimensional state space has a fixed point	T1	Brouwer / Schauder	classical	
+EXT-inner-auto	external	Every automorphism of a full matrix algebra is inner	L3.1	Skolem-Noether	classical	
+EXT-bgnp	external	A non-signalling bipartite unitary is a product	L3.1	Beckman, Gottesman, Nielsen, Preskill 2001	not_compared	Cross-check only; L3.1 is proved directly.
+EXT-unitary-span	external	Unitaries span the full matrix algebra	T6	linear algebra	classical	
+EXT-uhlmann	external	Two purifications of the same state are related by a unitary on the purifying system	L7.1	Uhlmann 1976	classical	
+EXT-schur	external	Unitarily covariant linear maps are spanned by id and X -> Tr(X) 1	T8.2	Schur's lemma	classical	
+EXT-aaronson2005	external	PostBQP = PP	T8.3	Aaronson 2005	not_compared	
+EXT-lloyd2011	external	P-CTC simulates PostBQP, postselecting on an event of nonzero probability	T8.3	Lloyd et al. 2011	partial	Fig. 4 numbers reproduced (LITERATURE_REPRODUCTION.md); the complexity construction is not compared line by line.
+EXT-aaronson-watrous	external	D-CTC computers decide exactly PSPACE, whichever fixed point is taken	T8.3	Aaronson & Watrous 2009	not_compared	
+EXT-covering	external	Covering homotopy property (S^2 -> RP^2 double cover)	T9	algebraic topology	classical	
+EXT-idp	external	Unambiguous discrimination of two pure states succeeds with probability 1 - c	T9	Ivanovic, Dieks, Peres	classical	Interpretation only.
+EXT-gellmann-hartle	external	Strong decoherence and generalized records	F-GH	Gell-Mann & Hartle, arXiv:1905.05859	read_in_full	
+EXT-araujo	external	A non-signalling P-CTC is a process matrix; linearity condition	F-lin	Araujo, Guerin, Baumeler, PRA 96, 052315 (2017)	partial	Citation corrected 2026-11-24 (NOVELTY_CHECK).
+A-same-basis	assumption	Every interaction that correlates A with the outside reads A in the same basis	T4		n/a	Relaxed by T4a, P4b, T7.
+A-T5-premises	assumption	Before R: every interaction of an input is a readout, blocks are rank one, inputs do not interact with each other	T5		n/a	
+A-U1	assumption	Past preservation: each world keeps its no-loop weight	T6		n/a	
+A-U2	assumption	Amplitude form: world output L(U) psi / ||L(U) psi|| with L linear (superposition of histories)	T6		n/a	The substantive assumption; excludes D-CTC-like mixed outputs.
+A-U3	assumption	Composition: L((W1 x 1) U (W2 x 1)) = W1 L(U) W2	T6		n/a	
+A-U4	assumption	Loop relabelling invariance: L((1 x V) U (1 x V^dag)) = L(U)	T6, T8.2		n/a	Also applied to the noise in T8.2.
+A-state-complete	assumption	The worlds are a function of the state on the outside slice, not of its history	L7.1, T7		n/a	Opposite choice to the pointer rule; see OPEN-record-rule.
+A-outside-unitaries	assumption	Any unitary on the outside systems is a possible outside operation	L7.1		n/a	
+A-R	assumption	When the state determines a basis with perfect outside records, those are the worlds	T7		n/a	
+A-basis-free-noise	assumption	Loop noise has no preferred basis	T8.2		n/a	
+OPEN-record-rule	open	State completeness vs history dependence (pointer vs state rule); a general mixed rule for unequal overlaps / several readouts	T7, T9, F4c		n/a	THEOREMS.md, Not yet proved, item 2.
+OPEN-superposed-order	open	A superposed order of two incompatible readouts	T4a		n/a	Disappears under the state rule.
+OPEN-discontinuity	open	PPS is discontinuous as C|k> -> 0	T8.1, T8.2		n/a	Not yet proved, item 3.
+OPEN-several-loops	open	Computational power with several loops and records between them	T8.3		n/a	Not yet proved, item 5.
+OPEN-weak-loop-reading	open	PPS treats the loop's own weak reading of A as perfect	T3G		n/a	Not yet proved, item 1.
+OPEN-spacetime	open	Non-readout interactions, weak records and a continuum of events in spacetime; exact CTC vacua	T5		n/a	Open list after the process-matrix section.
+OPEN-qft	open	A QFT calculation on a curved spacetime (PPS inherits the P-CTC divergence in the field toy)	T8.1		n/a	Not yet proved, item 6; FIELD_LOOP.md.
